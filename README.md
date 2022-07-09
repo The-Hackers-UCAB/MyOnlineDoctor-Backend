@@ -22,14 +22,18 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## _MyOnlineDoctor-Backend_
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The Hackers's members.
 
 ## Installation
 
 ```bash
+#npm dependencies
 $ npm install
+
+#.env.example configuration
+$ cp .env.example .env
 ```
 
 ## Running the app
