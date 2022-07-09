@@ -5,6 +5,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { SessionSerializer } from './sessions/session.serializer';
 import { PassportModule } from '@nestjs/passport';
 
+/** AuthModule: Módulo de autenticación de NestJs - Express Sessions & Passport. (Sistema Externo). */
 @Module({
   imports: [PassportModule.register({ session: true })],
   providers: [AuthService, LocalStrategy, SessionSerializer],

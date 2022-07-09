@@ -1,8 +1,8 @@
 import { ForbiddenException } from "@nestjs/common";
 
-/** InvalidSessionException is a custom Nestjs exception for invalidated sessions.*/
+/** InvalidSessionException: Excepción de NestJs para sesiones inválidas.*/
 export class InvalidSessionException extends ForbiddenException {
     constructor() {
-        super('Sessión cerrada.');
+        super('Sesión cerrada.');
     }
 }

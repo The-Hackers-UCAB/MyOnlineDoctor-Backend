@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-/** UserEntity Es una entitdad de infraestructura utilizada únicamente para el manejo de seguridad. */
+/** UserEntity Es una entitdad de infraestructura (ORM) utilizada únicamente para el manejo de seguridad. */
 @Entity({ name: 'users' })
 export class UserEntity {
     @Index() @PrimaryGeneratedColumn() id: number;
@@ -14,5 +14,5 @@ export class UserEntity {
 
     @UpdateDateColumn({ name: 'updated_at' }) updatedAt: Date;
 
-    //Aqui van las referencias a las entidades de Doctor y Paciente
+    //Colocar las FKs a Doctor y Paciente (Arco exclusivo).
 }

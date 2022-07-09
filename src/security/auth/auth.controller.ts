@@ -1,31 +1,29 @@
 import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
-import { EntityManager } from 'typeorm';
-import { UsersRepository } from '../users/entities/repositories/users.repository';
-import { UserEntity } from '../users/entities/user.entity';
+import { getManager } from 'typeorm';
+import { CreateUserDto } from '../users/dtos/create-user.dto';
+import { UsersRepository } from '../users/repositories/users.repository';
 import { SessionGuard } from './sessions/session.guard';
 import { LocalAuthGuard } from './strategies/local.auth.guard';
 
+/** AuthController: Controller de infraestructura encargado de gestionar las peticiones relacionadas con el módulo de seguridad.*/
 @Controller('auth')
 export class AuthController {
-
-    constructor(private readonly manager: EntityManager) { }
-
     @Post('login')
     @UseGuards(LocalAuthGuard)
     async login(@Request() request): Promise<{ msg: string }> {
-        return { msg: "Logged in!" };
+        return { msg: "Sesión iniciada!" };
     }
 
     @Get('logout')
     @UseGuards(SessionGuard)
     async logout(@Request() request): Promise<{ msg: string }> {
         request.session.destroy();
-        return { msg: "Logged out!" };
+        return { msg: "Sessión cerrada!" };
     }
 
-    @Post('create')
-    async createUser(@Body() dto: any) {
-        const usersRepository = new UsersRepository(this.manager.getRepository(UserEntity));
-        usersRepository.saveUser(dto.email, dto.password);
+    @Post('user/register')
+    async createUser(@Body() dto: CreateUserDto): Promise<{ msg: string }> {
+        await (await getManager().getCustomRepository(UsersRepository)).saveUser(dto);
+        return { msg: "Usuario registrado!" }
     }
 }

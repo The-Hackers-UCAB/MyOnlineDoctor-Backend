@@ -1,21 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { EntityManager } from 'typeorm';
-import { UsersRepository } from '../users/entities/repositories/users.repository';
+import { getManager } from 'typeorm';
 import { UserEntity } from '../users/entities/user.entity';
+import { UsersRepository } from '../users/repositories/users.repository';
 
+/** AuthService: Servicio de infraestructura (NestJs) utilizado para el manejo de seguridad y autenticación. */
 @Injectable()
 export class AuthService {
+    async validateUser(email: string, password: string): Promise<Partial<UserEntity>> {
+        const usersRepository = await getManager().getCustomRepository(UsersRepository);
+        const userEntity = await usersRepository.findOneOrFailByEmail(email);
 
-    private readonly usersRepository: UsersRepository;
-
-    constructor(private readonly manager: EntityManager) {
-        this.usersRepository = new UsersRepository(this.manager.getRepository(UserEntity));
-    }
-
-    async validateUser(email: string, password: string) {
-        const userEntity = await this.usersRepository.findOneByEmail(email);
-
-        if (await this.usersRepository.comparePasswords(password, userEntity.password)) {
+        if (await usersRepository.comparePasswords(password, userEntity.password)) {
             const { password, ...userDto } = userEntity;
             return userDto;
         }
