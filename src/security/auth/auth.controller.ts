@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { getManager } from 'typeorm';
+import { GetUserId } from '../users/decorators/get-user-id.decorator';
 import { CreateUserDto } from '../users/dtos/create-user.dto';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { SessionGuard } from './sessions/session.guard';
@@ -25,5 +26,11 @@ export class AuthController {
     async createUser(@Body() dto: CreateUserDto): Promise<{ msg: string }> {
         await (await getManager().getCustomRepository(UsersRepository)).saveUser(dto);
         return { msg: "Usuario registrado!" }
+    }
+
+    @Get('protected')
+    @UseGuards(SessionGuard)
+    async protectefFunction(@GetUserId() userId): Promise<{ msg: string }> {
+        return { msg: "User Id " + userId }
     }
 }

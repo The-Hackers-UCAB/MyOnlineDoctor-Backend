@@ -18,7 +18,10 @@ export class UsersRepository extends Repository<UserEntity> {
     }
 
     async saveUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-        const userEntity = await this.create({ email: createUserDto.email, password: createUserDto.password });
+        const userEntity = await this.create({
+            email: createUserDto.email,
+            password: (await this.hashPassword(createUserDto.password))
+        });
 
         try {
             return await this.save(userEntity);
