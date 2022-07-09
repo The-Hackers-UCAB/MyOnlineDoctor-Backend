@@ -1,10 +1,11 @@
 import { BadRequestException, ConflictException } from "@nestjs/common";
-import { EntityRepository, Repository } from "typeorm";
 import { UserEntity } from "../user.entity";
 import * as bcrypt from 'bcrypt';
+import { Repository } from "typeorm";
 
-@EntityRepository(UserEntity)
-export class UsersRepository extends Repository<UserEntity> {
+export class UsersRepository {
+
+    constructor(private readonly manager: Repository<UserEntity>) { }
 
     async hashPassword(password: string): Promise<string> {
         const salt = await bcrypt.genSalt();
@@ -16,10 +17,10 @@ export class UsersRepository extends Repository<UserEntity> {
     }
 
     async saveUser(email: string, password: string): Promise<UserEntity> {
-        const userEntity = await this.create({ email, password });
+        const userEntity = await this.manager.create({ email, password: await this.hashPassword(password) });
 
         try {
-            return await this.save(userEntity);
+            return await this.manager.save(userEntity);
         }
         catch (error) {
             if (error.code == 23505) throw new ConflictException('Este correo ya se encuentra registrado.');
@@ -28,10 +29,10 @@ export class UsersRepository extends Repository<UserEntity> {
     }
 
     async findOneByEmail(email: string): Promise<UserEntity> {
-        return await this.findOne({ where: { email } });
+        return await this.manager.findOne({ where: { email } });
     }
 
     async findOneById(id: number): Promise<UserEntity> {
-        return await this.findOneOrFail({ where: { id } });
+        return await this.manager.findOneOrFail({ where: { id } });
     }
 }
