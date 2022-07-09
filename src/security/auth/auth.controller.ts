@@ -3,6 +3,9 @@ import { getManager } from 'typeorm';
 import { GetUserId } from '../users/decorators/get-user-id.decorator';
 import { CreateUserDto } from '../users/dtos/create-user.dto';
 import { UsersRepository } from '../users/repositories/users.repository';
+import { Role } from '../users/roles/role.entity.enum';
+import { Roles } from '../users/roles/roles.decorator';
+import { RolesGuard } from '../users/roles/roles.guard';
 import { SessionGuard } from './sessions/session.guard';
 import { LocalAuthGuard } from './strategies/local.auth.guard';
 
@@ -29,6 +32,8 @@ export class AuthController {
     }
 
     @Get('protected')
+    @Roles(Role.Doctor)
+    @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
     async protectefFunction(@GetUserId() userId): Promise<{ msg: string }> {
         return { msg: "User Id " + userId }

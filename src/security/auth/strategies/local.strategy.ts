@@ -18,7 +18,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
         //Verificar que el Doctor o Paciente no esté bloqueado.
 
-        return { userId: userDto.id, userIpAddress: this.ipAddress(request) };
+        return { userId: userDto.id, userRole: userDto.role, userIpAddress: this.ipAddress(request) };
     }
 
     private ipAddress(request: any): string {
