@@ -13,7 +13,7 @@ export abstract class Entity<T extends IValueObject<T>> {
     }
 
     /** ID: Getter del identificador único de la entidad. */
-    get ID() { return this.id; }
+    get Id() { return this.id; }
 
     /**Compara la igualdad entre dos Entidades en función de sus IDs.
      * @param otherID ID de la entidad a compara.

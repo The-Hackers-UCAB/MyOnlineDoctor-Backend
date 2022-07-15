@@ -13,8 +13,7 @@ export abstract class AggregateRoot<T extends IValueObject<T>> extends Entity<T>
      * @param event Evento con los cambios. */
     protected constructor(id: T, event: DomainEvent) {
         super(id);
-        this.ensureValidState();
-        this.events.push(event);
+        this.apply(event);
     }
 
     /**Retorna y elimina todos los cambios realizados en el aggregate root.

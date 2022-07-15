@@ -7,6 +7,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import { Doctor } from './doctor/domain/doctor';
+import { DoctorId } from './doctor/domain/value-objects/doctor-id';
+import { DoctorNames } from './doctor/domain/value-objects/doctor-names';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -47,5 +50,12 @@ async function bootstrap() {
   app.use(passport.session());
 
   await app.listen(Number.parseInt(process.env.PORT) || 3000);
+
+  const doctor = Doctor.create(
+    DoctorId.create(1),
+    DoctorNames.create("John", "Smiht")
+  );
+
+  console.log(doctor.pullEvents());
 }
 bootstrap();
