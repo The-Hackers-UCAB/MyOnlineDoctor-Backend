@@ -1,4 +1,4 @@
-import { Result } from "../../../core/application/result-handler/result";
+import { Result } from "../../application/result-handler/result";
 
 /** IInfrastructureService: Es una interfaz genérica utilizada para implementar servicios de infraestructura.
  *  @typeParam `D` Tipo parametrizado de los DTOs.

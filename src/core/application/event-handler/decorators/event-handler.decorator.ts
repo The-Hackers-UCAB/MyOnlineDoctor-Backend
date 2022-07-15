@@ -1,4 +1,4 @@
-import { DomainEvent } from "src/core/domain/domain-events/domain-event";
+import { DomainEvent } from "../../../../core/domain/domain-events/domain-event";
 import { IEventHandler } from "../event-handler.interface";
 
 /**EventHandlerDecorator: Es una clase abstracta genérica utilizada para implementar el patron decorador en el controlador de eventos.*/

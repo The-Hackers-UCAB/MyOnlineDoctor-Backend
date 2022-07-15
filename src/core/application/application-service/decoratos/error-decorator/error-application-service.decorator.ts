@@ -1,4 +1,4 @@
-import { DomainException } from "src/core/domain/exceptions/domain.exception";
+import { DomainException } from "../../../../../core/domain/exceptions/domain.exception";
 import { Result } from "../../../result-handler/result";
 import { ApplicationServiceDecorator } from "../application-service.decorator";
 

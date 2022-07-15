@@ -6,7 +6,7 @@ import { IValueObject } from "../value-objects/value-object.interface";
  *  @typeParam `T` Tipo paramtrizado del ID de la entidad. Debe extender de IValueObject.*/
 export abstract class AggregateRoot<T extends IValueObject<T>> extends Entity<T> {
     /**Eventos de dominio que han modificado el estado del agregado. */
-    private events: DomainEvent[] = [];
+    protected events: DomainEvent[] = [];
 
     /**Constructor del agregado.
      * @param id ID de la entidad del agregado.
