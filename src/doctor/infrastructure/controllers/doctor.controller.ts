@@ -11,6 +11,8 @@ import { DoctorRating } from 'src/doctor/domain/value-objects/doctor-rating';
 import { DoctorSpecialty } from 'src/doctor/domain/value-objects/doctor-specialty.enum';
 import { DoctorStatus } from 'src/doctor/domain/value-objects/doctor-status.enum';
 import { DoctorSurnames } from 'src/doctor/domain/value-objects/doctor-surnames';
+import { EventBus } from 'src/core/infrastructure/event-handler/event-bus';
+import { DoctorCreated } from 'src/doctor/domain/events/doctor-created';
 
 @Controller('doctor')
 export class DoctorController {
@@ -23,6 +25,14 @@ export class DoctorController {
 
     @Post('')
     async register(): Promise<{ msg: string }> {
+
+        await EventBus.getInstance().subscribe(
+            DoctorCreated.eventName(),
+            (event: DoctorCreated) => {
+                console.log("Hola se publico un evento.");
+            }
+        );
+
         const doctor = Doctor.create(
             DoctorId.create(10),
             DoctorNames.create("John"),
@@ -38,6 +48,8 @@ export class DoctorController {
         );
 
         this.ormDoctorRepository.saveAggregate(doctor);
+
+        EventBus.getInstance().publish(doctor.pullEvents());
 
         return { msg: "Doctor Registrado" };
     }

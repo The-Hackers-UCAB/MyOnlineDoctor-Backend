@@ -3,8 +3,8 @@ import { ILogger } from "../../../../../core/application/logging-handler/logger.
 import { IEventHandler } from "../../event-handler.interface";
 import { EventHandlerDecorator } from "../event-handler.decorator";
 
-/**LoggingApplicationServiceDecorator: Es una clase abstracta genérica utilizada para implementar logging en los eventos.*/
-export class LoggingApplicationServiceDecorator extends EventHandlerDecorator {
+/**LoggingEventHandlerDecorator: Es una clase abstracta genérica utilizada para implementar logging en los eventos.*/
+export class LoggingEventHandlerDecorator extends EventHandlerDecorator {
     private readonly logger: ILogger;
 
     constructor(eventHandler: IEventHandler, logger: ILogger) {
