@@ -12,4 +12,8 @@ export interface IRepository<I extends IValueObject<I>, A extends AggregateRoot<
     /**Busca el agregado según su identificador único.
      * @param id Identificador del agregado. */
     findOneById(id: I): Promise<A>;
+
+    /**Busca el agregado según su identificador único, en caso de no encontrarse falla.
+    * @param id Identificador del agregado. */
+    findOneByIdOrFail(id: I): Promise<A>;
 }

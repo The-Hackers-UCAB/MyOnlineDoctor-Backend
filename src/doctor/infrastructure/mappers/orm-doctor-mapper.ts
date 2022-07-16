@@ -8,16 +8,14 @@ import { DoctorSurnames } from "../../../doctor/domain/value-objects/doctor-surn
 import { IMapper } from "../../../core/application/mappers/mapper.interface";
 import { Doctor } from "../../../doctor/domain/doctor";
 import { OrmDoctor } from "../entities/orm-doctor.entity";
-import { Injectable } from "@nestjs/common";
 
-@Injectable()
 export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
 
     constructor(private readonly doctorRatingDomainService = new DoctorRatingDomainService()) { }
 
-    fromDomainToOther(domain: Doctor): OrmDoctor {
+    async fromDomainToOther(domain: Doctor): Promise<OrmDoctor> {
         //Creamos un objeto de doctor de tipo ORM.
-        const ormDoctor: OrmDoctor = OrmDoctor.create(
+        const ormDoctor: OrmDoctor = await OrmDoctor.create(
             domain.Id.value,
             domain.Names.FirstName,
             domain.Surnames.FirstSurname,
@@ -36,7 +34,7 @@ export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
         return ormDoctor;
     }
 
-    fromOtherToDomain(other: OrmDoctor): Doctor {
+    async fromOtherToDomain(other: OrmDoctor): Promise<Doctor> {
         //Transformamos las especialidades del ORM a domain.
         const specialties: DoctorSpecialty[] = [];
         other.specialties.forEach((specialty) => {
@@ -61,6 +59,9 @@ export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
             other.status,
             specialties
         );
+
+        //Removemos los eventos ya que se está restaurando mas no creado
+        doctor.pullEvents();
 
         return doctor;
     }

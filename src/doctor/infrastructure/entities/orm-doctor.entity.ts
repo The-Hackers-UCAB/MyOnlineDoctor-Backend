@@ -1,4 +1,3 @@
-
 import { DoctorSpecialty } from "../../../doctor/domain/value-objects/doctor-specialty.enum";
 import { Column, CreateDateColumn, Entity, getManager, Index, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { DoctorGender } from "../../../doctor/domain/value-objects/doctor-gender.enum";
@@ -37,14 +36,14 @@ export class OrmDoctor {
 
 
     @JoinTable()
-    @ManyToMany(() => OrmDoctorSpecialty, (ormDoctorSpecialty) => ormDoctorSpecialty.specialty, { eager: true }) specialties: OrmDoctorSpecialty[];
+    @ManyToMany(() => OrmDoctorSpecialty, (ormDoctorSpecialty) => ormDoctorSpecialty.specialty, { eager: true, cascade: true }) specialties: OrmDoctorSpecialty[];
 
 
     @Column({ name: 'middle_name', length: 32, nullable: true }) middleName: string;
 
     @Column({ name: 'second_surname', length: 32, nullable: true }) secondSurname: string;
 
-    static create(id: number, firstName: string, firstSurname: string, gender: DoctorGender, status: DoctorStatus, latitude: number, longitude: number, count: number, total: number, rating: number, specialties: DoctorSpecialty[], middleName?: string, secondSurname?: string): OrmDoctor {
+    static async create(id: number, firstName: string, firstSurname: string, gender: DoctorGender, status: DoctorStatus, latitude: number, longitude: number, count: number, total: number, rating: number, specialties: DoctorSpecialty[], middleName?: string, secondSurname?: string): Promise<OrmDoctor> {
         const ormDoctor: OrmDoctor = new OrmDoctor();
         ormDoctor.id = id;
         ormDoctor.firstName = firstName;
@@ -59,18 +58,15 @@ export class OrmDoctor {
         ormDoctor.middleName = middleName;
         ormDoctor.secondSurname = secondSurname;
 
-        //Buscamos las OrmSpecialties.
-        const specialtyRepository = getManager().getRepository(OrmDoctorSpecialty);
-        const ormDoctorSpecialty = [];
-        specialties.forEach(specialty => {
-            const ormSpecialty = specialtyRepository.findOne({ where: { specialty } });
+        //Buscamos las OrmSpecialties y las asignamos a la entidad.
+        ormDoctor.specialties = [];
+        const specialtyRepository = await getManager().getRepository(OrmDoctorSpecialty);
+        for await (const specialty of specialties) {
+            const ormSpecialty: OrmDoctorSpecialty = await specialtyRepository.findOne({ where: { specialty } });
             if (ormSpecialty) {
-                ormDoctorSpecialty.push(ormSpecialty);
+                ormDoctor.specialties.push(ormSpecialty);
             }
-        });
-
-        //Colocamos las especialidades.
-        ormDoctor.specialties = ormDoctorSpecialty;
+        }
 
         return ormDoctor;
     }

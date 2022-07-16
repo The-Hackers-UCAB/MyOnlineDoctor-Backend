@@ -1,4 +1,4 @@
-import { DoctorSpecialty } from "src/doctor/domain/value-objects/doctor-specialty.enum";
+import { DoctorSpecialty } from "../../../doctor/domain/value-objects/doctor-specialty.enum";
 
 export interface OrmDoctorCriteriasDto {
     firstName?: string;

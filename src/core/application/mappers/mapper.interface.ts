@@ -4,9 +4,9 @@
 export interface IMapper<D, O> {
     /**Transforma un objeto de dominio a un objeto cualquiera.
      * @param domain Objeto del dominio.*/
-    fromDomainToOther(domain: D): O;
+    fromDomainToOther(domain: D): Promise<O>;
 
     /**Transforma un objeto cualquiera a un objeto de dominio.
     * @param other Objecto de tipo O.*/
-    fromOtherToDomain(other: O): D;
+    fromOtherToDomain(other: O): Promise<D>;
 }
