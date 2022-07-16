@@ -1,6 +1,6 @@
 import { AggregateRoot } from "../../core/domain/aggregates/aggregate-root";
 import { DomainEvent } from "../../core/domain/domain-events/domain-event";
-import { DoctorCreated as DoctorCreated } from "./events/doctor-created.event";
+import { DoctorCreated as DoctorCreated } from "./events/doctor-created";
 import { InvalidDoctorException } from "./exceptions/invalid-doctor.exception";
 import { DoctorGender } from "./value-objects/doctor-gender.enum";
 import { DoctorId } from "./value-objects/doctor-id";
@@ -27,6 +27,7 @@ export class Doctor extends AggregateRoot<DoctorId>{
     get Location() { return this.location; }
     get Rating() { return this.rating; }
     get Gender() { return this.gender; }
+    get Status() { return this.status; }
     get Specialties() { return this.specialties }
 
 

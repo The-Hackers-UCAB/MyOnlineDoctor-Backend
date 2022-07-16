@@ -57,21 +57,5 @@ async function bootstrap() {
   app.use(passport.session());
 
   await app.listen(Number.parseInt(process.env.PORT) || 3000);
-
-  const doctor = Doctor.create(
-    DoctorId.create(1),
-    DoctorNames.create("John"),
-    DoctorSurnames.create("Smith"),
-    DoctorLocation.create(-5, -152),
-    DoctorRating.create(
-      10, 150,
-      (new DoctorRatingDomainService()).execute({ count: 10, total: 150 })
-    ),
-    DoctorGender.MALE,
-    DoctorStatus.ACTIVE,
-    [DoctorSpecialty.CARDIOLOGY, DoctorSpecialty.NEPHROLOGY]
-  );
-
-  console.log(doctor.pullEvents());
 }
 bootstrap();
