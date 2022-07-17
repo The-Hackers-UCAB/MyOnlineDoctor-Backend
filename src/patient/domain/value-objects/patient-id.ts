@@ -6,7 +6,7 @@ export class PatientId implements IValueObject<PatientId> {
 
     private readonly id: number;
 
-    get value() { return this.id; }
+    get Value() { return this.id; }
 
     private constructor(id: number) {
         if (id) {

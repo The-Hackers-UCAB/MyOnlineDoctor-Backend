@@ -5,7 +5,7 @@ import { InvalidPatientWeightException } from "../exceptions/invalid-patient-wei
 export class PatientWeight implements IValueObject<PatientWeight> {
     private readonly weight: number;
 
-    get value() { return this.weight; }
+    get Value() { return this.weight; }
 
     private constructor(weight: number) {
         if (weight) {

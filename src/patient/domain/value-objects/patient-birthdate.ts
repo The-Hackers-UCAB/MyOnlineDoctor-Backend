@@ -6,7 +6,7 @@ export class PatientBirthdate implements IValueObject<PatientBirthdate> {
     
         private readonly birthdate: Date;
     
-        get value() { return this.birthdate; }
+        get Value() { return this.birthdate; }
     
         private constructor(birthdate: Date) {
             if (birthdate) {
