@@ -98,12 +98,12 @@ export class OrmDoctorRepository extends Repository<OrmDoctor> implements IDocto
             }
         }
 
-        if (criterias?.rating?.Score) {
+        if (criterias?.rating?.Rating) {
             if (andWhere) {
-                query.andWhere("d.rating BETWEEN :rating_start AND :rating_end", { rating_start: (criterias?.rating?.Score - 1), rating_end: (criterias?.rating?.Score + 1) });
+                query.andWhere("d.rating BETWEEN :rating_start AND :rating_end", { rating_start: (criterias?.rating?.Rating - 1), rating_end: (criterias?.rating?.Rating + 1) });
             }
             else {
-                query.where("d.rating BETWEEN :rating_start AND :rating_end", { rating_start: (criterias?.rating?.Score - 1), rating_end: (criterias?.rating?.Score + 1) });
+                query.where("d.rating BETWEEN :rating_start AND :rating_end", { rating_start: (criterias?.rating?.Rating - 1), rating_end: (criterias?.rating?.Rating + 1) });
                 andWhere = true;
             }
         }

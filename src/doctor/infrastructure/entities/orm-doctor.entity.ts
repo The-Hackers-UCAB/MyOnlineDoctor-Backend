@@ -23,10 +23,6 @@ export class OrmDoctor {
     @Column({ type: 'numeric', precision: 6, scale: 3 }) longitude: number;
 
 
-    @Column({ type: 'numeric', precision: 6, scale: 3 }) count: number;
-
-    @Column({ type: 'numeric', precision: 6, scale: 3 }) total: number;
-
     @Column({ type: 'numeric', precision: 6, scale: 3 }) rating: number;
 
 
@@ -43,7 +39,7 @@ export class OrmDoctor {
 
     @Column({ name: 'second_surname', length: 32, nullable: true }) secondSurname: string;
 
-    static async create(id: number, firstName: string, firstSurname: string, gender: DoctorGenderEnum, status: DoctorStatusEnum, latitude: number, longitude: number, count: number, total: number, rating: number, specialties: DoctorSpecialty[], middleName?: string, secondSurname?: string): Promise<OrmDoctor> {
+    static async create(id: number, firstName: string, firstSurname: string, gender: DoctorGenderEnum, status: DoctorStatusEnum, latitude: number, longitude: number, rating: number, specialties: DoctorSpecialty[], middleName?: string, secondSurname?: string): Promise<OrmDoctor> {
         const ormDoctor: OrmDoctor = new OrmDoctor();
         ormDoctor.id = id;
         ormDoctor.firstName = firstName;
@@ -52,8 +48,6 @@ export class OrmDoctor {
         ormDoctor.status = status;
         ormDoctor.latitude = latitude;
         ormDoctor.longitude = longitude;
-        ormDoctor.count = count;
-        ormDoctor.total = total;
         ormDoctor.rating = rating;
         ormDoctor.middleName = middleName;
         ormDoctor.secondSurname = secondSurname;
