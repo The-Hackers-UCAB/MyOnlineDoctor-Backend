@@ -17,7 +17,7 @@ import { PatientId } from "./patient/domain/value-objects/patient-id";
 export function _ant_testing() {
 
     const appointment = Appointment.create(
-        AppointmentId.create(1),
+        AppointmentId.create('ea039a82-060a-11ed-b939-0242ac120002'),
         AppointmentDate.create(new Date("02/02/2023")),
         AppointmentDescription.create("Cita numero 1 con el doctor John"),
         AppointmentDuration.create(1),
