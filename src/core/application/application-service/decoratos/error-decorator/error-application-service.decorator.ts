@@ -8,7 +8,7 @@ export class ErrorApplicationServiceDecorator<D, R> extends ApplicationServiceDe
         try {
             return await super.execute(dto);
         } catch (error) {
-            if (error.constructor.prototype instanceof DomainException) {
+            if (error.constructor.name == "DomainException") {
                 const domainError: DomainException = error as DomainException;
                 const result = Result.fail<R>(domainError);
                 return result;

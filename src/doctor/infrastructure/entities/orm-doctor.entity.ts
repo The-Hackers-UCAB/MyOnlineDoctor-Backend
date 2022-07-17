@@ -1,8 +1,8 @@
-import { DoctorSpecialty } from "../../../doctor/domain/value-objects/doctor-specialty.enum";
+import { DoctorSpecialty } from "../../domain/value-objects/doctor-specialty";
 import { Column, CreateDateColumn, Entity, getManager, Index, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { DoctorGender } from "../../../doctor/domain/value-objects/doctor-gender.enum";
-import { DoctorStatus } from "../../../doctor/domain/value-objects/doctor-status.enum";
 import { OrmDoctorSpecialty } from "./orm-doctor-specialty.entity";
+import { DoctorGenderEnum } from "../../../doctor/domain/value-objects/doctor-gender.enum";
+import { DoctorStatusEnum } from "../../../doctor/domain/value-objects/doctor-status.enum";
 
 @Entity({ name: 'doctors' })
 export class OrmDoctor {
@@ -13,9 +13,9 @@ export class OrmDoctor {
     @Column({ name: 'first_surname', length: 32 }) firstSurname: string;
 
 
-    @Column({ type: 'enum', enum: DoctorGender }) gender: DoctorGender;
+    @Column({ type: 'enum', enum: DoctorGenderEnum }) gender: DoctorGenderEnum;
 
-    @Column({ type: 'enum', enum: DoctorStatus }) status: DoctorStatus;
+    @Column({ type: 'enum', enum: DoctorStatusEnum }) status: DoctorStatusEnum;
 
 
     @Column({ type: 'numeric', precision: 6, scale: 3 }) latitude: number;
@@ -43,7 +43,7 @@ export class OrmDoctor {
 
     @Column({ name: 'second_surname', length: 32, nullable: true }) secondSurname: string;
 
-    static async create(id: number, firstName: string, firstSurname: string, gender: DoctorGender, status: DoctorStatus, latitude: number, longitude: number, count: number, total: number, rating: number, specialties: DoctorSpecialty[], middleName?: string, secondSurname?: string): Promise<OrmDoctor> {
+    static async create(id: number, firstName: string, firstSurname: string, gender: DoctorGenderEnum, status: DoctorStatusEnum, latitude: number, longitude: number, count: number, total: number, rating: number, specialties: DoctorSpecialty[], middleName?: string, secondSurname?: string): Promise<OrmDoctor> {
         const ormDoctor: OrmDoctor = new OrmDoctor();
         ormDoctor.id = id;
         ormDoctor.firstName = firstName;
@@ -62,7 +62,7 @@ export class OrmDoctor {
         ormDoctor.specialties = [];
         const specialtyRepository = await getManager().getRepository(OrmDoctorSpecialty);
         for await (const specialty of specialties) {
-            const ormSpecialty: OrmDoctorSpecialty = await specialtyRepository.findOne({ where: { specialty } });
+            const ormSpecialty: OrmDoctorSpecialty = await specialtyRepository.findOne({ where: { specialty: specialty.Value } });
             if (ormSpecialty) {
                 ormDoctor.specialties.push(ormSpecialty);
             }
