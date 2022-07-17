@@ -4,7 +4,7 @@ import { InvalidDoctorIdException } from "../exceptions/invalid-doctor-id.except
 export class DoctorId implements IValueObject<DoctorId>{
     private readonly id: number;
 
-    get value() { return this.id; }
+    get Value() { return this.id; }
 
     private constructor(id: number) {
         if (id) {

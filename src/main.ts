@@ -7,16 +7,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
 import * as passport from 'passport';
-import { Doctor } from './doctor/domain/doctor';
-import { DoctorId } from './doctor/domain/value-objects/doctor-id';
-import { DoctorNames } from './doctor/domain/value-objects/doctor-names';
-import { DoctorSurnames } from './doctor/domain/value-objects/doctor-surnames';
-import { DoctorLocation } from './doctor/domain/value-objects/doctor-location';
-import { DoctorRating } from './doctor/domain/value-objects/doctor-rating';
-import { DoctorGender } from './doctor/domain/value-objects/doctor-gender.enum';
-import { DoctorStatus } from './doctor/domain/value-objects/doctor-status.enum';
-import { DoctorSpecialty } from './doctor/domain/value-objects/doctor-specialty.enum';
-import { DoctorRatingDomainService } from './doctor/domain/domain-services/doctor-rating-domain-service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

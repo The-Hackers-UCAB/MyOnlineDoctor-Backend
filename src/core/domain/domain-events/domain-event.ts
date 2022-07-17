@@ -8,4 +8,8 @@ export abstract class DomainEvent {
     protected constructor() {
         this.timestamp = new Date();
     }
+
+    /**Retorna el nombre del evento.
+     * @returns String con el nombre de la clase. */
+    public static eventName(): string { return this.prototype.constructor.name; }
 }

@@ -3,11 +3,13 @@ import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
 import { DoctorLocation } from "../../../doctor/domain/value-objects/doctor-location";
 import { DoctorNames } from "../../../doctor/domain/value-objects/doctor-names";
 import { DoctorRating } from "../../../doctor/domain/value-objects/doctor-rating";
-import { DoctorSpecialty } from "../../../doctor/domain/value-objects/doctor-specialty.enum";
 import { DoctorSurnames } from "../../../doctor/domain/value-objects/doctor-surnames";
 import { IMapper } from "../../../core/application/mappers/mapper.interface";
 import { Doctor } from "../../../doctor/domain/doctor";
 import { OrmDoctor } from "../entities/orm-doctor.entity";
+import { DoctorSpecialty } from "../../domain/value-objects/doctor-specialty";
+import { DoctorGender } from "../../../doctor/domain/value-objects/doctor-gender";
+import { DoctorStatus } from "../../../doctor/domain/value-objects/doctor-status";
 
 export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
 
@@ -16,11 +18,11 @@ export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
     async fromDomainToOther(domain: Doctor): Promise<OrmDoctor> {
         //Creamos un objeto de doctor de tipo ORM.
         const ormDoctor: OrmDoctor = await OrmDoctor.create(
-            domain.Id.value,
+            domain.Id.Value,
             domain.Names.FirstName,
             domain.Surnames.FirstSurname,
-            domain.Gender,
-            domain.Status,
+            domain.Gender.Value,
+            domain.Status.Value,
             domain.Location.Latitude,
             domain.Location.Longitude,
             domain.Rating.Count,
@@ -38,7 +40,7 @@ export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
         //Transformamos las especialidades del ORM a domain.
         const specialties: DoctorSpecialty[] = [];
         other.specialties.forEach((specialty) => {
-            specialties.push(specialty.specialty);
+            specialties.push(DoctorSpecialty.create(specialty.specialty));
         });
 
         //Creamos el objeto de Doctor de dominio.
@@ -55,8 +57,8 @@ export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
                     total: other.total
                 })
             ),
-            other.gender,
-            other.status,
+            DoctorGender.create(other.gender),
+            DoctorStatus.create(other.status),
             specialties
         );
 

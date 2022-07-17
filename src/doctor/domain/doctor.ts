@@ -2,13 +2,13 @@ import { AggregateRoot } from "../../core/domain/aggregates/aggregate-root";
 import { DomainEvent } from "../../core/domain/domain-events/domain-event";
 import { DoctorCreated as DoctorCreated } from "./events/doctor-created";
 import { InvalidDoctorException } from "./exceptions/invalid-doctor.exception";
-import { DoctorGender } from "./value-objects/doctor-gender.enum";
+import { DoctorGender } from "./value-objects/doctor-gender";
 import { DoctorId } from "./value-objects/doctor-id";
 import { DoctorLocation } from "./value-objects/doctor-location";
 import { DoctorNames } from "./value-objects/doctor-names";
 import { DoctorRating } from "./value-objects/doctor-rating";
-import { DoctorSpecialty } from "./value-objects/doctor-specialty.enum";
-import { DoctorStatus } from "./value-objects/doctor-status.enum";
+import { DoctorSpecialty } from "./value-objects/doctor-specialty";
+import { DoctorStatus } from "./value-objects/doctor-status";
 import { DoctorSurnames } from "./value-objects/doctor-surnames";
 
 export class Doctor extends AggregateRoot<DoctorId>{

@@ -1,4 +1,4 @@
-import { Between, EntityRepository, Repository } from "typeorm";
+import { EntityRepository, Repository } from "typeorm";
 import { OrmDoctor } from "../entities/orm-doctor.entity";
 
 import { RepositoryPagingDto } from "../../../core/application/repositories/repository-paging.dto";
@@ -8,11 +8,10 @@ import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
 import { DoctorLocation } from "../../../doctor/domain/value-objects/doctor-location";
 import { DoctorNames } from "../../../doctor/domain/value-objects/doctor-names";
 import { DoctorRating } from "../../../doctor/domain/value-objects/doctor-rating";
-import { DoctorSpecialty } from "../../../doctor/domain/value-objects/doctor-specialty.enum";
 import { DoctorSurnames } from "../../../doctor/domain/value-objects/doctor-surnames";
 import { OrmDoctorMapper } from "../mappers/orm-doctor-mapper";
-import { OrmDoctorCriteriasDto } from "../dtos/orm-doctor-criterias.dto";
 import { InvalidDoctorException } from "../../../doctor/domain/exceptions/invalid-doctor.exception";
+import { DoctorSpecialty } from "../../domain/value-objects/doctor-specialty";
 
 @EntityRepository(OrmDoctor)
 export class OrmDoctorRepository extends Repository<OrmDoctor> implements IDoctorRepository {
@@ -29,7 +28,7 @@ export class OrmDoctorRepository extends Repository<OrmDoctor> implements IDocto
     }
 
     async findOneById(id: DoctorId): Promise<Doctor> {
-        const ormDoctor = await this.findOne({ where: { id: id.value } });
+        const ormDoctor = await this.findOne({ where: { id: id.Value } });
         return (ormDoctor) ? this.ormDoctorMapper.fromOtherToDomain(ormDoctor) : null;
     }
 
@@ -40,29 +39,86 @@ export class OrmDoctorRepository extends Repository<OrmDoctor> implements IDocto
     }
 
     async findDoctorByCriterias(criterias: Partial<{ names: DoctorNames; surnames: DoctorSurnames; specialty: DoctorSpecialty; location: DoctorLocation; rating: DoctorRating; }>, options: RepositoryPagingDto): Promise<Doctor[]> {
-        const ormCriterias: OrmDoctorCriteriasDto = {};
+        let andWhere: boolean = false;
 
-        if (criterias?.names?.FirstName) { ormCriterias.firstName = criterias.names.FirstName; }
-        if (criterias?.names?.MiddleName) { ormCriterias.middleName = criterias.names.MiddleName; }
-        if (criterias?.surnames?.FirstSurname) { ormCriterias.firstSurname = criterias.surnames.FirstSurname; }
-        if (criterias?.surnames?.SecondSurname) { ormCriterias.secondSurname = criterias.surnames.SecondSurname; }
-        if (criterias?.location?.Latitude) { ormCriterias.latitude = criterias.location.Latitude; }
-        if (criterias?.location?.Longitude) { ormCriterias.longitude = criterias.location.Longitude; }
-        if (criterias?.rating?.Score) { ormCriterias.rating = criterias.rating.Score; }
+        const query = this.createQueryBuilder("d").leftJoin("d.specialties", "s").select(["d", "s"]);
 
-        const ormDoctors: OrmDoctor[] = await this.find({
-            where: {
-                firstName: ormCriterias.firstName,
-                middleName: ormCriterias.middleName,
-                firstSurname: ormCriterias.firstSurname,
-                secondSurname: ormCriterias.secondSurname,
-                latitude: ormCriterias.latitude,
-                longitude: ormCriterias.longitude,
-                rating: Between(ormCriterias.rating - 1, ormCriterias.rating + 1),
-                specialties: { specialty: ormCriterias.specialty }
-            },
-            skip: options.pageIndex * options.pageSize, take: options.pageSize
-        });
+        if (criterias?.names?.FirstName) {
+            query.andWhere("LOWER(d.firstName ) LIKE LOWER(:firstName)", { firstName: `%${criterias.names.FirstName}%` });
+            andWhere = true;
+        }
+
+        if (criterias?.names?.MiddleName !== undefined) {
+            if (andWhere) {
+                query.andWhere("LOWER(d.middleName ) LIKE LOWER(:middleName)", { middleName: `%${criterias.names.MiddleName}%` });
+            }
+            else {
+                query.where("LOWER(d.middleName ) LIKE LOWER(:middleName)", { middleName: `%${criterias.names.MiddleName}%` });
+                andWhere = true;
+            }
+        }
+
+        if (criterias?.surnames?.FirstSurname) {
+            if (andWhere) {
+                query.andWhere("LOWER(d.firstSurname ) LIKE LOWER(:firstSurname)", { firstSurname: `%${criterias.surnames.FirstSurname}%` });
+            }
+            else {
+                query.where("LOWER(d.firstSurname ) LIKE LOWER(:firstSurname)", { firstSurname: `%${criterias.surnames.FirstSurname}%` });
+                andWhere = true;
+            }
+        }
+
+        if (criterias?.surnames?.SecondSurname !== undefined) {
+            if (andWhere) {
+                query.andWhere("LOWER(d.secondSurname ) LIKE LOWER(:secondSurname)", { secondSurname: `%${criterias.surnames.SecondSurname}%` });
+            }
+            else {
+                query.where("LOWER(d.secondSurname ) LIKE LOWER(:secondSurname)", { secondSurname: `%${criterias.surnames.SecondSurname}%` });
+                andWhere = true;
+            }
+        }
+
+        if (criterias?.location?.Latitude) {
+            if (andWhere) {
+                query.andWhere("d.latitude = :latitude", { latitude: criterias.location.Latitude });
+            }
+            else {
+                query.where("d.latitude = :latitude", { latitude: criterias.location.Latitude });
+                andWhere = true;
+            }
+        }
+
+        if (criterias?.location?.Longitude) {
+            if (andWhere) {
+                query.andWhere("d.longitude = :longitude", { longitude: criterias.location.Longitude });
+            }
+            else {
+                query.where("d.longitude = :longitude", { longitude: criterias.location.Longitude });
+                andWhere = true;
+            }
+        }
+
+        if (criterias?.rating?.Score) {
+            if (andWhere) {
+                query.andWhere("d.rating BETWEEN :rating_start AND :rating_end", { rating_start: (criterias?.rating?.Score - 1), rating_end: (criterias?.rating?.Score + 1) });
+            }
+            else {
+                query.where("d.rating BETWEEN :rating_start AND :rating_end", { rating_start: (criterias?.rating?.Score - 1), rating_end: (criterias?.rating?.Score + 1) });
+                andWhere = true;
+            }
+        }
+
+        if (criterias?.specialty) {
+            if (andWhere) {
+                query.andWhere("s.specialty = :specialty", { specialty: criterias.specialty.Value });
+            }
+            else {
+                query.where("s.specialty = :specialty", { specialty: criterias.specialty.Value });
+                andWhere = true;
+            }
+        }
+
+        const ormDoctors = await query.skip(options.pageIndex * options.pageSize).take(options.pageSize).getMany();
 
         const doctors: Doctor[] = [];
 
