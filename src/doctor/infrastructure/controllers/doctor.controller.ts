@@ -24,6 +24,7 @@ import { DoctorGenderEnum } from 'src/doctor/domain/value-objects/doctor-gender.
 import { DoctorStatus } from 'src/doctor/domain/value-objects/doctor-status';
 import { DoctorStatusEnum } from 'src/doctor/domain/value-objects/doctor-status.enum';
 import { OrmDoctorMulMapper } from '../mappers/orm-doctor-mul-mapper';
+import { ResultMapper } from 'src/core/application/result-handler/result.mapper';
 
 @Controller('doctor')
 export class DoctorController {
@@ -38,7 +39,7 @@ export class DoctorController {
     }
 
     @Post('search')
-    async getDoctorsByCriteria(@Body() searchDoctorsByCriteriaApplicationServiceRequest: SearchDoctorsByCriteriaApplicationServiceRequest, @Query('pageIndex') pageIndex, @Query('pageSize') pageSize) {
+    async getDoctorsByCriteria(@Body() searchDoctorsByCriteriaApplicationServiceRequest: SearchDoctorsByCriteriaApplicationServiceRequest, @Query('pageIndex') pageIndex, @Query('pageSize') pageSize): Promise<Result<OrmDoctor[]>> {
         //Agregamos Paginación
         searchDoctorsByCriteriaApplicationServiceRequest.paging = { pageIndex: (pageIndex) ? pageIndex : 0, pageSize: (pageSize) ? pageSize : 100 };
 
@@ -53,7 +54,13 @@ export class DoctorController {
         //Ejecutamos el caso de uso
         const result = (await service.execute(searchDoctorsByCriteriaApplicationServiceRequest));
 
-        return (result.IsSuccess) ? Result.success(await this.ormDoctorMulMapper.fromDomainToOther(result.Value)) : result;
+        //Mapeamos y retornamos.
+        return ResultMapper.map(
+            result,
+            (value: Doctor[]) => {
+                return this.ormDoctorMulMapper.fromDomainToOther(value)
+            }
+        );
     }
 
     //#region EXTRAS

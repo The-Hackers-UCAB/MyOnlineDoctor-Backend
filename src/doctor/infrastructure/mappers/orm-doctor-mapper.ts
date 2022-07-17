@@ -16,6 +16,9 @@ export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
     constructor(private readonly doctorRatingDomainService = new DoctorRatingDomainService()) { }
 
     async fromDomainToOther(domain: Doctor): Promise<OrmDoctor> {
+        //Verificamos que no sea null
+        if (!domain) { return null; }
+
         //Creamos un objeto de doctor de tipo ORM.
         const ormDoctor: OrmDoctor = await OrmDoctor.create(
             domain.Id.Value,
@@ -37,6 +40,9 @@ export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
     }
 
     async fromOtherToDomain(other: OrmDoctor): Promise<Doctor> {
+        //Verificamos que no sea null
+        if (!other) { return null; }
+
         //Transformamos las especialidades del ORM a domain.
         const specialties: DoctorSpecialty[] = [];
         other.specialties.forEach((specialty) => {

@@ -14,9 +14,9 @@ export class Result<T>{
         return this.value;
     }
 
-    /** Retorna el mensaje del error encapsulado. */
-    get Error(): string {
-        return this.error.message;
+    /** Retorna el error encapsulado. */
+    get Error(): Error {
+        return this.error;
     }
 
     /** Retorna `true` si el resultado fue exitoso, en caso contrario `false`. */
