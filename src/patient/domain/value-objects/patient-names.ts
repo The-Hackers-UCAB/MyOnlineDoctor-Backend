@@ -1,5 +1,5 @@
 import { IValueObject } from "../../../core/domain/value-objects/value-object.interface";
-import { InvalidPatientIdException } from "../exceptions/invalid-patient-id.exception";
+import { InvalidPatientNamesException } from "../exceptions/invalid-patient-names.exception";
 
 
 export class PatientNames implements IValueObject<PatientNames> {
@@ -10,12 +10,12 @@ export class PatientNames implements IValueObject<PatientNames> {
     get MiddleName() { return this.secondName; }
 
     private constructor(firstName: string, lastName: string) {
-        if (firstName && lastName) {
+        if (firstName) {
             this.firstName = firstName;
             this.secondName = lastName;
         }
         else {
-            throw new InvalidPatientIdException();
+            throw new InvalidPatientNamesException();
         }
     }
 

@@ -26,14 +26,10 @@ export class EventBus implements IEventHandler {
     /**Patron Singleton.
      * @returns Retorna una instancia del Bus de Eventos con Logging.*/
     public static getInstance(): IEventHandler {
-        if (this.instance === undefined) {
-            this.instance = new LoggingEventHandlerDecorator(
-                new EventBus(),
-                new NestLogger()
-            );
-        }
-
-        return this.instance;
+        return this.instance = new LoggingEventHandlerDecorator(
+            new EventBus(),
+            new NestLogger()
+        );;
     }
 
     async publish(events: DomainEvent[]): Promise<void> {

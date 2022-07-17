@@ -99,7 +99,7 @@ export class Patient extends AggregateRoot<PatientId> {
 
     //Validar estados
     protected ensureValidState(): void {
-        if (!this.names || !this.surnames || !this.birthdate || !this.allergies || !this.background || !this.height || !this.phoneNumber || !this.status || !this.weight || !this.surgeries || !this.gender) {
+        if (!this.Id || !this.names || !this.surnames || !this.birthdate || !this.allergies || !this.background || !this.height || !this.phoneNumber || !this.status || !this.weight || !this.surgeries || !this.gender) {
             throw new InvalidPatientException();
         }
     }

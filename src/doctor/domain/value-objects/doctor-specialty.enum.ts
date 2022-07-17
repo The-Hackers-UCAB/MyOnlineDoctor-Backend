@@ -1,5 +1,5 @@
 export enum DoctorSpecialtyEnum {
-    CARDIOLOGY = "CARDIOLOGIA",
+    CARDIOLOGY = "Cardiologia",
     OPHTHALMOLOGY = "OFTALMOLOGIA",
     OTOLARYNGOLOGY = "OTORRINOLARINGOLOGIA",
     UROLOGY = "UROLOGIA",

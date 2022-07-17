@@ -19,12 +19,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     async validate(request: Request, email: string, password: string): Promise<SessionDto> {
         const userDto = await this.authService.validateUser(email, password);
 
-        if (userDto.role == Role.Doctor) {
+        if (userDto.role == Role.DOCTOR) {
             if (userDto.doctor.status == DoctorStatusEnum.BLOCKED || userDto.doctor.status == DoctorStatusEnum.DELETED) {
                 throw new UnauthorizedException("Doctor eliminado o bloqueado.")
             }
         }
-        else if (userDto.role == Role.Patient) {
+        else if (userDto.role == Role.PATIENT) {
             if (userDto.patient.status == PatientStatusEnum.BLOCKED || userDto.patient.status == PatientStatusEnum.DELETED) {
                 throw new UnauthorizedException("Paciente eliminado o bloqueado.")
             }

@@ -6,15 +6,15 @@ import { Role } from "../roles/role.entity.enum";
 
 /** UserEntity Es una entitdad de infraestructura (ORM) utilizada únicamente para el manejo de seguridad. */
 @Entity({ name: 'users' })
-@Check(`("role" = 'DOCTOR' AND "doctor_id" IS NOT NULL) OR ("role" = 'PACIENTE' AND "patient_id" IS NOT NULL) OR ("role" = 'ADMIN' AND "doctor_id" IS NULL AND "patient_id" IS NULL)`)
+@Check(`("role" = 'Doctor' AND "doctor_id" IS NOT NULL) OR ("role" = 'Paciente' AND "patient_id" IS NOT NULL) OR ("role" = 'Admin' AND "doctor_id" IS NULL AND "patient_id" IS NULL)`)
 export class UserEntity {
     @Index() @PrimaryGeneratedColumn() id: number;
 
-    @Column({ length: 255, unique: true }) email: string;
+    @Column({ length: 255, unique: true, nullable: false }) email: string;
 
-    @Column({ length: 255 }) password: string;
+    @Column({ length: 255, nullable: false }) password: string;
 
-    @Column({ type: 'enum', enum: Role }) role: Role;
+    @Column({ type: 'enum', enum: Role, nullable: false }) role: Role;
 
     @CreateDateColumn({ name: 'created_at' }) createdAt: Date;
 
@@ -23,7 +23,13 @@ export class UserEntity {
 
     @OneToMany(() => SessionEntity, (sessionEntity) => sessionEntity.user) sessions: Promise<SessionEntity[]>;
 
+
+    @Column({ name: 'doctor_id', nullable: true }) doctorId: string;
+
     @OneToOne(() => OrmDoctor, { eager: true, nullable: true }) @JoinColumn({ name: 'doctor_id' }) doctor: OrmDoctor;
+
+
+    @Column({ name: 'patient_id', nullable: true }) patientId: string;
 
     @OneToOne(() => OrmPatient, { eager: true, nullable: true }) @JoinColumn({ name: 'patient_id' }) patient: OrmPatient;
 }
