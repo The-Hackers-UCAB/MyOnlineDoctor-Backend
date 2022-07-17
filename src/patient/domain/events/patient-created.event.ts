@@ -4,14 +4,13 @@ import { PatientNames } from "../value-objects/patient-names";
 import { PatientBirthdate } from "../value-objects/patient-birthdate";
 import { PatientAllergies } from "../value-objects/patient-allergies";
 import { PatientBackground } from "../value-objects/patient-background";
-import { PatientGender } from "../value-objects/patient-gender";
 import { PatientHeight } from "../value-objects/patient-height";
 import { PatientPhoneNumber } from "../value-objects/patient-phone-number";
-import { PatientStatus } from "../value-objects/patient-status";
 import { PatientWeight } from "../value-objects/patient-weight";
 import { PatientSurgeries } from "../value-objects/patient-surgeries";
 import { PatientSurnames } from "../value-objects/patient-surnames";
-
+import { PatientStatus } from "../value-objects/patient-status";
+import { PatientGender } from "../value-objects/patient-gender";
 
 export class PatientCreated extends DomainEvent {
     protected constructor(
@@ -27,24 +26,23 @@ export class PatientCreated extends DomainEvent {
         public weight: PatientWeight,
         public surgeries: PatientSurgeries,
         public gender: PatientGender
-        )
-        {
-            super();
-        }
+    ) {
+        super();
+    }
 
     static create(
-         id: PatientId,
-         names: PatientNames,
-         surnames: PatientSurnames,
-         birthdate: PatientBirthdate,
-         allergies: PatientAllergies,
-         background: PatientBackground,
-         height: PatientHeight,
-         phoneNumber: PatientPhoneNumber,
-         status: PatientStatus,
-         weight: PatientWeight,
-         surgeries: PatientSurgeries,
-         gender: PatientGender
+        id: PatientId,
+        names: PatientNames,
+        surnames: PatientSurnames,
+        birthdate: PatientBirthdate,
+        allergies: PatientAllergies,
+        background: PatientBackground,
+        height: PatientHeight,
+        phoneNumber: PatientPhoneNumber,
+        status: PatientStatus,
+        weight: PatientWeight,
+        surgeries: PatientSurgeries,
+        gender: PatientGender
     ): PatientCreated {
         return new PatientCreated(
             id,

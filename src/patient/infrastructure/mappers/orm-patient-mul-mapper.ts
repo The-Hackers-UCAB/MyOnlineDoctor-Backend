@@ -11,6 +11,8 @@ export class OrmPatientMulMapper implements IMapper<Patient[], OrmPatient[]> {
     }
 
     async fromDomainToOther(domain: Patient[]): Promise<OrmPatient[]> {
+        if (!domain) { return null; }
+
         const ormPatients: OrmPatient[] = [];
         for await (const patient of domain) {
             ormPatients.push(await this.ormPatientMapper.fromDomainToOther(patient));
@@ -20,8 +22,9 @@ export class OrmPatientMulMapper implements IMapper<Patient[], OrmPatient[]> {
     }
 
     async fromOtherToDomain(other: OrmPatient[]): Promise<Patient[]> {
-        const patients: Patient[] = [];
+        if (!other) { return null; }
 
+        const patients: Patient[] = [];
         for await (const ormPatient of other) {
             patients.push(await this.ormPatientMapper.fromOtherToDomain(ormPatient));
         }

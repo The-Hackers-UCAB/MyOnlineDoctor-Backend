@@ -1,8 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { SessionDto } from "../sessions/dtos/session.dto";
 import { PassportStrategy } from "@nestjs/passport";
 import { AuthService } from "../auth.service";
 import { Strategy } from "passport-local";
+import { Role } from "src/security/users/roles/role.entity.enum";
+import { DoctorStatusEnum } from "src/doctor/domain/value-objects/doctor-status.enum";
+import { PatientStatusEnum } from "src/patient/domain/value-objects/patient-status.enum";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -16,9 +19,18 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     async validate(request: Request, email: string, password: string): Promise<SessionDto> {
         const userDto = await this.authService.validateUser(email, password);
 
-        //Verificar que el Doctor o Paciente no esté bloqueado.
+        if (userDto.role == Role.Doctor) {
+            if (userDto.doctor.status == DoctorStatusEnum.BLOCKED || userDto.doctor.status == DoctorStatusEnum.DELETED) {
+                throw new UnauthorizedException("Doctor eliminado o bloqueado.")
+            }
+        }
+        else if (userDto.role == Role.Patient) {
+            if (userDto.patient.status == PatientStatusEnum.BLOCKED || userDto.patient.status == PatientStatusEnum.DELETED) {
+                throw new UnauthorizedException("Paciente eliminado o bloqueado.")
+            }
+        }
 
-        return { userId: userDto.id, userRole: userDto.role, userIpAddress: this.ipAddress(request) };
+        return { userId: userDto.id, userRole: userDto.role, userIpAddress: this.ipAddress(request), doctorId: userDto.doctor?.id, patientId: userDto.patient?.id };
     }
 
     private ipAddress(request: any): string {

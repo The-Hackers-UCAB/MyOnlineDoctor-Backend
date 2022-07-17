@@ -23,6 +23,7 @@ import { DoctorStatus } from 'src/doctor/domain/value-objects/doctor-status';
 import { DoctorStatusEnum } from 'src/doctor/domain/value-objects/doctor-status.enum';
 import { OrmDoctorMulMapper } from '../mappers/orm-doctor-mul-mapper';
 import { ResultMapper } from 'src/core/application/result-handler/result.mapper';
+import { UUIDGenerator } from 'src/core/infrastructure/uuid/uuid-generator';
 
 @Controller('doctor')
 export class DoctorController {
@@ -64,7 +65,7 @@ export class DoctorController {
     //#region EXTRAS
 
     @Get('/:id')
-    async getDoctorById(@Param('id') id: number) {
+    async getDoctorById(@Param('id') id: string) {
         return this.ormDoctorRepository.findOneByIdOrFail(DoctorId.create(id));
     }
 
@@ -79,7 +80,7 @@ export class DoctorController {
         );
 
         const doctor = Doctor.create(
-            DoctorId.create(10),
+            DoctorId.create(UUIDGenerator.generate()),
             DoctorNames.create("Susan"),
             DoctorSurnames.create("Smith"),
             DoctorLocation.create(-5, -152),

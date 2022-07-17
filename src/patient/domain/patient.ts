@@ -10,9 +10,9 @@ import { PatientAllergies } from "./value-objects/patient-allergies";
 import { PatientBackground } from "./value-objects/patient-background";
 import { PatientHeight } from "./value-objects/patient-height";
 import { PatientPhoneNumber } from "./value-objects/patient-phone-number";
-import { PatientStatus } from "./value-objects/patient-status";
 import { PatientWeight } from "./value-objects/patient-weight";
 import { PatientSurgeries } from "./value-objects/patient-surgeries";
+import { PatientStatus } from "./value-objects/patient-status";
 import { PatientGender } from "./value-objects/patient-gender";
 
 
@@ -32,19 +32,19 @@ export class Patient extends AggregateRoot<PatientId> {
     private gender: PatientGender;
 
     //getter
-    get Names() {return this.names}
-    get SurNames() {return this.surnames}
-    get BirthDate() {return this.birthdate}
-    get Allergies() {return this.allergies}
-    get Backgorund() {return this.background}
-    get Height() {return this.height}
-    get PhoneNumber() {return this.phoneNumber}
-    get Status() {return this.status}
-    get Weight() {return this.weight}
-    get Surgeries() {return this.surgeries}
-    get Gender() {return this.gender}
+    get Names() { return this.names }
+    get SurNames() { return this.surnames }
+    get BirthDate() { return this.birthdate }
+    get Allergies() { return this.allergies }
+    get Backgorund() { return this.background }
+    get Height() { return this.height }
+    get PhoneNumber() { return this.phoneNumber }
+    get Status() { return this.status }
+    get Weight() { return this.weight }
+    get Surgeries() { return this.surgeries }
+    get Gender() { return this.gender }
 
-    protected constructor (
+    protected constructor(
         id: PatientId,
         names: PatientNames,
         surnames: PatientSurnames,
@@ -57,7 +57,7 @@ export class Patient extends AggregateRoot<PatientId> {
         weight: PatientWeight,
         surgeries: PatientSurgeries,
         gender: PatientGender
-    ){
+    ) {
         const patientCreated = PatientCreated.create(
             id,
             names,
@@ -76,8 +76,8 @@ export class Patient extends AggregateRoot<PatientId> {
     }
 
     //asignando estados
-    protected when(event: DomainEvent) : void {
-        switch(event.constructor) {
+    protected when(event: DomainEvent): void {
+        switch (event.constructor) {
             case PatientCreated:
                 const patientCreated = event as PatientCreated;
                 this.names = patientCreated.names;
@@ -117,8 +117,7 @@ export class Patient extends AggregateRoot<PatientId> {
         weight: PatientWeight,
         surgeries: PatientSurgeries,
         gender: PatientGender
-
-    ) : Patient {
+    ): Patient {
         return new Patient(
             id,
             names,
@@ -134,5 +133,4 @@ export class Patient extends AggregateRoot<PatientId> {
             gender
         );
     }
-
 }

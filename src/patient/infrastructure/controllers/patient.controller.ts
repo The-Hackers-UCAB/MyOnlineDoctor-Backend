@@ -12,9 +12,6 @@ import { PatientHeight } from 'src/patient/domain/value-objects/patient-height';
 import { PatientWeight } from 'src/patient/domain/value-objects/patient-weight';
 import { PatientPhoneNumber } from 'src/patient/domain/value-objects/patient-phone-number';
 import { PatientSurgeries } from 'src/patient/domain/value-objects/patient-surgeries';
-import { PatientStatus } from 'src/patient/domain/value-objects/patient-status';
-import { PatientGender } from 'src/patient/domain/value-objects/patient-gender';
-import { OrmPatientMapper } from '../mappers/orm-patient-mapper';
 import { ErrorApplicationServiceDecorator } from 'src/core/application/application-service/decoratos/error-decorator/error-application-service.decorator';
 import { LoggingApplicationServiceDecorator } from 'src/core/application/application-service/decoratos/logging-decorator/logging-application-service.decorator';
 import { Result } from 'src/core/application/result-handler/result';
@@ -23,7 +20,11 @@ import { SearchAssociatedPatientsApplicationService, SearchAssociatedPatientsApp
 import { OrmPatientMulMapper } from '../mappers/orm-patient-mul-mapper';
 import { EventBus } from '../../../core/infrastructure/event-handler/event-bus';
 import { PatientCreated } from 'src/patient/domain/events/patient-created.event';
-
+import { UUIDGenerator } from 'src/core/infrastructure/uuid/uuid-generator';
+import { PatientStatus } from 'src/patient/domain/value-objects/patient-status';
+import { PatientStatusEnum } from 'src/patient/domain/value-objects/patient-status.enum';
+import { PatientGender } from 'src/patient/domain/value-objects/patient-gender';
+import { PatientGenderEnum } from 'src/patient/domain/value-objects/patient-gender.enum';
 
 @Controller('patient')
 export class PatientController {
@@ -31,7 +32,7 @@ export class PatientController {
     private readonly ormPatientRepository: OrmPatientRepository;
     private readonly ormPatientMulMapper: OrmPatientMulMapper;
 
-    constructor( private readonly manager: EntityManager){
+    constructor(private readonly manager: EntityManager) {
         if (!manager) { throw new Error("Entity manager can't be null"); }
         this.ormPatientRepository = manager.getCustomRepository(OrmPatientRepository);
         this.ormPatientMulMapper = new OrmPatientMulMapper();
@@ -39,11 +40,11 @@ export class PatientController {
 
     @Post('searchPatients')
     async getAssociatedPatients(
-        @Body() request: SearchAssociatedPatientsApplicationServiceRequest, 
-        @Query('pageIndex') pageIndex, 
+        @Body() request: SearchAssociatedPatientsApplicationServiceRequest,
+        @Query('pageIndex') pageIndex,
         @Query('pageSize') pageSize) {
-        request.paging = {pageIndex: (pageIndex) ? pageIndex : 0, pageSize: (pageSize) ? pageSize : 100};
-            
+        request.paging = { pageIndex: (pageIndex) ? pageIndex : 0, pageSize: (pageSize) ? pageSize : 100 };
+
         const service = new ErrorApplicationServiceDecorator(
             new LoggingApplicationServiceDecorator(
                 new SearchAssociatedPatientsApplicationService(this.ormPatientRepository),
@@ -54,16 +55,16 @@ export class PatientController {
         const result = await service.execute(request);
 
         return (result.IsSuccess) ? Result.success(await this.ormPatientMulMapper.fromDomainToOther(result.Value)) : result;
-    
+
     }
 
     @Get('/Patient:id')
-    async getPatient(@Param('id') id: number) {
+    async getPatient(@Param('id') id: string) {
         return this.ormPatientRepository.findOneByIdOrFail(PatientId.create(id));
     }
 
     @Post('registerPatient')
-    async registerPatient(): Promise<{msg : string}> {
+    async registerPatient(): Promise<{ msg: string }> {
         await EventBus.getInstance().subscribe(
             PatientCreated.eventName(),
             (event: PatientCreated) => {
@@ -72,24 +73,24 @@ export class PatientController {
         );
 
         const patient = Patient.create(
-            PatientId.create(35),
+            PatientId.create(UUIDGenerator.generate()),
             PatientNames.create("Santiago"),
             PatientSurnames.create("Figueroa"),
-            PatientBirthdate.create( new Date("2000-09-01")),
+            PatientBirthdate.create(new Date("2000-09-01")),
             PatientAllergies.create("Ninguna"),
             PatientBackground.create("Ninguna"),
             PatientHeight.create(1.85),
             PatientPhoneNumber.create("0424-1234567"),
-            PatientStatus.ACTIVE,
+            PatientStatus.create(PatientStatusEnum.ACTIVE),
             PatientWeight.create(70),
             PatientSurgeries.create("Ninguna"),
-            PatientGender.MALE);
+            PatientGender.create(PatientGenderEnum.MALE)
+        );
 
         this.ormPatientRepository.saveAggregate(patient);
 
         EventBus.getInstance().publish(patient.pullEvents());
 
         return { msg: "Paciente Registrado" };
-
     }
 }
