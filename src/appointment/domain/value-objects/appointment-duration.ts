@@ -9,7 +9,7 @@ export class AppointmentDuration implements IValueObject<AppointmentDuration>{
 
     private constructor(hours: number) {
 
-        if (!hours || hours % 1 === 0 || hours <= 0) {
+        if (!hours || hours % 1 != 0 || hours <= 0) {
 
             throw new InvalidDurationAppointmentException();
         } else {

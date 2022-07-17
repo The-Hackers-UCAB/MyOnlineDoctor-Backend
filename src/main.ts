@@ -8,6 +8,7 @@ import { AppModule } from './app.module';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import { ExceptionInterceptor } from './core/infrastructure/interceptors/exception.interceptor';
+import { _ant_testing } from './_ant';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -50,5 +51,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ExceptionInterceptor());
 
   await app.listen(Number.parseInt(process.env.PORT) || 3000);
+
+  _ant_testing();
+
 }
 bootstrap();
