@@ -1,9 +1,12 @@
-import { SessionEntity } from "src/security/auth/sessions/entities/session.entity";
-import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Check, Column, CreateDateColumn, Entity, Index, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { OrmDoctor } from "../../../doctor/infrastructure/entities/orm-doctor.entity";
+import { OrmPatient } from "../../../patient/infrastructure/entities/orm-patient.entity";
+import { SessionEntity } from "../../../security/auth/sessions/entities/session.entity";
 import { Role } from "../roles/role.entity.enum";
 
 /** UserEntity Es una entitdad de infraestructura (ORM) utilizada únicamente para el manejo de seguridad. */
 @Entity({ name: 'users' })
+@Check(`("role" = 'DOCTOR' AND "doctor_id" IS NOT NULL) OR ("role" = 'PACIENTE' AND "patient_id" IS NOT NULL) OR ("role" = 'ADMIN' AND "doctor_id" IS NULL AND "patient_id" IS NULL)`)
 export class UserEntity {
     @Index() @PrimaryGeneratedColumn() id: number;
 
@@ -20,5 +23,7 @@ export class UserEntity {
 
     @OneToMany(() => SessionEntity, (sessionEntity) => sessionEntity.user) sessions: Promise<SessionEntity[]>;
 
-    //Colocar las FKs a Doctor y Paciente (Arco exclusivo).
+    @OneToOne(() => OrmDoctor, { eager: true, nullable: true }) @JoinColumn({ name: 'doctor_id' }) doctor: OrmDoctor;
+
+    @OneToOne(() => OrmPatient, { eager: true, nullable: true }) @JoinColumn({ name: 'patient_id' }) patient: OrmPatient;
 }
