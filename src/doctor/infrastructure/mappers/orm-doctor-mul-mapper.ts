@@ -12,6 +12,10 @@ export class OrmDoctorMulMapper implements IMapper<Doctor[], OrmDoctor[]>{
     }
 
     async fromDomainToOther(domain: Doctor[]): Promise<OrmDoctor[]> {
+        //Verificamos que no sea null
+        if (!domain) { return null; }
+
+        //Transformamos
         const ormDoctors: OrmDoctor[] = [];
         for await (const doctor of domain) {
             ormDoctors.push(await this.ormDoctorMapper.fromDomainToOther(doctor));
@@ -21,8 +25,11 @@ export class OrmDoctorMulMapper implements IMapper<Doctor[], OrmDoctor[]>{
     }
 
     async fromOtherToDomain(other: OrmDoctor[]): Promise<Doctor[]> {
-        const doctors: Doctor[] = [];
+        //Verificamos que no sea null
+        if (!other) { return null; }
 
+        //Transformamos
+        const doctors: Doctor[] = [];
         for await (const ormDoctor of other) {
             doctors.push(await this.ormDoctorMapper.fromOtherToDomain(ormDoctor));
         }
