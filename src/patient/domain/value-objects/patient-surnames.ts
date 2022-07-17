@@ -2,24 +2,34 @@ import { IValueObject } from "src/core/domain/value-objects/value-object.interfa
 import { InvalidPatientSurnamesException } from "../exceptions/invalid-patient-surnames.exception";
 
 export class PatientSurnames implements IValueObject<PatientSurnames> {
-    private readonly surnames: string;
+    private readonly firstSurname: string;
+    private readonly secondSurname?: string;
 
-    get value() { return this.surnames; }
+    get FirstSurname() { return this.firstSurname; }
+    get SecondSurname() { return this.secondSurname; }
 
-    private constructor(surnames: string) {
-        if (surnames) {
-            this.surnames = surnames;
+    private constructor(firstSurname: string, secondSurname: string) {
+        let error: boolean = false;
+        if (!firstSurname || firstSurname.length < 3) {
+            error = true;
+        }
+        if (secondSurname && secondSurname.length < 3) {
+            error = true;
+        }
+        if (error) {
+            throw new InvalidPatientSurnamesException();
         }
         else {
-            throw new InvalidPatientSurnamesException();
+            this.firstSurname = firstSurname;
+            this.secondSurname = secondSurname;
         }
     }
 
     equals(other: PatientSurnames): boolean {
-        return this.surnames == other.surnames;
+        return this.firstSurname == other.firstSurname && this.secondSurname == other.secondSurname
     }
 
-    static create(surnames: string): PatientSurnames {
-        return new PatientSurnames(surnames);
+    static create(firstSurname: string, secondSurname?: string): PatientSurnames {
+        return new PatientSurnames(firstSurname, secondSurname);
     }
 }

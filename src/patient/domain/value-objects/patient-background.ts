@@ -5,7 +5,7 @@ import { InvalidPatientBackgroundException } from "../exceptions/invalid-patient
 export class PatientBackground implements IValueObject<PatientBackground> {
     private readonly background: string;
 
-    get value() { return this.background; }
+    get Value() { return this.background; }
 
     private constructor(background: string) {
         if (background) {

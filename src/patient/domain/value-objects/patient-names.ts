@@ -4,9 +4,10 @@ import { InvalidPatientIdException } from "../exceptions/invalid-patient-id.exce
 
 export class PatientNames implements IValueObject<PatientNames> {
     private readonly firstName: string;
-    private readonly secondName: string;
+    private readonly secondName?: string;
 
-    get value() { return this.firstName + " " + this.secondName; }
+    get FirstName() { return this.firstName; }
+    get MiddleName() { return this.secondName; }
 
     private constructor(firstName: string, lastName: string) {
         if (firstName && lastName) {
@@ -22,7 +23,7 @@ export class PatientNames implements IValueObject<PatientNames> {
         return this.firstName == other.firstName && this.secondName == other.secondName;
     }
 
-    static create(firstName: string, secondName: string): PatientNames {
+    static create(firstName: string, secondName?: string): PatientNames {
         return new PatientNames(firstName, secondName);
     }
 }

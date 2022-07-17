@@ -5,7 +5,7 @@ import { InvalidPatientAllergiesException } from "../exceptions/invalid-patient-
 export class PatientAllergies implements IValueObject<PatientAllergies> {
     private readonly allergies: string;
 
-    get value() { return this.allergies; }
+    get Value() { return this.allergies; }
 
     private constructor(allergies: string) {
         if (allergies) {

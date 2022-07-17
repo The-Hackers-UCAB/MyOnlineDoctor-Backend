@@ -5,7 +5,7 @@ import { InvalidPatientHeightException } from "../exceptions/invalid-patient-hei
 export class PatientHeight implements IValueObject<PatientHeight> {
     private readonly height: number;
 
-    get value() { return this.height; }
+    get Value() { return this.height; }
 
     private constructor(height: number) {
         if (height) {

@@ -5,7 +5,7 @@ import { InvalidPatientPhoneNumberException} from "../exceptions/invalid-patient
 export class PatientPhoneNumber implements IValueObject<PatientPhoneNumber> {
     private readonly phoneNumber: string;
 
-    get value() { return this.phoneNumber; }
+    get Value() { return this.phoneNumber; }
 
     private constructor(phoneNumber: string) {
         if (phoneNumber) {
