@@ -3,14 +3,12 @@ import { OrmDoctorRepository } from '../repositories/orm-doctor.repository';
 import { EntityManager } from 'typeorm';
 import { DoctorNames } from 'src/doctor/domain/value-objects/doctor-names';
 import { Doctor } from 'src/doctor/domain/doctor';
-import { DoctorRatingDomainService } from 'src/doctor/domain/domain-services/doctor-rating-domain-service';
 import { DoctorId } from 'src/doctor/domain/value-objects/doctor-id';
 import { DoctorLocation } from 'src/doctor/domain/value-objects/doctor-location';
 import { DoctorRating } from 'src/doctor/domain/value-objects/doctor-rating';
 import { DoctorSurnames } from 'src/doctor/domain/value-objects/doctor-surnames';
 import { EventBus } from 'src/core/infrastructure/event-handler/event-bus';
 import { DoctorCreated } from 'src/doctor/domain/events/doctor-created';
-import { OrmDoctorMapper } from '../mappers/orm-doctor-mapper';
 import { ErrorApplicationServiceDecorator } from 'src/core/application/application-service/decoratos/error-decorator/error-application-service.decorator';
 import { LoggingApplicationServiceDecorator } from 'src/core/application/application-service/decoratos/logging-decorator/logging-application-service.decorator';
 import { Result } from 'src/core/application/result-handler/result';
@@ -25,6 +23,7 @@ import { DoctorStatus } from 'src/doctor/domain/value-objects/doctor-status';
 import { DoctorStatusEnum } from 'src/doctor/domain/value-objects/doctor-status.enum';
 import { OrmDoctorMulMapper } from '../mappers/orm-doctor-mul-mapper';
 import { ResultMapper } from 'src/core/application/result-handler/result.mapper';
+import { UUIDGenerator } from 'src/core/infrastructure/uuid/uuid-generator';
 
 @Controller('doctor')
 export class DoctorController {
@@ -66,7 +65,7 @@ export class DoctorController {
     //#region EXTRAS
 
     @Get('/:id')
-    async getDoctorById(@Param('id') id: number) {
+    async getDoctorById(@Param('id') id: string) {
         return this.ormDoctorRepository.findOneByIdOrFail(DoctorId.create(id));
     }
 
@@ -81,14 +80,11 @@ export class DoctorController {
         );
 
         const doctor = Doctor.create(
-            DoctorId.create(10),
+            DoctorId.create(UUIDGenerator.generate()),
             DoctorNames.create("Susan"),
             DoctorSurnames.create("Smith"),
             DoctorLocation.create(-5, -152),
-            DoctorRating.create(
-                10, 150,
-                (new DoctorRatingDomainService()).execute({ count: 10, total: 150 })
-            ),
+            DoctorRating.create(5),
             DoctorGender.create(DoctorGenderEnum.FEMALE),
             DoctorStatus.create(DoctorStatusEnum.ACTIVE),
             [DoctorSpecialty.create(DoctorSpecialtyEnum.UROLOGY), DoctorSpecialty.create(DoctorSpecialtyEnum.NEPHROLOGY)]

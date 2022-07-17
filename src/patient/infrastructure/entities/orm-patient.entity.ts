@@ -1,49 +1,47 @@
-import { PatientGender } from "../../../patient/domain/value-objects/patient-gender";
-import { PatientStatus } from "../../../patient/domain/value-objects/patient-status";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
+import { PatientGenderEnum } from "../../../patient/domain/value-objects/patient-gender.enum";
+import { PatientStatusEnum } from "../../../patient/domain/value-objects/patient-status.enum";
+import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'patients' })
 export class OrmPatient {
-    @PrimaryGeneratedColumn() id: number;
+    @PrimaryColumn({ type: "uuid" }) id: string;
 
     @Column({ name: 'first_name', length: 32 }) firstName: string;
 
     @Column({ name: 'first_surname', length: 32 }) firstSurname: string;
 
-    @Column({ type: 'enum', enum: PatientGender }) gender: PatientGender;
+    @Column({ type: 'enum', enum: PatientGenderEnum }) gender: PatientGenderEnum;
 
-    @Column({ type: 'enum',enum: PatientStatus }) status: PatientStatus;
+    @Column({ type: 'enum', enum: PatientStatusEnum }) status: PatientStatusEnum;
 
-    @Column({ name: 'allergies' , length: 127}) allergies: string;
+    @Column({ name: 'allergies', length: 127 }) allergies: string;
 
     @Column({ name: 'background', length: 127 }) background: string;
 
-    @Column({name: 'birthdate', type: 'date'}) birthdate: Date;
+    @Column({ name: 'birthdate', type: 'date' }) birthdate: Date;
 
-    @Column({type: 'numeric', precision: 6, scale: 3}) height: number;
+    @Column({ type: 'numeric', precision: 6, scale: 3 }) height: number;
 
     @Column({ type: 'numeric', precision: 6, scale: 3 }) weight: number;
 
     @Column({ name: 'phoneNumber', length: 11 }) phoneNumber: string;
 
-    @Column({name: 'surgeries', length: 127}) surgeries: string;
+    @Column({ name: 'surgeries', length: 127 }) surgeries: string;
 
     @CreateDateColumn({ name: 'created_at' }) createdAt: Date;
 
     @UpdateDateColumn({ name: 'updated_at' }) updatedAt: Date;
 
-    @Column({name:'middle_name', length: 32, nullable: true}) middleName: string;
+    @Column({ name: 'middle_name', length: 32, nullable: true }) middleName: string;
 
-    @Column ({name:'second_surname', length: 32, nullable: true}) secondSurname: string;
-
+    @Column({ name: 'second_surname', length: 32, nullable: true }) secondSurname: string;
 
     static async create(
-        id: number,
+        id: string,
         firstName: string,
         firstSurname: string,
-        gender: PatientGender,
-        status: PatientStatus,
+        gender: PatientGenderEnum,
+        status: PatientStatusEnum,
         allergies: string,
         background: string,
         birthdate: Date,
@@ -53,7 +51,7 @@ export class OrmPatient {
         surgeries: string,
         middleName: string,
         secondSurname: string
-    ) : Promise<OrmPatient> {
+    ): Promise<OrmPatient> {
         const ormPatient: OrmPatient = new OrmPatient();
         ormPatient.id = id;
         ormPatient.firstName = firstName;

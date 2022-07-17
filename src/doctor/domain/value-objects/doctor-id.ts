@@ -1,13 +1,14 @@
 import { IValueObject } from "../../../core/domain/value-objects/value-object.interface";
 import { InvalidDoctorIdException } from "../exceptions/invalid-doctor-id.exception";
+const UUID_FORMAT = /([0-9]|[a-f]){8,8}-([0-9]|[a-f]){4,4}-([0-9]|[a-f]){4,4}-([0-9]|[a-f]){4,4}-([0-9]|[a-f]){12,12}/g
 
 export class DoctorId implements IValueObject<DoctorId>{
-    private readonly id: number;
+    private readonly id: string;
 
     get Value() { return this.id; }
 
-    private constructor(id: number) {
-        if (id) {
+    private constructor(id: string) {
+        if (id && id.match(UUID_FORMAT)) {
             this.id = id;
         }
         else {
@@ -19,7 +20,7 @@ export class DoctorId implements IValueObject<DoctorId>{
         return this.id == other.id;
     }
 
-    static create(id: number): DoctorId {
+    static create(id: string): DoctorId {
         return new DoctorId(id);
     }
 }

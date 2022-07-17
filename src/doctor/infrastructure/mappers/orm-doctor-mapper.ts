@@ -28,9 +28,7 @@ export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
             domain.Status.Value,
             domain.Location.Latitude,
             domain.Location.Longitude,
-            domain.Rating.Count,
-            domain.Rating.Total,
-            domain.Rating.Score,
+            domain.Rating.Rating,
             domain.Specialties,
             domain.Names.MiddleName,
             domain.Surnames.SecondSurname
@@ -55,14 +53,7 @@ export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
             DoctorNames.create(other.firstName, other.middleName),
             DoctorSurnames.create(other.firstSurname, other.middleName),
             DoctorLocation.create(other.latitude, other.longitude),
-            DoctorRating.create(
-                other.count,
-                other.total,
-                this.doctorRatingDomainService.execute({
-                    count: other.count,
-                    total: other.total
-                })
-            ),
+            DoctorRating.create(other.rating),
             DoctorGender.create(other.gender),
             DoctorStatus.create(other.status),
             specialties

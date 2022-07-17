@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { getManager } from 'typeorm';
+import { GetDoctorId } from '../users/decorators/get-doctor-id.decortator';
+import { GetPatientId } from '../users/decorators/get-patient-id.decorator';
 import { GetUserId } from '../users/decorators/get-user-id.decorator';
 import { CreateUserDto } from '../users/dtos/create-user.dto';
 import { UsersRepository } from '../users/repositories/users.repository';
@@ -32,10 +34,10 @@ export class AuthController {
     }
 
     @Get('protected')
-    @Roles(Role.Doctor)
+    @Roles(Role.PATIENT)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
-    async protectefFunction(@GetUserId() userId): Promise<{ msg: string }> {
-        return { msg: "User Id " + userId }
+    async protectefFunction(@GetUserId() userId, @GetPatientId() patientId, @GetDoctorId() doctorId): Promise<{ msg: string }> {
+        return { msg: "Patient Id " + patientId }
     }
 }

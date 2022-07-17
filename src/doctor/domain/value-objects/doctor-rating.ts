@@ -2,29 +2,23 @@ import { IValueObject } from "../../../core/domain/value-objects/value-object.in
 import { InvalidDoctorRatingException } from "../exceptions/invalid-doctor-rating.exception";
 
 export class DoctorRating implements IValueObject<DoctorRating>{
-    private readonly count: number;
-    private readonly total: number;
-    private readonly score: number;
+    private readonly rating: number;
 
-    get Count() { return this.count; }
-    get Total() { return this.total; }
-    get Score() { return this.score; }
+    get Rating() { return this.rating; }
 
-    private constructor(count: number, total: number, score: number) {
-        if (count < 0 || total < 0 || score < 0) {
+    private constructor(rating: number) {
+        if (rating < 0) {
             throw new InvalidDoctorRatingException();
         }
 
-        this.count = count;
-        this.total = total;
-        this.score = score;
+        this.rating = rating;
     }
 
     equals(other: DoctorRating): boolean {
-        return this.score == other.score;
+        return this.rating == other.rating;
     }
 
-    static create(count: number, total: number, score: number): DoctorRating {
-        return new DoctorRating(count, total, score);
+    static create(rating: number): DoctorRating {
+        return new DoctorRating(rating);
     }
 }

@@ -21,7 +21,9 @@ export class UsersRepository extends Repository<UserEntity> {
         const userEntity = await this.create({
             email: createUserDto.email,
             password: (await this.hashPassword(createUserDto.password)),
-            role: createUserDto.role
+            role: createUserDto.role,
+            patientId: createUserDto.patientId,
+            doctorId: createUserDto.doctorId
         });
 
         try {

@@ -36,7 +36,7 @@ export class SearchDoctorsByCriteriaApplicationService implements IApplicationSe
         if (dto.firstName) { criterias.names = DoctorNames.create(dto.firstName, dto.middleName); }
         if (dto.firstSurname) { criterias.surnames = DoctorSurnames.create(dto.firstSurname, dto.secondSurname); }
         if (dto.latitude && dto.longitude) { criterias.location = DoctorLocation.create(dto.latitude, dto.longitude); }
-        if (dto.rating) { criterias.rating = DoctorRating.create(0, 0, dto.rating); }
+        if (dto.rating) { criterias.rating = DoctorRating.create(dto.rating); }
         if (dto.specialty) { criterias.specialty = DoctorSpecialty.create(dto.specialty); }
 
         //Buscamos los docores.

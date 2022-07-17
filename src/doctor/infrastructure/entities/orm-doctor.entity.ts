@@ -1,12 +1,12 @@
 import { DoctorSpecialty } from "../../domain/value-objects/doctor-specialty";
-import { Column, CreateDateColumn, Entity, getManager, Index, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, getManager, JoinTable, ManyToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { OrmDoctorSpecialty } from "./orm-doctor-specialty.entity";
 import { DoctorGenderEnum } from "../../../doctor/domain/value-objects/doctor-gender.enum";
 import { DoctorStatusEnum } from "../../../doctor/domain/value-objects/doctor-status.enum";
 
 @Entity({ name: 'doctors' })
 export class OrmDoctor {
-    @Index() @PrimaryGeneratedColumn() id: number;
+    @PrimaryColumn({ type: "uuid" }) id: string;
 
     @Column({ name: 'first_name', length: 32 }) firstName: string;
 
@@ -22,10 +22,6 @@ export class OrmDoctor {
 
     @Column({ type: 'numeric', precision: 6, scale: 3 }) longitude: number;
 
-
-    @Column({ type: 'numeric', precision: 6, scale: 3 }) count: number;
-
-    @Column({ type: 'numeric', precision: 6, scale: 3 }) total: number;
 
     @Column({ type: 'numeric', precision: 6, scale: 3 }) rating: number;
 
@@ -43,7 +39,7 @@ export class OrmDoctor {
 
     @Column({ name: 'second_surname', length: 32, nullable: true }) secondSurname: string;
 
-    static async create(id: number, firstName: string, firstSurname: string, gender: DoctorGenderEnum, status: DoctorStatusEnum, latitude: number, longitude: number, count: number, total: number, rating: number, specialties: DoctorSpecialty[], middleName?: string, secondSurname?: string): Promise<OrmDoctor> {
+    static async create(id: string, firstName: string, firstSurname: string, gender: DoctorGenderEnum, status: DoctorStatusEnum, latitude: number, longitude: number, rating: number, specialties: DoctorSpecialty[], middleName?: string, secondSurname?: string): Promise<OrmDoctor> {
         const ormDoctor: OrmDoctor = new OrmDoctor();
         ormDoctor.id = id;
         ormDoctor.firstName = firstName;
@@ -52,8 +48,6 @@ export class OrmDoctor {
         ormDoctor.status = status;
         ormDoctor.latitude = latitude;
         ormDoctor.longitude = longitude;
-        ormDoctor.count = count;
-        ormDoctor.total = total;
         ormDoctor.rating = rating;
         ormDoctor.middleName = middleName;
         ormDoctor.secondSurname = secondSurname;
