@@ -5,7 +5,7 @@ export class AppointmentDescription implements IValueObject<AppointmentDescripti
 
     private readonly description: string;
 
-    get Description() { return this.description; }
+    get Value() { return this.description; }
 
     private constructor(description: string) {
 

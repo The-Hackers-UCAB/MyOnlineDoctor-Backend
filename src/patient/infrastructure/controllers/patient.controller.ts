@@ -1,31 +1,40 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { OrmPatientRepository } from '../repositories/orm-patient.repository';
 import { EntityManager, getManager } from 'typeorm';
-import { PatientId } from 'src/patient/domain/value-objects/patient-id';
 import { ErrorApplicationServiceDecorator } from 'src/core/application/application-service/decoratos/error-decorator/error-application-service.decorator';
 import { LoggingApplicationServiceDecorator } from 'src/core/application/application-service/decoratos/logging-decorator/logging-application-service.decorator';
 import { Result } from 'src/core/application/result-handler/result';
 import { NestLogger } from 'src/core/infrastructure/logger/nest-logger';
-import { SearchAssociatedPatientsApplicationService, SearchAssociatedPatientsApplicationServiceRequest } from 'src/patient/application/services/search-associated-patients.application.service';
-import { OrmPatientMulMapper } from '../mappers/orm-patient-mul-mapper';
 import { EventBus } from '../../../core/infrastructure/event-handler/event-bus';
 import { PatientCreated } from 'src/patient/domain/events/patient-created.event';
-import { UUIDGenerator } from 'src/core/infrastructure/uuid/uuid-generator';
-import { RegisterPatientApplicationService, RegisterPatientApplicationServiceRequest } from 'src/patient/application/services/register-patient.application.service';
+
 import { CreateUserDto } from 'src/security/users/dtos/create-user.dto';
 import { UsersRepository } from 'src/security/users/repositories/users.repository';
 import { Role } from 'src/security/users/roles/role.entity.enum';
+import { UUIDGenerator } from 'src/core/infrastructure/uuid/uuid-generator';
+import { RegisterPatientApplicationServiceRequest, RegisterPatientApplicationService } from 'src/patient/application/services/register-patient.application.service';
+import { Appointment } from 'src/appointment/domain/appointment';
+import { SearchPatientAppointmentsApplicationService, SearchPatientAppointmentsApplicationServiceRequest } from 'src/patient/application/services/search-patient-appointment.application.service';
+import { OrmAppointmentRepository } from 'src/appointment/infrastructure/repositories/orm-appointment.repository';
+import { ResultMapper } from 'src/core/application/result-handler/result.mapper';
+import { OrmAppointmentMulMapper } from 'src/appointment/infrastructure/mappers/orm-appointment-mul.mapper';
+import { OrmAppointment } from 'src/appointment/infrastructure/entities/orm.appointment.entity';
+import { SessionGuard } from 'src/security/auth/sessions/session.guard';
+import { Roles } from 'src/security/users/roles/roles.decorator';
+import { RolesGuard } from 'src/security/users/roles/roles.guard';
+import { GetPatientId } from 'src/security/users/decorators/get-patient-id.decorator';
 
 @Controller('patient')
 export class PatientController {
 
     private readonly ormPatientRepository: OrmPatientRepository;
-    private readonly ormPatientMulMapper: OrmPatientMulMapper;
+    private readonly ormAppointmentRepository: OrmAppointmentRepository;
+    private readonly ormAppointmentMulMapper: OrmAppointmentMulMapper = new OrmAppointmentMulMapper();
 
     constructor(private readonly manager: EntityManager) {
         if (!manager) { throw new Error("Entity manager can't be null"); }
         this.ormPatientRepository = this.manager.getCustomRepository(OrmPatientRepository);
-        this.ormPatientMulMapper = new OrmPatientMulMapper();
+        this.ormAppointmentRepository = this.manager.getCustomRepository(OrmAppointmentRepository);
     }
 
     @Post('')
@@ -60,24 +69,31 @@ export class PatientController {
         return result;
     }
 
-    @Post('search')
-    async getAssociatedPatients(@Body() request: SearchAssociatedPatientsApplicationServiceRequest, @Query('pageIndex') pageIndex, @Query('pageSize') pageSize) {
-        request.paging = { pageIndex: (pageIndex) ? pageIndex : 0, pageSize: (pageSize) ? pageSize : 100 };
+    @Get('appointments')
+    @Roles(Role.PATIENT)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async getAppointments(@GetPatientId() id, @Query('pageIndex') pageIndex, @Query('pageSize') pageSize): Promise<Result<OrmAppointment[]>> {
+        //Agregamos Paginación
+        const searchPatientAppointmentsApplicationServiceRequest = { id, paging: { pageIndex: (pageIndex) ? pageIndex : 0, pageSize: (pageSize) ? pageSize : 100 } };
 
+        //Creamos el servicio de aplicación.
         const service = new ErrorApplicationServiceDecorator(
             new LoggingApplicationServiceDecorator(
-                new SearchAssociatedPatientsApplicationService(this.ormPatientRepository),
+                new SearchPatientAppointmentsApplicationService(this.ormAppointmentRepository),
                 new NestLogger()
             )
         );
 
-        const result = await service.execute(request);
+        //Ejecutamos el caso de uso
+        const result = (await service.execute(searchPatientAppointmentsApplicationServiceRequest));
 
-        return (result.IsSuccess) ? Result.success(await this.ormPatientMulMapper.fromDomainToOther(result.Value)) : result;
-    }
-
-    @Get(':id')
-    async getPatient(@Param('id') id: string) {
-        return this.ormPatientRepository.findOneByIdOrFail(PatientId.create(id));
+        //Mapeamos y retornamos.
+        return ResultMapper.map(
+            result,
+            (value: Appointment[]) => {
+                return this.ormAppointmentMulMapper.fromDomainToOther(value)
+            }
+        );
     }
 }
