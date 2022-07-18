@@ -1,4 +1,4 @@
-import { DomainEvent } from "../domain-events/domain-event"
+import { DomainEvent } from "../events/domain-event"
 import { Entity } from "../entities/entity";
 import { IValueObject } from "../value-objects/value-object.interface";
 

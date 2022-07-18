@@ -8,8 +8,8 @@ import { OrmDoctorRepository } from "src/doctor/infrastructure/repositories/orm-
 import { OrmPatientRepository } from "src/patient/infrastructure/repositories/orm-patient.repository";
 import { OrmAppointmentRepository } from "src/appointment/infrastructure/repositories/orm-appointment.repository";
 
-@Entity({name: 'medical-records'})
-export class OrmMedicalRecord{
+@Entity({ name: 'medical_records' })
+export class OrmMedicalRecord {
 
     @PrimaryColumn({ type: 'uuid' }) id: string;
 
@@ -28,7 +28,7 @@ export class OrmMedicalRecord{
     @ManyToOne(() => OrmPatient, { eager: true }) @JoinColumn({ name: 'patient_id' }) patient: OrmPatient;
 
     @Column({ name: 'appointment_id' }) appointmentId: string;
-    @ManyToOne(() => OrmAppointment, { eager: true}) @JoinColumn({ name: 'appointment_id' }) appointment: OrmAppointment;
+    @ManyToOne(() => OrmAppointment, { eager: true }) @JoinColumn({ name: 'appointment_id' }) appointment: OrmAppointment;
 
     @CreateDateColumn({ name: 'created_at' }) createdAt: Date;
     @UpdateDateColumn({ name: 'updated_at' }) updatedAt: Date;
@@ -45,7 +45,7 @@ export class OrmMedicalRecord{
         patientId: string,
         appointmentId: string,
         doctorSpecialty?: DoctorSpecialtyEnum
-    ): Promise<OrmMedicalRecord>{
+    ): Promise<OrmMedicalRecord> {
 
         const ormMedicalRecord: OrmMedicalRecord = new OrmMedicalRecord();
         ormMedicalRecord.id = id;
@@ -61,8 +61,8 @@ export class OrmMedicalRecord{
         ormMedicalRecord.patientId = patientId;
         ormMedicalRecord.patient = await getManager().getCustomRepository(OrmPatientRepository).findOne({ where: { id: patientId } });
         ormMedicalRecord.appointmentId = appointmentId;
-        ormMedicalRecord.appointment = await getManager().getCustomRepository(OrmAppointmentRepository).findOne({ where: { id: appointmentId }});
-        
+        ormMedicalRecord.appointment = await getManager().getCustomRepository(OrmAppointmentRepository).findOne({ where: { id: appointmentId } });
+
         return ormMedicalRecord;
     }
 }

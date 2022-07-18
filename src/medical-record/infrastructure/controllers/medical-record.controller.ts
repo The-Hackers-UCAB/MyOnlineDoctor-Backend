@@ -9,23 +9,24 @@ import { Role } from "src/security/users/roles/role.entity.enum";
 import { RolesGuard } from "src/security/users/roles/roles.guard";
 import { SessionGuard } from "src/security/auth/sessions/session.guard";
 import { GetDoctorId } from "src/security/users/decorators/get-doctor-id.decortator";
-import { CreateMedicalRecordApplicationService, CreateMedicalRecordApplicationServiceRequest } from "src/medical-record/application/services/create-medical-record.aplication.service";
+import { CreateMedicalRecordApplicationService, CreateMedicalRecordApplicationServiceDto } from "src/medical-record/application/services/create-medical-record.aplication.service";
 import { Result } from "src/core/application/result-handler/result";
 import { UUIDGenerator } from "src/core/infrastructure/uuid/uuid-generator";
 import { EventBus } from "src/core/infrastructure/event-handler/event-bus";
-import { ErrorApplicationServiceDecorator } from "src/core/application/application-service/decoratos/error-decorator/error-application-service.decorator";
-import { LoggingApplicationServiceDecorator } from "src/core/application/application-service/decoratos/logging-decorator/logging-application-service.decorator";
+import { ErrorApplicationServiceDecorator } from "src/core/application/application-service/decoratos/error-decorator/error-application.service.decorator";
+import { LoggingApplicationServiceDecorator } from "src/core/application/application-service/decoratos/logging-decorator/logging-application.service.decorator";
 import { NestLogger } from "src/core/infrastructure/logger/nest-logger";
 
 @Controller('medical-record')
-export class MedicalRecordController{
-    
+export class MedicalRecordController {
+
     private readonly ormPatientRepository: OrmPatientRepository;
     private readonly ormAppointmentRepository: OrmAppointmentRepository;
     private readonly ormDoctorRepository: OrmDoctorRepository;
     private readonly ormMedicalRecordRepository: OrmMedicalRecordRepository;
+    private readonly uuidGenerator: UUIDGenerator = new UUIDGenerator();
 
-    constructor(private readonly manager: EntityManager){
+    constructor(private readonly manager: EntityManager) {
         if (!manager) { throw new Error("Entity manager can't be null"); }
         this.ormPatientRepository = this.manager.getCustomRepository(OrmPatientRepository);
         this.ormAppointmentRepository = this.manager.getCustomRepository(OrmAppointmentRepository);
@@ -37,24 +38,24 @@ export class MedicalRecordController{
     @Roles(Role.DOCTOR)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
-    async createMedicalRecord(@GetDoctorId() id, @Body() createMedicalRecordApplicationServiceRequest: CreateMedicalRecordApplicationServiceRequest): Promise<Result<string>>{
-        createMedicalRecordApplicationServiceRequest.doctorId = id;
-        createMedicalRecordApplicationServiceRequest.id = UUIDGenerator.generate();
+    async createMedicalRecord(@GetDoctorId() id, @Body() dto: CreateMedicalRecordApplicationServiceDto): Promise<Result<string>> {
+        dto.doctorId = id;
 
         const eventBus = EventBus.getInstance();
 
         const service = new ErrorApplicationServiceDecorator(
             new LoggingApplicationServiceDecorator(
                 new CreateMedicalRecordApplicationService(
-                    this.ormMedicalRecordRepository, 
-                    this.ormPatientRepository, 
+                    this.ormMedicalRecordRepository,
+                    this.ormPatientRepository,
                     this.ormDoctorRepository,
                     this.ormAppointmentRepository,
+                    this.uuidGenerator,
                     eventBus),
                 new NestLogger()
             )
         );
-        
-        return await service.execute(createMedicalRecordApplicationServiceRequest);
+
+        return await service.execute(dto);
     }
 }

@@ -1,4 +1,4 @@
-import { DomainEvent } from "../../../../core/domain/domain-events/domain-event";
+import { DomainEvent } from "../../../domain/events/domain-event";
 import { IEventHandler } from "../event-handler.interface";
 import { ISubscription } from "../subscription.interface";
 

@@ -1,7 +1,7 @@
 import { Result } from "../../../core/application/result-handler/result";
 import { PatientGenderEnum } from "../../../patient/domain/value-objects/patient-gender.enum";
 import { PatientStatusEnum } from "../../../patient/domain/value-objects/patient-status.enum";
-import { IApplicationService } from "../../../core/application/application-service/application-service.interface";
+import { IApplicationService } from "../../../core/application/application-service/application.service.interface";
 import { IEventHandler } from "../../../core/application/event-handler/event-handler.interface";
 import { UUIDGenerator } from "../../../core/infrastructure/uuid/uuid-generator";
 import { Patient } from "../../../patient/domain/patient";
@@ -18,10 +18,10 @@ import { PatientSurgeries } from "../../../patient/domain/value-objects/patient-
 import { PatientSurnames } from "../../../patient/domain/value-objects/patient-surnames";
 import { PatientWeight } from "../../../patient/domain/value-objects/patient-weight";
 import { IPatientRepository } from "../repositories/patient.repository.interface";
+import { IUUIDGenerator } from "src/core/application/uuid/uuid-generator.interface";
 
 //#region Service DTOs
-export interface RegisterPatientApplicationServiceRequest {
-    id?: string;
+export interface RegisterPatientApplicationServiceDto {
     firstName?: string;
     middleName?: string;
     firstSurname?: string;
@@ -31,22 +31,26 @@ export interface RegisterPatientApplicationServiceRequest {
     birthdate?: Date;
     height?: number;
     phoneNumber?: string;
-    status?: PatientStatusEnum;
     weight?: number;
     surgeries?: string;
     gender?: PatientGenderEnum;
 }
 //#endregion
 
-export class RegisterPatientApplicationService implements IApplicationService<RegisterPatientApplicationServiceRequest, string> {
+export class RegisterPatientApplicationService implements IApplicationService<RegisterPatientApplicationServiceDto, string> {
     get name(): string { return this.constructor.name; }
 
-    constructor(private readonly eventHandler: IEventHandler, private readonly patientRepository: IPatientRepository) { }
+    constructor(
+        private readonly eventHandler: IEventHandler,
+        private readonly uuidGenerator: IUUIDGenerator,
+        private readonly patientRepository: IPatientRepository
+    ) { }
 
-    async execute(dto: RegisterPatientApplicationServiceRequest): Promise<Result<string>> {
+    async execute(dto: RegisterPatientApplicationServiceDto): Promise<Result<string>> {
+
         //Creamos el paciente
         const patient = Patient.create(
-            PatientId.create(dto.id),
+            PatientId.create(this.uuidGenerator.generate()),
             PatientNames.create(dto.firstName, dto.middleName),
             PatientSurnames.create(dto.firstSurname, dto.secondSurname),
             PatientBirthdate.create(dto.birthdate),
@@ -54,7 +58,7 @@ export class RegisterPatientApplicationService implements IApplicationService<Re
             PatientBackground.create(dto.background),
             PatientHeight.create(dto.height),
             PatientPhoneNumber.create(dto.phoneNumber),
-            PatientStatus.create(dto.status),
+            PatientStatus.create(PatientStatusEnum.ACTIVE),
             PatientWeight.create(dto.weight),
             PatientSurgeries.create(dto.surgeries),
             PatientGender.create(dto.gender)

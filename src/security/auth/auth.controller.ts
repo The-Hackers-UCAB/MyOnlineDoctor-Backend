@@ -1,10 +1,4 @@
 import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
-import { GetDoctorId } from '../users/decorators/get-doctor-id.decortator';
-import { GetPatientId } from '../users/decorators/get-patient-id.decorator';
-import { GetUserId } from '../users/decorators/get-user-id.decorator';
-import { Role } from '../users/roles/role.entity.enum';
-import { Roles } from '../users/roles/roles.decorator';
-import { RolesGuard } from '../users/roles/roles.guard';
 import { SessionGuard } from './sessions/session.guard';
 import { LocalAuthGuard } from './strategies/local.auth.guard';
 
@@ -13,22 +7,14 @@ import { LocalAuthGuard } from './strategies/local.auth.guard';
 export class AuthController {
     @Post('login')
     @UseGuards(LocalAuthGuard)
-    async login(@Request() request): Promise<{ msg: string }> {
-        return { msg: "Sesión iniciada!" };
+    async login(@Request() request): Promise<{ value: string }> {
+        return { value: "Sesión iniciada." };
     }
 
     @Get('logout')
     @UseGuards(SessionGuard)
-    async logout(@Request() request): Promise<{ msg: string }> {
+    async logout(@Request() request): Promise<{ value: string }> {
         request.session.destroy();
-        return { msg: "Sessión cerrada!" };
-    }
-
-    @Get('protected')
-    @Roles(Role.PATIENT)
-    @UseGuards(RolesGuard)
-    @UseGuards(SessionGuard)
-    async protectefFunction(@GetUserId() userId, @GetPatientId() patientId, @GetDoctorId() doctorId): Promise<{ msg: string }> {
-        return { msg: "Patient Id " + patientId }
+        return { value: "Sessión cerrada." };
     }
 }

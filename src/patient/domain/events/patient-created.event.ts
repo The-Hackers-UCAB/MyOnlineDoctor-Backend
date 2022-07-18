@@ -1,4 +1,4 @@
-import { DomainEvent } from "../../../core/domain/domain-events/domain-event";
+import { DomainEvent } from "../../../core/domain/events/domain-event";
 import { PatientId } from "../value-objects/patient-id";
 import { PatientNames } from "../value-objects/patient-names";
 import { PatientBirthdate } from "../value-objects/patient-birthdate";

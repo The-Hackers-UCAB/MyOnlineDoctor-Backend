@@ -1,6 +1,7 @@
-import { IApplicationService } from "src/core/application/application-service/application-service.interface";
+import { IApplicationService } from "src/core/application/application-service/application.service.interface";
 import { IEventHandler } from "src/core/application/event-handler/event-handler.interface";
 import { Result } from "src/core/application/result-handler/result";
+import { IUUIDGenerator } from "src/core/application/uuid/uuid-generator.interface";
 import { Doctor } from "src/doctor/domain/doctor";
 import { DoctorGender } from "src/doctor/domain/value-objects/doctor-gender";
 import { DoctorGenderEnum } from "src/doctor/domain/value-objects/doctor-gender.enum";
@@ -16,8 +17,7 @@ import { DoctorSurnames } from "src/doctor/domain/value-objects/doctor-surnames"
 import { IDoctorRepository } from "../repositories/doctor.repository.inteface";
 
 //#region Service DTOs
-export interface RegisterDoctorApplicationServiceRequest {
-    id: string;
+export interface RegisterDoctorApplicationServiceDto {
     firstName: string;
     firstSurname: string;
     gender: DoctorGenderEnum;
@@ -29,12 +29,16 @@ export interface RegisterDoctorApplicationServiceRequest {
 }
 //#endregion
 
-export class RegisterDoctorApplicationService implements IApplicationService<RegisterDoctorApplicationServiceRequest, string> {
+export class RegisterDoctorApplicationService implements IApplicationService<RegisterDoctorApplicationServiceDto, string> {
     get name(): string { return this.constructor.name; }
 
-    constructor(private readonly eventHandler: IEventHandler, private readonly patientRepository: IDoctorRepository) { }
+    constructor(
+        private readonly eventHandler: IEventHandler,
+        private readonly uuidGenerator: IUUIDGenerator,
+        private readonly patientRepository: IDoctorRepository
+    ) { }
 
-    async execute(dto: RegisterDoctorApplicationServiceRequest): Promise<Result<string>> {
+    async execute(dto: RegisterDoctorApplicationServiceDto): Promise<Result<string>> {
         //Creamos las especialidades
         const specialties: DoctorSpecialty[] = [];
         dto.specialties.forEach((specialty) => {
@@ -43,7 +47,7 @@ export class RegisterDoctorApplicationService implements IApplicationService<Reg
 
         //Creamos el paciente
         const doctor = Doctor.create(
-            DoctorId.create(dto.id),
+            DoctorId.create(this.uuidGenerator.generate()),
             DoctorNames.create(dto.firstName, dto.middleName),
             DoctorSurnames.create(dto.firstSurname, dto.secondSurname),
             DoctorLocation.create(dto.latitude, dto.longitude),

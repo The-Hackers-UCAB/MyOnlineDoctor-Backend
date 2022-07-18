@@ -1,5 +1,5 @@
 import { AggregateRoot } from "../../core/domain/aggregates/aggregate-root";
-import { DomainEvent } from "../../core/domain/domain-events/domain-event";
+import { DomainEvent } from "../../core/domain/events/domain-event";
 import { PatientCreated as PatientCreated } from "./events/patient-created.event";
 import { InvalidPatientException } from "./exceptions/invalid-patient.exception";
 import { PatientId } from "./value-objects/patient-id";

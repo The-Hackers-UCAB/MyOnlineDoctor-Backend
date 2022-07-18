@@ -1,4 +1,4 @@
-import { DomainEvent } from "../../domain/domain-events/domain-event";
+import { DomainEvent } from "../../domain/events/domain-event";
 import { ISubscription } from "./subscription.interface";
 
 /**IEventHandler es una interfaz utilizada para el manejo de eventos de dominio. */
