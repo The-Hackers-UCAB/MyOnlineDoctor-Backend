@@ -6,6 +6,7 @@ import { DoctorController } from './doctor/infrastructure/controllers/doctor.con
 import config from '../ormconfig';
 import { PatientController } from './patient/infrastructure/controllers/patient.controller';
 import { AppointmentController } from './appointment/infrastructure/controllers/appointment.controller';
+import { MedicalRecordController } from './medical-record/infrastructure/controllers/medical-record.controller';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { AppointmentController } from './appointment/infrastructure/controllers/
     TypeOrmModule.forRoot(config),
     AuthModule,
   ],
-  controllers: [DoctorController, PatientController, AppointmentController],
+  controllers: [DoctorController, PatientController, AppointmentController, MedicalRecordController],
   providers: [],
 })
 export class AppModule { }
