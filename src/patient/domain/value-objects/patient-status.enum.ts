@@ -1,6 +1,6 @@
 export enum PatientStatusEnum {
-    BLOCKED = "Bloqueado",
-    ACTIVE = "Activo",
-    SUSPENDED = "Suspendido",
-    DELETED = "Eliminado"
+    BLOCKED = "BLOQUEADO",
+    ACTIVE = "ACTIVO",
+    SUSPENDED = "SUSPENDIDO",
+    DELETED = "ELIMINADO"
 }

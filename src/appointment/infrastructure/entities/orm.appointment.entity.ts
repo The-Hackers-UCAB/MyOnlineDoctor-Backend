@@ -13,13 +13,14 @@ export class OrmAppointment {
 
     @PrimaryColumn({ type: 'uuid' }) id: string;
 
-    @Column({ name: 'date' }) date: Date;
+    @Column({ name: 'date', nullable: true }) date: Date;
     @Column({ name: 'description' }) description: string;
-    @Column({ name: 'duration' }) duration: number;
+    @Column({ name: 'duration', nullable: true }) duration: number;
 
     @Column({ type: 'enum', enum: AppointmentStatusEnum }) status: AppointmentStatusEnum;
     @Column({ type: 'enum', enum: AppointmentTypeEnum }) type: AppointmentTypeEnum;
 
+    @Column({ type: 'numeric', precision: 6, scale: 3, nullable: true }) rating: number;
 
     @Column({ name: 'doctor_id' }) doctorId: string;
     @ManyToOne(() => OrmDoctor, { eager: true }) @JoinColumn({ name: 'doctor_id' }) doctor: OrmDoctor;
@@ -34,7 +35,7 @@ export class OrmAppointment {
     @UpdateDateColumn({ name: 'updated_at' }) updatedAt: Date;
 
     // TODO REVISAR AQUI
-    static async create(id: string, date: Date, description: string, duration: number, status: AppointmentStatusEnum, type: AppointmentTypeEnum, patientId: string, doctorId: string, doctorSpecialty?: DoctorSpecialtyEnum): Promise<OrmAppointment> {
+    static async create(id: string, date: Date, description: string, duration: number, status: AppointmentStatusEnum, type: AppointmentTypeEnum, patientId: string, doctorId: string, rating: number, doctorSpecialty?: DoctorSpecialtyEnum): Promise<OrmAppointment> {
         const ormAppointment: OrmAppointment = new OrmAppointment();
         ormAppointment.id = id;
         ormAppointment.date = date;
@@ -45,6 +46,7 @@ export class OrmAppointment {
         ormAppointment.patientId = patientId;
         ormAppointment.patient = await getManager().getCustomRepository(OrmPatientRepository).findOne({ where: { id: patientId } })
         ormAppointment.doctorId = doctorId;
+        ormAppointment.rating = rating;
         ormAppointment.doctor = await getManager().getCustomRepository(OrmDoctorRepository).findOne({ where: { id: doctorId } });
         ormAppointment.specialty = await getManager().getRepository(OrmDoctorSpecialty).findOne({ where: { specialty: doctorSpecialty } });
 

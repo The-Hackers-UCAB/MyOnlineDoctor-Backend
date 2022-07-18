@@ -1,4 +1,4 @@
-import { DomainEvent } from "../../../core/domain/domain-events/domain-event";
+import { DomainEvent } from "../../../core/domain/events/domain-event";
 import { AppointmentDate } from "../value-objects/appointment-date";
 import { AppointmentDescription } from "../value-objects/appointment-description";
 import { AppointmentDoctor } from "../value-objects/appointment-doctor";

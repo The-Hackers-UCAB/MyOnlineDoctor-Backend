@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/core/application/application-service/application-service.interface";
+import { IApplicationService } from "src/core/application/application-service/application.service.interface";
 import { Result } from "src/core/application/result-handler/result";
 import { DoctorSpecialtyEnum } from "src/doctor/domain/value-objects/doctor-specialty.enum";
 import { IMedicalRecordRepository } from "../repositories/medical-record.repository.interface";
@@ -24,10 +24,10 @@ import { MedicalRecordDoctor } from "src/medical-record/domain/value-objects/med
 import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
 import { AppointmentId } from "src/appointment/domain/value-objects/appointment-id";
 import { IAppointmentRepository } from "src/appointment/application/repositories/appointment.repository.interface";
+import { IUUIDGenerator } from "src/core/application/uuid/uuid-generator.interface";
 
 //#region Service DTOs
-export interface CreateMedicalRecordApplicationServiceRequest{
-    id: string,
+export interface CreateMedicalRecordApplicationServiceDto {
     date: Date,
     description: string,
     diagnostic: string,
@@ -37,11 +37,11 @@ export interface CreateMedicalRecordApplicationServiceRequest{
     recipe?: string
     doctorId: string,
     doctorSpecialty: DoctorSpecialtyEnum,
-    planning?: string    
+    planning?: string
 }
 //#endregion
 
-export class CreateMedicalRecordApplicationService implements IApplicationService<CreateMedicalRecordApplicationServiceRequest, string>{
+export class CreateMedicalRecordApplicationService implements IApplicationService<CreateMedicalRecordApplicationServiceDto, string>{
 
     get name(): string { return this.constructor.name; }
 
@@ -52,11 +52,12 @@ export class CreateMedicalRecordApplicationService implements IApplicationServic
         private readonly patientRepository: IPatientRepository,
         private readonly doctorRepository: IDoctorRepository,
         private readonly appointmentRepository: IAppointmentRepository,
+        private readonly uuidGenerator: IUUIDGenerator,
         private readonly eventHandler: IEventHandler
-    ){}
+    ) { }
 
-    async execute(dto: CreateMedicalRecordApplicationServiceRequest): Promise<Result<string>> {
-        
+    async execute(dto: CreateMedicalRecordApplicationServiceDto): Promise<Result<string>> {
+
         //Paciente
         const patientId = PatientId.create(dto.patientId);
 
@@ -84,7 +85,7 @@ export class CreateMedicalRecordApplicationService implements IApplicationServic
 
         //Creamos el medical record
         const medicalRecord: MedicalRecord = MedicalRecord.create(
-            MedicalRecordID.create(dto.id),
+            MedicalRecordID.create(this.uuidGenerator.generate()),
             MedicalRecordDate.create(dto.date),
             MedicalRecordDescription.create(dto.description),
             MedicalRecordDiagnostic.create(dto.diagnostic),

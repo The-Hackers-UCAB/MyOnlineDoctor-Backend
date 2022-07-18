@@ -8,7 +8,7 @@ export class AppointmentDate implements IValueObject<AppointmentDate>{
     get Value() { return this.date; }
 
     private constructor(date: Date) {
-        if (!date) {
+        if (date === undefined) {
             throw new InvalidDateAppointmentException();
 
         } else {

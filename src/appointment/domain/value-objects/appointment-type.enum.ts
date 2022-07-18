@@ -1,4 +1,4 @@
 export enum AppointmentTypeEnum {
-    VIRTUAL = "V",
-    INPERSON = "P"
+    VIRTUAL = "VIRTUAL",
+    INPERSON = "PRESENCIAL"
 }

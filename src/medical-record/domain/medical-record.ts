@@ -1,7 +1,7 @@
 import { AggregateRoot } from "src/core/domain/aggregates/aggregate-root";
 import { InvalidMedicalRecordException } from "./exceptions/invalid-medical-record.exception";
 import { MedicalRecordCreated } from "./events/medical-record-created";
-import { DomainEvent } from "src/core/domain/domain-events/domain-event";
+import { DomainEvent } from "src/core/domain/events/domain-event";
 import { MedicalRecordID } from "./value-objects/medical-record-id";
 import { MedicalRecordDate } from "./value-objects/medical-record-date";
 import { MedicalRecordDescription } from "./value-objects/medical-record-description";

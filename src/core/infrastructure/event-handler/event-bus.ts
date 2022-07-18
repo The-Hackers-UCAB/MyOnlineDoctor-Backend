@@ -1,5 +1,5 @@
 import { ISubscription } from "../../application/event-handler/subscription.interface";
-import { DomainEvent } from "../../../core/domain/domain-events/domain-event";
+import { DomainEvent } from "../../domain/events/domain-event";
 import { IEventHandler } from "../../../core/application/event-handler/event-handler.interface";
 import { ISubscriber } from "./subscribers/subscriber.interface";
 import { LoggingEventHandlerDecorator } from "src/core/application/event-handler/decorators/logging-decorator/logging-event-handler.decorator";

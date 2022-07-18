@@ -7,7 +7,7 @@ export class DoctorRating implements IValueObject<DoctorRating>{
     get Rating() { return this.rating; }
 
     private constructor(rating: number) {
-        if (rating < 0) {
+        if (rating < 0 || rating > 5) {
             throw new InvalidDoctorRatingException();
         }
 

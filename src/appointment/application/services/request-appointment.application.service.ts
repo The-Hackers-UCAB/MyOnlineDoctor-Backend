@@ -1,4 +1,4 @@
-import { IApplicationService } from "../../../core/application/application-service/application-service.interface";
+import { IApplicationService } from "../../../core/application/application-service/application.service.interface";
 import { Result } from "../../../core/application/result-handler/result";
 import { IAppointmentRepository } from "../repositories/appointment.repository.interface";
 import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
@@ -7,10 +7,8 @@ import { DoctorSpecialtyEnum } from "src/doctor/domain/value-objects/doctor-spec
 import { AppointmentTypeEnum } from "src/appointment/domain/value-objects/appointment-type.enum";
 import { AppointmentStatusEnum } from "src/appointment/domain/value-objects/appointment-status.enum";
 import { Appointment } from "src/appointment/domain/appointment";
-import { AppointmentDate } from "src/appointment/domain/value-objects/appointment-date";
 import { AppointmentDescription } from "src/appointment/domain/value-objects/appointment-description";
 import { AppointmentDoctor } from "src/appointment/domain/value-objects/appointment-doctor";
-import { AppointmentDuration } from "src/appointment/domain/value-objects/appointment-duration";
 import { AppointmentId } from "src/appointment/domain/value-objects/appointment-id";
 import { AppointmentPatient } from "src/appointment/domain/value-objects/appointment-patient";
 import { AppointmentStatus } from "src/appointment/domain/value-objects/appointment-status";
@@ -23,14 +21,13 @@ import { ValidatePatientActiveStatusDomainService } from "src/patient/domain/ser
 import { IDoctorRepository } from "src/doctor/application/repositories/doctor.repository.inteface";
 import { ValidateDoctorSpecialty } from "src/doctor/domain/domain-services/validate-doctor-specialty.domain.service";
 import { InvalidDoctorSpecialtyException } from "src/doctor/domain/exceptions/invalid-doctor-specialty.exception";
-import { InvalidDateAppointmentException } from "src/appointment/domain/exceptions/invalid-appointment-date-exception";
+import { IUUIDGenerator } from "src/core/application/uuid/uuid-generator.interface";
+import { AppointmentDuration } from "src/appointment/domain/value-objects/appointment-duration";
+import { AppointmentDate } from "src/appointment/domain/value-objects/appointment-date";
 
 //#region Service DTOs
-export interface RequestAppointmentApplicationServiceRequest {
-    id: string,
-    date: Date,
+export interface RequestAppointmentApplicationServiceDto {
     description: string,
-    duration: number,
     type: AppointmentTypeEnum,
     patientId: string,
     doctorId: string,
@@ -38,7 +35,7 @@ export interface RequestAppointmentApplicationServiceRequest {
 }
 //#endregion
 
-export class RequestAppointmentApplicationService implements IApplicationService<RequestAppointmentApplicationServiceRequest, string> {
+export class RequestAppointmentApplicationService implements IApplicationService<RequestAppointmentApplicationServiceDto, string> {
     get name(): string { return this.constructor.name; }
 
     private readonly validatePatientActiveStatus: ValidatePatientActiveStatusDomainService = new ValidatePatientActiveStatusDomainService();
@@ -48,10 +45,11 @@ export class RequestAppointmentApplicationService implements IApplicationService
         private readonly appointmentRepository: IAppointmentRepository,
         private readonly patientRepository: IPatientRepository,
         private readonly doctorRepository: IDoctorRepository,
-        private readonly eventHandler: IEventHandler
+        private readonly uuidGenerator: IUUIDGenerator,
+        private readonly eventHandler: IEventHandler,
     ) { }
 
-    async execute(dto: RequestAppointmentApplicationServiceRequest): Promise<Result<string>> {
+    async execute(dto: RequestAppointmentApplicationServiceDto): Promise<Result<string>> {
 
         const patientId = PatientId.create(dto.patientId);
 
@@ -68,17 +66,14 @@ export class RequestAppointmentApplicationService implements IApplicationService
         const doctor = await this.doctorRepository.findOneByIdOrFail(doctorId);
 
         //Validamos que la especialidad corresponda al doctor
-        if (this.validateDoctorSpecialty.execute({ specialty, doctor })) { throw new InvalidDoctorSpecialtyException(); }
-
-        //Verificamos la fecha
-        if (new Date(dto.date) < (new Date(Date.now()))) { throw new InvalidDateAppointmentException(); }
+        if (!this.validateDoctorSpecialty.execute({ specialty, doctor })) { throw new InvalidDoctorSpecialtyException(); }
 
         //Creamos la cita
         const appointment: Appointment = Appointment.create(
-            AppointmentId.create(dto.id),
-            AppointmentDate.create(dto.date),
+            AppointmentId.create(this.uuidGenerator.generate()),
+            AppointmentDate.create(null),
             AppointmentDescription.create(dto.description),
-            AppointmentDuration.create(dto.duration),
+            AppointmentDuration.create(null),
             AppointmentStatus.create(AppointmentStatusEnum.REQUESTED),
             AppointmentType.create(dto.type),
             AppointmentPatient.create(patientId),

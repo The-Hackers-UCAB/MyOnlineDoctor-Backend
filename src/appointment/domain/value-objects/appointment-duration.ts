@@ -8,14 +8,12 @@ export class AppointmentDuration implements IValueObject<AppointmentDuration>{
     get Value() { return this.hours; }
 
     private constructor(hours: number) {
-
-        if (!hours || hours % 1 != 0 || hours <= 0) {
+        if (hours === undefined || (hours && (hours % 1 != 0 || hours <= 0))) {
 
             throw new InvalidDurationAppointmentException();
         } else {
             this.hours = hours;
         }
-
     }
 
 

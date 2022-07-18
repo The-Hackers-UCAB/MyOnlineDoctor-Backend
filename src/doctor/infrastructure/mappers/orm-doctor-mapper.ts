@@ -51,7 +51,7 @@ export class OrmDoctorMapper implements IMapper<Doctor, OrmDoctor>{
         const doctor: Doctor = Doctor.create(
             DoctorId.create(other.id),
             DoctorNames.create(other.firstName, other.middleName),
-            DoctorSurnames.create(other.firstSurname, other.middleName),
+            DoctorSurnames.create(other.firstSurname, other.secondSurname),
             DoctorLocation.create(other.latitude, other.longitude),
             DoctorRating.create(other.rating),
             DoctorGender.create(other.gender),

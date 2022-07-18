@@ -1,5 +1,5 @@
 import { Patient } from "../../../patient/domain/patient";
-import { IApplicationService } from "../../../core/application/application-service/application-service.interface";
+import { IApplicationService } from "../../../core/application/application-service/application.service.interface";
 import { IPatientRepository, SearchAssociatedPatientsDomainDto } from "../repositories/patient.repository.interface";
 import { RepositoryPagingDto } from "../../../core/application/repositories/repository-paging.dto";
 import { PatientNames } from "../../../patient/domain/value-objects/patient-names";
@@ -17,7 +17,7 @@ import { PatientGenderEnum } from "../../../patient/domain/value-objects/patient
 import { PatientStatus } from "../../../patient/domain/value-objects/patient-status";
 import { PatientGender } from "../../../patient/domain/value-objects/patient-gender";
 
-export interface SearchAssociatedPatientsApplicationServiceRequest {
+export interface SearchAssociatedPatientsApplicationServiceDto {
     firstName?: string;
     middleName?: string;
     firstSurname?: string;
@@ -34,12 +34,12 @@ export interface SearchAssociatedPatientsApplicationServiceRequest {
     paging?: RepositoryPagingDto;
 }
 
-export class SearchAssociatedPatientsApplicationService implements IApplicationService<SearchAssociatedPatientsApplicationServiceRequest, Patient[]>{
+export class SearchAssociatedPatientsApplicationService implements IApplicationService<SearchAssociatedPatientsApplicationServiceDto, Patient[]>{
     get name(): string { return this.constructor.name; }
 
     constructor(private patientRepository: IPatientRepository) { }
 
-    async execute(dto: SearchAssociatedPatientsApplicationServiceRequest): Promise<Result<Patient[]>> {
+    async execute(dto: SearchAssociatedPatientsApplicationServiceDto): Promise<Result<Patient[]>> {
         const associated: SearchAssociatedPatientsDomainDto = {};
         if (dto.firstName) { associated.names = PatientNames.create(dto.firstName, dto.middleName); }
         if (dto.firstSurname) { associated.surnames = PatientSurnames.create(dto.firstSurname, dto.secondSurname); }

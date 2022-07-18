@@ -1,4 +1,4 @@
-import { DomainEvent } from "../../../../../core/domain/domain-events/domain-event";
+import { DomainEvent } from "../../../../domain/events/domain-event";
 import { ILogger } from "../../../../../core/application/logging-handler/logger.interface";
 import { IEventHandler } from "../../event-handler.interface";
 import { EventHandlerDecorator } from "../event-handler.decorator";

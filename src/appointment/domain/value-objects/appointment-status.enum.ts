@@ -1,7 +1,7 @@
 export enum AppointmentStatusEnum {
-    REQUESTED = "REQ",
-    REJECTED = "REJ",
-    SCHEDULED = "SCH",
-    CANCELED = "CAN",
-    COMPLETED = "COM"
+    REQUESTED = "SOLICITADA",
+    REJECTED = "RECHAZADA",
+    SCHEDULED = "AGENDADA",
+    CANCELED = "CANCELADA",
+    COMPLETED = "COMPLETADA"
 }

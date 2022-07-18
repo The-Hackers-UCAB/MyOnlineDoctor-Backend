@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
-import { RequestAppointmentApplicationService, RequestAppointmentApplicationServiceRequest } from "src/appointment/application/services/request-appointment.application.service";
-import { ErrorApplicationServiceDecorator } from "src/core/application/application-service/decoratos/error-decorator/error-application-service.decorator";
-import { LoggingApplicationServiceDecorator } from "src/core/application/application-service/decoratos/logging-decorator/logging-application-service.decorator";
+import { RequestAppointmentApplicationService, RequestAppointmentApplicationServiceDto } from "src/appointment/application/services/request-appointment.application.service";
+import { ErrorApplicationServiceDecorator } from "src/core/application/application-service/decoratos/error-decorator/error-application.service.decorator";
+import { LoggingApplicationServiceDecorator } from "src/core/application/application-service/decoratos/logging-decorator/logging-application.service.decorator";
 import { Result } from "src/core/application/result-handler/result";
 import { EventBus } from "src/core/infrastructure/event-handler/event-bus";
 import { NestLogger } from "src/core/infrastructure/logger/nest-logger";
@@ -22,6 +22,7 @@ export class AppointmentController {
     private readonly ormPatientRepository: OrmPatientRepository;
     private readonly ormAppointmentRepository: OrmAppointmentRepository;
     private readonly ormDoctorRepository: OrmDoctorRepository;
+    private readonly uuidGenerator: UUIDGenerator = new UUIDGenerator();
 
     constructor(private readonly manager: EntityManager) {
         if (!manager) { throw new Error("Entity manager can't be null"); }
@@ -35,19 +36,18 @@ export class AppointmentController {
     @Roles(Role.PATIENT)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
-    async requestAppointment(@GetPatientId() id, @Body() requestAppointmentApplicationServiceRequest: RequestAppointmentApplicationServiceRequest): Promise<Result<string>> {
-        requestAppointmentApplicationServiceRequest.patientId = id;
-        requestAppointmentApplicationServiceRequest.id = UUIDGenerator.generate();
+    async requestAppointment(@GetPatientId() id, @Body() dto: RequestAppointmentApplicationServiceDto): Promise<Result<string>> {
+        dto.patientId = id;
 
         const eventBus = EventBus.getInstance();
 
         const service = new ErrorApplicationServiceDecorator(
             new LoggingApplicationServiceDecorator(
-                new RequestAppointmentApplicationService(this.ormAppointmentRepository, this.ormPatientRepository, this.ormDoctorRepository, eventBus),
+                new RequestAppointmentApplicationService(this.ormAppointmentRepository, this.ormPatientRepository, this.ormDoctorRepository, this.uuidGenerator, eventBus),
                 new NestLogger()
             )
         );
 
-        return await service.execute(requestAppointmentApplicationServiceRequest);
+        return await service.execute(dto);
     }
 }

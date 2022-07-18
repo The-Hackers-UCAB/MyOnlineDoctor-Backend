@@ -1,5 +1,5 @@
 import { AggregateRoot } from "../../core/domain/aggregates/aggregate-root";
-import { DomainEvent } from "../../core/domain/domain-events/domain-event";
+import { DomainEvent } from "../../core/domain/events/domain-event";
 import { DoctorCreated as DoctorCreated } from "./events/doctor-created";
 import { InvalidDoctorException } from "./exceptions/invalid-doctor.exception";
 import { DoctorGender } from "./value-objects/doctor-gender";

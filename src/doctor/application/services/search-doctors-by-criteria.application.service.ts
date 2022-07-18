@@ -1,5 +1,5 @@
 import { Doctor } from "../../../doctor/domain/doctor";
-import { IApplicationService } from "../../../core/application/application-service/application-service.interface";
+import { IApplicationService } from "../../../core/application/application-service/application.service.interface";
 import { IDoctorRepository, SearchDoctorsByCriteriaDomainDto } from "../repositories/doctor.repository.inteface";
 import { RepositoryPagingDto } from "../../../core/application/repositories/repository-paging.dto";
 import { DoctorSpecialtyEnum } from "src/doctor/domain/value-objects/doctor-specialty.enum";
@@ -11,7 +11,7 @@ import { Result } from "../../../core/application/result-handler/result";
 import { DoctorSpecialty } from "src/doctor/domain/value-objects/doctor-specialty";
 
 //#region Service DTOs
-export interface SearchDoctorsByCriteriaApplicationServiceRequest {
+export interface SearchDoctorsByCriteriaApplicationServiceDto {
     firstName?: string;
     middleName?: string;
     firstSurname?: string;
@@ -25,12 +25,12 @@ export interface SearchDoctorsByCriteriaApplicationServiceRequest {
 }
 //#endregion
 
-export class SearchDoctorsByCriteriaApplicationService implements IApplicationService<SearchDoctorsByCriteriaApplicationServiceRequest, Doctor[]> {
+export class SearchDoctorsByCriteriaApplicationService implements IApplicationService<SearchDoctorsByCriteriaApplicationServiceDto, Doctor[]> {
     get name(): string { return this.constructor.name; }
 
     constructor(private readonly doctorRepository: IDoctorRepository) { }
 
-    async execute(dto: SearchDoctorsByCriteriaApplicationServiceRequest): Promise<Result<Doctor[]>> {
+    async execute(dto: SearchDoctorsByCriteriaApplicationServiceDto): Promise<Result<Doctor[]>> {
         //Transformamos a dominio.
         const criterias: SearchDoctorsByCriteriaDomainDto = {};
         if (dto.firstName) { criterias.names = DoctorNames.create(dto.firstName, dto.middleName); }

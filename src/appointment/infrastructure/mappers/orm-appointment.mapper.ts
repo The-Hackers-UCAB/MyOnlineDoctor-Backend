@@ -28,6 +28,7 @@ export class OrmAppointmentMapper implements IMapper<Appointment, OrmAppointment
             domain.Type.Value,
             domain.Patient.Id.Value,
             domain.Doctor.Id.Value,
+            domain.Doctor.Rating,
             domain.Doctor.Specialty.Value,
         );
 

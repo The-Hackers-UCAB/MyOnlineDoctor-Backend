@@ -1,5 +1,5 @@
 export enum DoctorStatusEnum {
-    BLOCKED = "Bloqueado",
-    DELETED = "Eliminado",
-    ACTIVE = "Activo"
+    BLOCKED = "BLOQUEADO",
+    DELETED = "ELIMINADO",
+    ACTIVE = "ACTIVO"
 }

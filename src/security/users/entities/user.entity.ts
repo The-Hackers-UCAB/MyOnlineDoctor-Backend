@@ -6,7 +6,7 @@ import { Role } from "../roles/role.entity.enum";
 
 /** UserEntity Es una entitdad de infraestructura (ORM) utilizada únicamente para el manejo de seguridad. */
 @Entity({ name: 'users' })
-@Check(`("role" = 'Doctor' AND "doctor_id" IS NOT NULL) OR ("role" = 'Paciente' AND "patient_id" IS NOT NULL) OR ("role" = 'Admin' AND "doctor_id" IS NULL AND "patient_id" IS NULL)`)
+@Check(`("role" = 'DOCTOR' AND "doctor_id" IS NOT NULL) OR ("role" = 'PACIENTE' AND "patient_id" IS NOT NULL) OR ("role" = 'ADMIN' AND "doctor_id" IS NULL AND "patient_id" IS NULL)`)
 export class UserEntity {
     @Index() @PrimaryGeneratedColumn() id: number;
 

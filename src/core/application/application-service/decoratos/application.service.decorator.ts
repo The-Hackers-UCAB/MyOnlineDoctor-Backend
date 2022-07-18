@@ -1,5 +1,5 @@
 import { Result } from "../../result-handler/result";
-import { IApplicationService } from "../application-service.interface";
+import { IApplicationService } from "../application.service.interface";
 
 /**ApplicationServiceDecorator: Es una clase abstracta genérica utilizada para implementar el patron decorador en los servicios de aplicación.*/
 export abstract class ApplicationServiceDecorator<D, R> implements IApplicationService<D, R> {
