@@ -5,7 +5,7 @@ export class AppointmentDuration implements IValueObject<AppointmentDuration>{
 
     private readonly hours: number;
 
-    get Duration() { return this.hours; }
+    get Value() { return this.hours; }
 
     private constructor(hours: number) {
 

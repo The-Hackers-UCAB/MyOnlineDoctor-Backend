@@ -29,6 +29,5 @@ export class SearchAssociatedPatientsDomainDto {
 }
 
 export interface IPatientRepository extends IRepository<PatientId, Patient> {
-
     findAsociatedPatients(asociated: SearchAssociatedPatientsDomainDto, options: RepositoryPagingDto): Promise<Patient[]>;
 }

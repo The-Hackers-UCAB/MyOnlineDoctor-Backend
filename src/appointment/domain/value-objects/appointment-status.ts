@@ -8,7 +8,7 @@ export class AppointmentStatus implements IValueObject<AppointmentStatus>{
 
     private readonly status: AppointmentStatusEnum;
 
-    get value() {
+    get Value() {
         return this.status;
     }
 

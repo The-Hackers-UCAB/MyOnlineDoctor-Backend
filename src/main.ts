@@ -1,14 +1,13 @@
 import 'dotenv/config';
 import { SessionsRepository } from '../src/security/auth/sessions/repositories/session.repository';
 import { TypeormStore } from 'connect-typeorm/out';
-import { ValidationPipe } from '@nestjs/common';
+import { UnauthorizedException, ValidationPipe } from '@nestjs/common';
 import { getCustomRepository } from 'typeorm';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import { ExceptionInterceptor } from './core/infrastructure/interceptors/exception.interceptor';
-import { _ant_testing } from './_ant';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -51,8 +50,5 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ExceptionInterceptor());
 
   await app.listen(Number.parseInt(process.env.PORT) || 3000);
-
-  _ant_testing();
-
 }
 bootstrap();

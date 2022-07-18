@@ -5,13 +5,10 @@ export class AppointmentDate implements IValueObject<AppointmentDate>{
 
     private readonly date: Date;
 
-    get Date() { return this.date; }
+    get Value() { return this.date; }
 
     private constructor(date: Date) {
-
-        let hoy: Date = new Date();
-
-        if (!date || date < hoy) {
+        if (!date) {
             throw new InvalidDateAppointmentException();
 
         } else {

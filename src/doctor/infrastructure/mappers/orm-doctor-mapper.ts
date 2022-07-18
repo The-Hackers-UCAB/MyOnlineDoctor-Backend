@@ -1,4 +1,4 @@
-import { DoctorRatingDomainService } from "../../../doctor/domain/domain-services/doctor-rating-domain-service";
+import { DoctorRatingDomainService } from "../../domain/domain-services/doctor-rating.domain.service";
 import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
 import { DoctorLocation } from "../../../doctor/domain/value-objects/doctor-location";
 import { DoctorNames } from "../../../doctor/domain/value-objects/doctor-names";

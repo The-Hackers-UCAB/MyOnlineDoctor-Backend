@@ -1,4 +1,4 @@
-import { CallHandler, ExecutionContext, InternalServerErrorException, NestInterceptor, } from '@nestjs/common';
+import { CallHandler, ExecutionContext, ForbiddenException, InternalServerErrorException, NestInterceptor, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -9,7 +9,15 @@ export class ExceptionInterceptor implements NestInterceptor {
     ): Observable<Error> {
         return next.handle().pipe(
             catchError(err => {
-                throw new InternalServerErrorException(err.message);
+                if (err?.status && err?.status === 401) {
+                    throw new UnauthorizedException(err.message);
+                }
+                else if (err?.status && err?.status === 403) {
+                    throw new ForbiddenException(err.message);
+                }
+                else {
+                    throw new InternalServerErrorException(err.message);
+                }
             }),
         );
     }

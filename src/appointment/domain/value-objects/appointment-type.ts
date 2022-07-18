@@ -8,7 +8,7 @@ export class AppointmentType implements IValueObject<AppointmentType>{
 
     private readonly type: AppointmentTypeEnum;
 
-    get value() {
+    get Value() {
         return this.type;
     }
 

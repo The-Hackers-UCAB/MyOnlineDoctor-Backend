@@ -60,6 +60,11 @@ export class OrmDoctor {
             if (ormSpecialty) {
                 ormDoctor.specialties.push(ormSpecialty);
             }
+            else {
+                const ormNewSpecialty = new OrmDoctorSpecialty();
+                ormNewSpecialty.specialty = specialty.Value;
+                ormDoctor.specialties.push(await specialtyRepository.save(ormNewSpecialty));
+            }
         }
 
         return ormDoctor;

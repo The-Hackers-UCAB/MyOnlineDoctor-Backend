@@ -6,7 +6,7 @@ export class AppointmentId implements IValueObject<AppointmentId>{
 
     private readonly id: string;
 
-    get value() {
+    get Value() {
         return this.id;
     }
 

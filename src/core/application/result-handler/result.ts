@@ -1,12 +1,20 @@
 /** Result: Es una clase genérica utilizada para encapsular los resultados obtenidos de los CU.
  *  @typeParam `T` Tipo parametrizado del resultado encapsulado.*/
 export class Result<T>{
-    private value: T;
-    private error: Error;
+    public readonly value?: T;
+    public readonly statusCode?: number;
+    public readonly message?: string;
+    public readonly error?: string;
 
     private constructor(value: T, error: Error) {
-        this.value = value;
-        this.error = error;
+        if (error) {
+            this.statusCode = 500;
+            this.message = error?.message ? error?.message : "Unknown.";
+            this.error = "Internal Domain Error";
+        }
+        else {
+            this.value = value;
+        }
     }
 
     /** Retorna el valor del resultado encapsulado. */
@@ -16,7 +24,7 @@ export class Result<T>{
 
     /** Retorna el error encapsulado. */
     get Error(): Error {
-        return this.error;
+        return new Error(this.message);
     }
 
     /** Retorna `true` si el resultado fue exitoso, en caso contrario `false`. */

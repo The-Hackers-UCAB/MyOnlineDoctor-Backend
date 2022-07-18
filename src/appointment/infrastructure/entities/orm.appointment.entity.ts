@@ -1,10 +1,12 @@
 import { AppointmentStatusEnum } from "src/appointment/domain/value-objects/appointment-status.enum";
 import { AppointmentTypeEnum } from "src/appointment/domain/value-objects/appointment-type.enum";
-import { DoctorSpecialty } from "src/doctor/domain/value-objects/doctor-specialty";
+import { DoctorSpecialtyEnum } from "src/doctor/domain/value-objects/doctor-specialty.enum";
 import { OrmDoctorSpecialty } from "src/doctor/infrastructure/entities/orm-doctor-specialty.entity";
 import { OrmDoctor } from "src/doctor/infrastructure/entities/orm-doctor.entity";
+import { OrmDoctorRepository } from "src/doctor/infrastructure/repositories/orm-doctor.repository";
 import { OrmPatient } from "src/patient/infrastructure/entities/orm-patient.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { OrmPatientRepository } from "src/patient/infrastructure/repositories/orm-patient.repository";
+import { Column, CreateDateColumn, Entity, getManager, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'appointments' })
 export class OrmAppointment {
@@ -20,21 +22,19 @@ export class OrmAppointment {
 
 
     @Column({ name: 'doctor_id' }) doctorId: string;
-    @OneToOne(() => OrmDoctor, { eager: true }) @JoinColumn({ name: 'doctor_id' }) doctor: OrmDoctor;
+    @ManyToOne(() => OrmDoctor, { eager: true }) @JoinColumn({ name: 'doctor_id' }) doctor: OrmDoctor;
 
+    @ManyToOne(() => OrmDoctorSpecialty, { eager: true }) @JoinColumn({ name: 'doctor_specialty' }) specialty: OrmDoctorSpecialty;
 
-    @Column({ name: 'doctor_specialty' }) doctor_specialty: string;
-    @OneToOne(() => OrmDoctorSpecialty, { eager: true }) @JoinColumn({ name: 'doctor_specialty' }) specialty: OrmDoctorSpecialty;
-
-    @Column({ name: 'patient_id', nullable: true }) patientId: string;
-    @OneToOne(() => OrmPatient, { eager: true }) @JoinColumn({ name: 'patient_id' }) patient: OrmPatient;
+    @Column({ name: 'patient_id' }) patientId: string;
+    @ManyToOne(() => OrmPatient, { eager: true }) @JoinColumn({ name: 'patient_id' }) patient: OrmPatient;
 
 
     @CreateDateColumn({ name: 'created_at' }) createdAt: Date;
     @UpdateDateColumn({ name: 'updated_at' }) updatedAt: Date;
 
     // TODO REVISAR AQUI
-    static async create(id: string, date: Date, description: string, duration: number, status: AppointmentStatusEnum, type: AppointmentTypeEnum, patient: OrmPatient, doctor: OrmDoctor, doctorSpecialty?: OrmDoctorSpecialty): Promise<OrmAppointment> {
+    static async create(id: string, date: Date, description: string, duration: number, status: AppointmentStatusEnum, type: AppointmentTypeEnum, patientId: string, doctorId: string, doctorSpecialty?: DoctorSpecialtyEnum): Promise<OrmAppointment> {
         const ormAppointment: OrmAppointment = new OrmAppointment();
         ormAppointment.id = id;
         ormAppointment.date = date;
@@ -42,11 +42,12 @@ export class OrmAppointment {
         ormAppointment.duration = duration;
         ormAppointment.status = status;
         ormAppointment.type = type;
-        ormAppointment.patient = patient;
-        ormAppointment.doctor = doctor;
-        ormAppointment.specialty = doctorSpecialty;
+        ormAppointment.patientId = patientId;
+        ormAppointment.patient = await getManager().getCustomRepository(OrmPatientRepository).findOne({ where: { id: patientId } })
+        ormAppointment.doctorId = doctorId;
+        ormAppointment.doctor = await getManager().getCustomRepository(OrmDoctorRepository).findOne({ where: { id: doctorId } });
+        ormAppointment.specialty = await getManager().getRepository(OrmDoctorSpecialty).findOne({ where: { specialty: doctorSpecialty } });
 
         return ormAppointment;
     }
-
 }
