@@ -1,5 +1,5 @@
 import { IAppointmentRepository } from "../../../appointment/application/repositories/appointment.repository.interface";
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository, IsNull, Not, Repository } from "typeorm";
 import { OrmAppointment } from "../entities/orm.appointment.entity";
 import { Appointment } from "../../../appointment/domain/appointment";
 import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";
@@ -40,17 +40,14 @@ export class OrmAppointmentRepository extends Repository<OrmAppointment> impleme
         return await this.ormAppointmentMulMapper.fromOtherToDomain(ormAppointments);
     }
 
-    /**
+    /**Cuenta las citas del doctor y el total de rating
      * @param id El id del doctor
-     * @returns `Retorna el numero total de citas y la suma de todas las calificaciones de la misma` en un objeto
-     */
+     * @returns `Retorna el numero total de citas y la suma de todas las calificaciones de la misma` en un objeto*/
     async findDoctorAppointmentsAndCount(id: DoctorId): Promise<{ total: number, total_rating: number }> {
-        const ormAppointments = await this.findAndCount({ where: { doctorId: id.Value } });
-        let total = 0;
+        const ormAppointments = await this.findAndCount({ where: { doctorId: id.Value, rating: Not(IsNull()) } });
+        let total: number = 0;
         for await (const ormAppointment of ormAppointments[0]) {
-            if (ormAppointment.rating) {
-                total += ormAppointment.rating;
-            }
+            total += Number.parseFloat("" + ormAppointment.rating);
         }
         return { total: ormAppointments[1], total_rating: total };
     }

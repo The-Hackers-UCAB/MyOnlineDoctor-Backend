@@ -53,22 +53,22 @@ export class Appointment extends AggregateRoot<AppointmentId>{
     }
 
     //Rechazar cita.
-    public reject() : void {
+    public reject(): void {
         this.apply(AppointmentRejected.create(this.Id));
     }
 
     //Aceptar Cita.
-    public accept() : void {
+    public accept(): void {
         this.apply(AppointmentAccepted.create(this.Id));
     }
 
     //Cancelar Cita.
-    public cancel() : void {
+    public cancel(): void {
         this.apply(AppointmentCanceled.create(this.Id));
     }
 
     //Calificar cita.
-    public rate(doctorRating: DoctorRating) : void {
+    public rate(doctorRating: DoctorRating): void {
         this.apply(AppointmentRated.create(this.Id, this.Doctor.Id, doctorRating));
     }
 
@@ -106,7 +106,7 @@ export class Appointment extends AggregateRoot<AppointmentId>{
                 this.status = appointmentCanceled.status;
             case AppointmentRated:
                 const appointmentRated: AppointmentRated = event as AppointmentRated;
-                this.doctor = AppointmentDoctor.create(this.doctor.Id,this.doctor.Specialty,appointmentRated.doctorRating);
+                this.doctor = AppointmentDoctor.create(this.doctor.Id, this.doctor.Specialty, appointmentRated.doctorRating);
                 break;
             default:
                 throw new Error("Event not implemented.");

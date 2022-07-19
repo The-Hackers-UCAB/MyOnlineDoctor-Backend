@@ -10,13 +10,13 @@ import { IPatientRepository } from "src/patient/application/repositories/patient
 import { PatientId } from "src/patient/domain/value-objects/patient-id";
 import { IAppointmentRepository } from "../repositories/appointment.repository.interface";
 
-
+//#region DTOs
 export interface RateAppointmentApplicationServiceDto {
     id?: string;
     rating?: number;
     patientId?: string;
 }
-
+//#endregion
 
 export class RateAppointmentApplicationService implements IApplicationService<RateAppointmentApplicationServiceDto, string> {
 
@@ -24,21 +24,22 @@ export class RateAppointmentApplicationService implements IApplicationService<Ra
 
     constructor(
         private readonly appointmentRepository: IAppointmentRepository,
-        private readonly eventHandler: IEventHandler,
-        private readonly patientRepository: IPatientRepository
+        private readonly patientRepository: IPatientRepository,
+        private readonly eventHandler: IEventHandler
     ) { }
 
     async execute(dto: RateAppointmentApplicationServiceDto): Promise<Result<string>> {
         //Encuentro la cita medica
         const appointment = await this.appointmentRepository.findOneByIdOrFail(AppointmentId.create(dto.id));
-        console.log(appointment);
 
         //Verifico que la cita este asginada al paciente
         const patient = await this.patientRepository.findOneByIdOrFail(PatientId.create(dto.patientId));
 
+        //Verificamos que la cita corresponda al paciente.
         if (!patient.Id.equals(appointment.Patient.Id)) {
             throw new InvalidPatientAppointmentException();
         }
+
         //Cambio el estado de la cita a rechazada
         if (appointment.Status.Value != AppointmentStatusEnum.INICIATED) {
             throw new InvalidAppointmentException();
@@ -54,7 +55,6 @@ export class RateAppointmentApplicationService implements IApplicationService<Ra
         this.eventHandler.publish(appointment.pullEvents());
 
         //Retorno el resultado
-        return Result.success('Cita calificada');
-
+        return Result.success('Cita Calificada.');
     }
 }
