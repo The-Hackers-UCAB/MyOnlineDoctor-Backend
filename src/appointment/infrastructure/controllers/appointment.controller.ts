@@ -35,7 +35,7 @@ import { AppointmentRated } from "src/appointment/domain/events/appointment-rate
 import { UpdateDoctorRatingApplicationService } from "src/doctor/application/services/update-doctor-rating.application.service";
 import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
 import { PatientId } from "src/patient/domain/value-objects/patient-id";
-import { IniciateAppointmentApplicationService, IniciateAppointmentApplicationServiceDto } from "src/appointment/application/services/iniciate-appointment.application.service";
+import { InitiateAppointmentApplicationServiceDto, InitiateAppointmentApplicationService } from "src/appointment/application/services/iniciate-appointment.application.service";
 import { CompleteAppointmentApplicationService, CompleteAppointmentApplicationServiceDto } from "src/appointment/application/services/complete-appointment.application.service";
 
 @Controller('appointment')
@@ -379,14 +379,14 @@ export class AppointmentController {
     @Roles(Role.PATIENT)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
-    async iniciateAppointment(@GetPatientId() id, @Body() dto: IniciateAppointmentApplicationServiceDto): Promise<Result<string>> {
+    async iniciateAppointment(@GetPatientId() id, @Body() dto: InitiateAppointmentApplicationServiceDto): Promise<Result<string>> {
         dto.patientId = id;
 
         const eventBus = EventBus.getInstance();
 
         const service = new ErrorApplicationServiceDecorator(
             new LoggingApplicationServiceDecorator(
-                new IniciateAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormPatientRepository),
+                new InitiateAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormPatientRepository),
                 new NestLogger()
             )
         );

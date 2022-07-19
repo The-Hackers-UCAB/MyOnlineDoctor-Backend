@@ -4,7 +4,7 @@ import { AppointmentStatus } from "../value-objects/appointment-status";
 import { AppointmentStatusEnum } from "../value-objects/appointment-status.enum";
 
 
-export class AppointmentIniciated extends DomainEvent {
+export class AppointmentInitiated extends DomainEvent {
     protected constructor(
         public id: AppointmentId,
         public status: AppointmentStatus,
@@ -12,7 +12,7 @@ export class AppointmentIniciated extends DomainEvent {
         super();
     }
 
-    static create(id: AppointmentId): AppointmentIniciated {
-        return new AppointmentIniciated(id, AppointmentStatus.create(AppointmentStatusEnum.INICIATED));
+    static create(id: AppointmentId): AppointmentInitiated {
+        return new AppointmentInitiated(id, AppointmentStatus.create(AppointmentStatusEnum.INICIATED));
     }
 }
