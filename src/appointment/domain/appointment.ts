@@ -4,6 +4,7 @@ import { DomainEvent } from "../../core/domain/events/domain-event";
 import { AppointmentAccepted } from "./events/appointment-accepted";
 import { AppointmentCanceled } from "./events/appointment-canceled";
 import { AppointmentCreated } from "./events/appointment-created";
+import { AppointmentIniciated } from "./events/appointment-iniciated";
 import { AppointmentRated } from "./events/appointment-rated";
 import { AppointmentRejected } from "./events/appointment-rejected";
 import { AppointmentScheduled } from "./events/appointment-scheduled";
@@ -72,6 +73,11 @@ export class Appointment extends AggregateRoot<AppointmentId>{
         this.apply(AppointmentRated.create(this.Id, this.Doctor.Id, doctorRating));
     }
 
+    //Iniciar cita
+    public iniciate(): void {
+        this.apply(AppointmentIniciated.create(this.Id));
+    }
+
     //Programar cita.
     public scheduleAppointment(date: AppointmentDate, duration: AppointmentDuration) {
         this.apply(AppointmentScheduled.create(this.Id, date, duration));
@@ -104,6 +110,9 @@ export class Appointment extends AggregateRoot<AppointmentId>{
             case AppointmentCanceled:
                 const appointmentCanceled: AppointmentCanceled = event as AppointmentCanceled;
                 this.status = appointmentCanceled.status;
+            case AppointmentIniciated:
+                const appointmentIniciated: AppointmentIniciated = event as AppointmentIniciated;
+                this.status = appointmentIniciated.status;
             case AppointmentRated:
                 const appointmentRated: AppointmentRated = event as AppointmentRated;
                 this.doctor = AppointmentDoctor.create(this.doctor.Id, this.doctor.Specialty, appointmentRated.doctorRating);
