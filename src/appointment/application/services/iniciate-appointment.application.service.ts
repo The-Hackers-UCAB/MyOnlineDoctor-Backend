@@ -10,13 +10,13 @@ import { PatientId } from "src/patient/domain/value-objects/patient-id";
 import { IPatientRepository } from "../../../patient/application/repositories/patient.repository.interface";
 
 //#Region Service Dtos
-export interface IniciateAppointmentApplicationServiceDto {
+export interface InitiateAppointmentApplicationServiceDto {
     id?: string;
     patientId?: string;
 }
 //#endregion
 
-export class IniciateAppointmentApplicationService implements IApplicationService<IniciateAppointmentApplicationServiceDto, string> {
+export class InitiateAppointmentApplicationService implements IApplicationService<InitiateAppointmentApplicationServiceDto, string> {
 
     get name(): string { return this.constructor.name; }
 
@@ -26,7 +26,7 @@ export class IniciateAppointmentApplicationService implements IApplicationServic
         private readonly patientRepository: IPatientRepository
     ) { }
 
-    async execute(dto: IniciateAppointmentApplicationServiceDto): Promise<Result<string>> {
+    async execute(dto: InitiateAppointmentApplicationServiceDto): Promise<Result<string>> {
         //Encuentro la cita medica
         const appointment = await this.appointmentRepository.findOneByIdOrFail(AppointmentId.create(dto.id));
 

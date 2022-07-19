@@ -35,6 +35,8 @@ import { AppointmentRated } from "src/appointment/domain/events/appointment-rate
 import { UpdateDoctorRatingApplicationService } from "src/doctor/application/services/update-doctor-rating.application.service";
 import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
 import { PatientId } from "src/patient/domain/value-objects/patient-id";
+import { InitiateAppointmentApplicationServiceDto, InitiateAppointmentApplicationService } from "src/appointment/application/services/iniciate-appointment.application.service";
+import { CompleteAppointmentApplicationService, CompleteAppointmentApplicationServiceDto } from "src/appointment/application/services/complete-appointment.application.service";
 
 @Controller('appointment')
 export class AppointmentController {
@@ -370,6 +372,42 @@ export class AppointmentController {
             )
         );
 
+        return await service.execute(dto);
+    }
+
+    @Post('initiate/patient')
+    @Roles(Role.PATIENT)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async iniciateAppointment(@GetPatientId() id, @Body() dto: InitiateAppointmentApplicationServiceDto): Promise<Result<string>> {
+        dto.patientId = id;
+
+        const eventBus = EventBus.getInstance();
+
+        const service = new ErrorApplicationServiceDecorator(
+            new LoggingApplicationServiceDecorator(
+                new InitiateAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormPatientRepository),
+                new NestLogger()
+            )
+        );
+        return await service.execute(dto);
+    }
+
+    @Post('complete/doctor')
+    @Roles(Role.DOCTOR)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async completeAppointment(@GetDoctorId() id, @Body() dto: CompleteAppointmentApplicationServiceDto): Promise<Result<string>> {
+        dto.doctorId = id;
+
+        const eventBus = EventBus.getInstance();
+
+        const service = new ErrorApplicationServiceDecorator(
+            new LoggingApplicationServiceDecorator(
+                new CompleteAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormDoctorRepository),
+                new NestLogger()
+            )
+        );
         return await service.execute(dto);
     }
 }

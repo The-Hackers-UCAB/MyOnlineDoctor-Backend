@@ -5,7 +5,7 @@ import { AppointmentAccepted } from "./events/appointment-accepted";
 import { AppointmentCanceled } from "./events/appointment-canceled";
 import { AppointmentCompleted } from "./events/appointment-completed";
 import { AppointmentCreated } from "./events/appointment-created";
-import { AppointmentIniciated } from "./events/appointment-iniciated";
+import { AppointmentInitiated } from "./events/appointment-initiated";
 import { AppointmentRated } from "./events/appointment-rated";
 import { AppointmentRejected } from "./events/appointment-rejected";
 import { AppointmentScheduled } from "./events/appointment-scheduled";
@@ -76,7 +76,7 @@ export class Appointment extends AggregateRoot<AppointmentId>{
 
     //Iniciar cita
     public iniciate(): void {
-        this.apply(AppointmentIniciated.create(this.Id));
+        this.apply(AppointmentInitiated.create(this.Id));
     }
 
     //Completar cita.
@@ -119,8 +119,8 @@ export class Appointment extends AggregateRoot<AppointmentId>{
                 const appointmentCanceled: AppointmentCanceled = event as AppointmentCanceled;
                 this.status = appointmentCanceled.status;
                 break;
-            case AppointmentIniciated:
-                const appointmentIniciated: AppointmentIniciated = event as AppointmentIniciated;
+            case AppointmentInitiated:
+                const appointmentIniciated: AppointmentInitiated = event as AppointmentInitiated;
                 this.status = appointmentIniciated.status;
                 break;
             case AppointmentCompleted:
