@@ -39,4 +39,19 @@ export class OrmAppointmentRepository extends Repository<OrmAppointment> impleme
         const ormAppointments = await this.find({ where: { doctorId: id.Value } });
         return await this.ormAppointmentMulMapper.fromOtherToDomain(ormAppointments);
     }
+
+    /**
+     * @param id El id del doctor
+     * @returns `Retorna el numero total de citas y la suma de todas las calificaciones de la misma` en un objeto
+     */
+    async findDoctorAppointmentsAndCount(id: DoctorId): Promise<{ total: number, total_rating: number }> {
+        const ormAppointments = await this.findAndCount({ where: { doctorId: id.Value } });
+        let total = 0;
+        for await (const ormAppointment of ormAppointments[0]) {
+            if (ormAppointment.rating) {
+                total += ormAppointment.rating;
+            }
+        }
+        return { total: ormAppointments[1], total_rating: total };
+    }
 }

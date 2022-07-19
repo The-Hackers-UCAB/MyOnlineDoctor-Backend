@@ -1,6 +1,7 @@
 import { AggregateRoot } from "../../core/domain/aggregates/aggregate-root";
 import { DomainEvent } from "../../core/domain/events/domain-event";
 import { AppointmentCreated } from "./events/appointment-created";
+import { AppointmentRejected } from "./events/appointment-rejected";
 import { AppointmentScheduled } from "./events/appointment-scheduled";
 import { InvalidAppointmentException } from "./exceptions/invalid-appointment-exception";
 import { AppointmentDate } from "./value-objects/appointment-date";
@@ -47,6 +48,10 @@ export class Appointment extends AggregateRoot<AppointmentId>{
         super(id, appointmentCreated);
     }
 
+    //Rechazar cita.
+    public reject() : void {
+        this.apply(AppointmentRejected.create(this.Id));
+    }
 
     //Programar cita.
     public scheduleAppointment(date: AppointmentDate, duration: AppointmentDuration) {
@@ -65,6 +70,9 @@ export class Appointment extends AggregateRoot<AppointmentId>{
                 this.type = appointmentCreated.type;
                 this.patient = appointmentCreated.patient;
                 this.doctor = appointmentCreated.doctor;
+            case AppointmentRejected:
+                const appointmentRejected: AppointmentRejected = event as AppointmentRejected;
+                this.status = appointmentRejected.status;
                 break;
             case AppointmentScheduled:
                 const appointmentScheduled: AppointmentScheduled = event as AppointmentScheduled;

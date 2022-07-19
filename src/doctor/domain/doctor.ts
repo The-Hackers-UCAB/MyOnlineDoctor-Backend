@@ -1,6 +1,7 @@
 import { AggregateRoot } from "../../core/domain/aggregates/aggregate-root";
 import { DomainEvent } from "../../core/domain/events/domain-event";
 import { DoctorCreated as DoctorCreated } from "./events/doctor-created";
+import { DoctorRatingUpdated } from "./events/doctor-rating-updated";
 import { InvalidDoctorException } from "./exceptions/invalid-doctor.exception";
 import { DoctorGender } from "./value-objects/doctor-gender";
 import { DoctorId } from "./value-objects/doctor-id";
@@ -37,6 +38,9 @@ export class Doctor extends AggregateRoot<DoctorId>{
         super(id, doctorCreated);
     }
 
+    public updateRating(rating: DoctorRating){
+        this.apply(DoctorRatingUpdated.create(this.Id,rating));
+    }   
 
     //Asignador de estados.
     protected when(event: DomainEvent): void {
@@ -50,6 +54,9 @@ export class Doctor extends AggregateRoot<DoctorId>{
                 this.gender = doctorCreated.gender;
                 this.status = doctorCreated.status;
                 this.specialties = doctorCreated.specialties;
+            case DoctorRatingUpdated: 
+                const doctorRatingUpdated : DoctorRatingUpdated = event as DoctorRatingUpdated;
+                this.rating = doctorRatingUpdated.rating;
                 break;
             default:
                 throw new Error("Event not implemented.");
