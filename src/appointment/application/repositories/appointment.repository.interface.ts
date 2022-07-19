@@ -8,4 +8,5 @@ import { RepositoryPagingDto } from "../../../core/application/repositories/repo
 export interface IAppointmentRepository extends IRepository<AppointmentId, Appointment> {
     findPatientAppointments(id: PatientId, paging?: RepositoryPagingDto): Promise<Appointment[]>;
     findDoctorAppointments(id: DoctorId, paging?: RepositoryPagingDto): Promise<Appointment[]>;
+    findDoctorAppointmentsAndCount(id: DoctorId): Promise<{ total: number, total_rating: number }>;
 }
