@@ -23,7 +23,6 @@ import { SessionGuard } from 'src/security/auth/sessions/session.guard';
 import { Roles } from 'src/security/users/roles/roles.decorator';
 import { RolesGuard } from 'src/security/users/roles/roles.guard';
 import { GetPatientId } from 'src/security/users/decorators/get-patient-id.decorator';
-import { FirebaseMovilNotifierService, FirebaseMovilPayloadDto } from 'src/core/infrastructure/firebase-handler/notifications/firebase.appopintmentScheduled';
 
 @Controller('patient')
 export class PatientController {
@@ -96,14 +95,5 @@ export class PatientController {
                 return this.ormAppointmentMulMapper.fromDomainToOther(value)
             }
         );
-    }
-    @Post('NotifyAppointmentCanceled')
-    async NotifyPatient(@Body() payload: { to: string, title: string, body: string }) {
-        //TODO : Agregar los decoradores de logging y error
-        const service = new FirebaseMovilNotifierService();
-        const notification = new FirebaseMovilPayloadDto();
-        notification.token = payload.to;
-        notification.notifications = [{ title: payload.title, body: payload.body, payload: 'Holiwis' }];
-        await service.sendNotification(notification);
     }
 }

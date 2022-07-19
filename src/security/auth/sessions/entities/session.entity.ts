@@ -15,4 +15,7 @@ export class SessionEntity implements ISession {
     @Index() @Column({ name: 'user_id', nullable: true }) userId: number;
 
     @ManyToOne(() => UserEntity) @JoinColumn({ name: 'user_id' }) user: Promise<UserEntity>;
+
+    
+    @Column({ name: 'firebase_token', nullable: true }) firebaseToken: string;
 }
