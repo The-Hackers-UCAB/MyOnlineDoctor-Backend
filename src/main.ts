@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import { SessionsRepository } from '../src/security/auth/sessions/repositories/session.repository';
+import { SessionsRepository } from './core/infrastructure/security/auth/sessions/repositories/session.repository';
 import { TypeormStore } from 'connect-typeorm/out';
-import { UnauthorizedException, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { getCustomRepository } from 'typeorm';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -10,6 +10,7 @@ import * as passport from 'passport';
 import { ExceptionInterceptor } from './core/infrastructure/interceptors/exception.interceptor';
 import * as admin from 'firebase-admin';
 import { ServiceAccount } from 'firebase-admin';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 

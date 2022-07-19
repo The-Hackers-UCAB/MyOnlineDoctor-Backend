@@ -7,10 +7,6 @@ import { Result } from 'src/core/application/result-handler/result';
 import { NestLogger } from 'src/core/infrastructure/logger/nest-logger';
 import { EventBus } from '../../../core/infrastructure/event-handler/event-bus';
 import { PatientCreated } from 'src/patient/domain/events/patient-created.event';
-
-import { CreateUserDto } from 'src/security/users/dtos/create-user.dto';
-import { UsersRepository } from 'src/security/users/repositories/users.repository';
-import { Role } from 'src/security/users/roles/role.entity.enum';
 import { UUIDGenerator } from 'src/core/infrastructure/uuid/uuid-generator';
 import { RegisterPatientApplicationServiceDto, RegisterPatientApplicationService } from 'src/patient/application/services/register-patient.application.service';
 import { Appointment } from 'src/appointment/domain/appointment';
@@ -19,10 +15,13 @@ import { OrmAppointmentRepository } from 'src/appointment/infrastructure/reposit
 import { ResultMapper } from 'src/core/application/result-handler/result.mapper';
 import { OrmAppointmentMulMapper } from 'src/appointment/infrastructure/mappers/orm-appointment-mul.mapper';
 import { OrmAppointment } from 'src/appointment/infrastructure/entities/orm.appointment.entity';
-import { SessionGuard } from 'src/security/auth/sessions/session.guard';
-import { Roles } from 'src/security/users/roles/roles.decorator';
-import { RolesGuard } from 'src/security/users/roles/roles.guard';
-import { GetPatientId } from 'src/security/users/decorators/get-patient-id.decorator';
+import { SessionGuard } from 'src/core/infrastructure/security/auth/sessions/session.guard';
+import { GetPatientId } from 'src/core/infrastructure/security/users/decorators/get-patient-id.decorator';
+import { CreateUserDto } from 'src/core/infrastructure/security/users/dtos/create-user.dto';
+import { UsersRepository } from 'src/core/infrastructure/security/users/repositories/users.repository';
+import { Role } from 'src/core/infrastructure/security/users/roles/role.entity.enum';
+import { Roles } from 'src/core/infrastructure/security/users/roles/roles.decorator';
+import { RolesGuard } from 'src/core/infrastructure/security/users/roles/roles.guard';
 
 @Controller('patient')
 export class PatientController {

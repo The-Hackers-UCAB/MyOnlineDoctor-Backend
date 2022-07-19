@@ -1,10 +1,10 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common"
-import { InvalidSessionException } from "src/security/auth/sessions/exceptions/invalid.session.exception";
+import { InvalidSessionException } from "../../auth/sessions/exceptions/invalid.session.exception";
 
-export const GetPatientId = createParamDecorator(
+export const GetUserId = createParamDecorator(
     (_data, context: ExecutionContext) => {
         const request = context.switchToHttp().getRequest();
         if (!request.user) throw new InvalidSessionException();
-        return request.user.patientId;
+        return request.user.id;
     }
 );

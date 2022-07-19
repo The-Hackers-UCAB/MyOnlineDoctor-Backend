@@ -1,14 +1,14 @@
 import * as admin from 'firebase-admin';
-import { SessionsRepository } from "../../../../security/auth/sessions/repositories/session.repository";
 import { NotificationHandler } from '../../../application/notification-handlers/notification-handler';
-import { UsersRepository } from "../../../../security/users/repositories/users.repository";
 import { PatientId } from "../../../../patient/domain/value-objects/patient-id";
 import { DoctorId } from "../../../../doctor/domain/value-objects/doctor-id";
-import { UserEntity } from "../../../../security/users/entities/user.entity";
 import { getManager, IsNull, Not } from "typeorm";
 import { HttpService } from '@nestjs/axios';
 import { Logger } from '@nestjs/common';
 import { tap } from 'rxjs';
+import { SessionsRepository } from '../../security/auth/sessions/repositories/session.repository';
+import { UserEntity } from '../../security/users/entities/user.entity';
+import { UsersRepository } from '../../security/users/repositories/users.repository';
 
 //#region DTOs.
 export class FirebaseNotifierDto {

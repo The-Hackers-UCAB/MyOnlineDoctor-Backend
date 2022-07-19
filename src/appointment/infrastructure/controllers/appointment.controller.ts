@@ -12,12 +12,6 @@ import { UUIDGenerator } from "src/core/infrastructure/uuid/uuid-generator";
 import { DoctorGenderEnum } from "src/doctor/domain/value-objects/doctor-gender.enum";
 import { OrmDoctorRepository } from "src/doctor/infrastructure/repositories/orm-doctor.repository";
 import { OrmPatientRepository } from "src/patient/infrastructure/repositories/orm-patient.repository";
-import { SessionGuard } from "src/security/auth/sessions/session.guard";
-import { GetDoctorId } from "src/security/users/decorators/get-doctor-id.decortator";
-import { GetPatientId } from "src/security/users/decorators/get-patient-id.decorator";
-import { Role } from "src/security/users/roles/role.entity.enum";
-import { Roles } from "src/security/users/roles/roles.decorator";
-import { RolesGuard } from "src/security/users/roles/roles.guard";
 import { OrmAppointmentRepository } from "../repositories/orm-appointment.repository";
 import { EntityManager } from "typeorm";
 import { FirebaseNotifier } from "src/core/infrastructure/firebase-notifications/notifier/firebase-notifier";
@@ -37,6 +31,12 @@ import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
 import { PatientId } from "src/patient/domain/value-objects/patient-id";
 import { InitiateAppointmentApplicationServiceDto, InitiateAppointmentApplicationService } from "src/appointment/application/services/iniciate-appointment.application.service";
 import { CompleteAppointmentApplicationService, CompleteAppointmentApplicationServiceDto } from "src/appointment/application/services/complete-appointment.application.service";
+import { SessionGuard } from "src/core/infrastructure/security/auth/sessions/session.guard";
+import { GetDoctorId } from "src/core/infrastructure/security/users/decorators/get-doctor-id.decortator";
+import { GetPatientId } from "src/core/infrastructure/security/users/decorators/get-patient-id.decorator";
+import { Role } from "src/core/infrastructure/security/users/roles/role.entity.enum";
+import { Roles } from "src/core/infrastructure/security/users/roles/roles.decorator";
+import { RolesGuard } from "src/core/infrastructure/security/users/roles/roles.guard";
 
 @Controller('appointment')
 export class AppointmentController {

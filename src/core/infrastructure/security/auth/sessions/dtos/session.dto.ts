@@ -1,4 +1,4 @@
-import { Role } from "src/security/users/roles/role.entity.enum";
+import { Role } from "../../../users/roles/role.entity.enum";
 
 /** SessionDto is a Data Transfer Object for the session cookie.
  *  @var {number} userId: Corresponds to the user's ID.
