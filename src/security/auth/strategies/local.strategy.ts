@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
 import { SessionDto } from "../sessions/dtos/session.dto";
 import { PassportStrategy } from "@nestjs/passport";
 import { AuthService } from "../auth.service";
@@ -30,7 +30,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
             }
         }
 
-        return { userId: userDto.id, userRole: userDto.role, userIpAddress: this.ipAddress(request), doctorId: userDto.doctor?.id, patientId: userDto.patient?.id };
+        return { userId: userDto.id, userRole: userDto.role, userIpAddress: this.ipAddress(request), doctorId: userDto.doctor?.id, patientId: userDto.patient?.id, firebaseToken: request.body['firebaseToken'] };
     }
 
     private ipAddress(request: any): string {
