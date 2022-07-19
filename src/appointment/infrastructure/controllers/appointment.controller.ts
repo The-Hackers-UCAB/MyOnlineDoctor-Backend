@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { RequestAppointmentApplicationService, RequestAppointmentApplicationServiceDto } from "src/appointment/application/services/request-appointment.application.service";
 import { ScheduleAppointmentApplicationService, ScheduleAppointmentApplicationServiceDto } from "src/appointment/application/services/schedule-appointment.application.service";
 import { AppointmentId } from "src/appointment/domain/value-objects/appointment-id";
@@ -33,6 +33,8 @@ import { CancelDoctorAppointmentApplicationService, CancelDoctorAppointmentAppli
 import { RateAppointmentApplicationService, RateAppointmentApplicationServiceDto } from "src/appointment/application/services/rate-appointment.application.service";
 import { AppointmentRated } from "src/appointment/domain/events/appointment-rated";
 import { UpdateDoctorRatingApplicationService } from "src/doctor/application/services/update-doctor-rating.application.service";
+import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
+import { PatientId } from "src/patient/domain/value-objects/patient-id";
 
 @Controller('appointment')
 export class AppointmentController {
@@ -52,7 +54,7 @@ export class AppointmentController {
     }
 
 
-    @Post('')
+    @Post('/request')
     @Roles(Role.PATIENT)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
@@ -62,9 +64,24 @@ export class AppointmentController {
         const eventBus = EventBus.getInstance();
 
         const service = new ErrorApplicationServiceDecorator(
-            new LoggingApplicationServiceDecorator(
-                new RequestAppointmentApplicationService(this.ormAppointmentRepository, this.ormPatientRepository, this.ormDoctorRepository, this.uuidGenerator, eventBus),
-                new NestLogger()
+            new NotifierApplicationServiceDecorator(
+                new LoggingApplicationServiceDecorator(
+                    new RequestAppointmentApplicationService(this.ormAppointmentRepository, this.ormPatientRepository, this.ormDoctorRepository, this.uuidGenerator, eventBus),
+                    new NestLogger()
+                ),
+                new FirebaseNotifier(
+                    async (data: RequestAppointmentApplicationServiceDto) => {
+                        const patient = await this.ormPatientRepository.findOneById(PatientId.create(data.patientId));
+                        return {
+                            doctorId: DoctorId.create(dto.doctorId),
+                            message: {
+                                title: "Cita Solicitada - " + dto.doctorSpecialty.charAt(0).toUpperCase() + dto.doctorSpecialty.slice(1).toLowerCase(),
+                                body: "Paciente: " + patient.Names.FirstName + " " + patient.SurNames.FirstSurname + " - " + dto.type.charAt(0).toUpperCase() + dto.type.slice(1).toLowerCase(),
+                                payload: ""
+                            }
+                        };
+                    }
+                )
             )
         );
 
@@ -106,32 +123,11 @@ export class AppointmentController {
         return await service.execute(dto);
     }
 
-    @Post('reject/patient')
-    @Roles(Role.PATIENT)
-    @UseGuards(RolesGuard)
-    @UseGuards(SessionGuard)
-    async rejectPatientAppointment(@GetPatientId() id, @Body() dto: RejectPatientAppointmentApplicationServiceDto): Promise<Result<string>> {
-        console.log(dto);
-
-        dto.patientId = id;
-
-        const eventBus = EventBus.getInstance();
-
-        const service = new ErrorApplicationServiceDecorator(
-            new LoggingApplicationServiceDecorator(
-                new RejectPatientAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormPatientRepository),
-                new NestLogger()
-            )
-        );
-
-        return await service.execute(dto);
-    }
-
     @Post('reject/doctor')
     @Roles(Role.DOCTOR)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
-    async rejectDoctorAppointment(@GetDoctorId() id, @Body() dto: RejectDoctorAppointmentApplicationServiceDto): Promise<Result<string>> {
+    async rejectAppointmentDoctor(@GetDoctorId() id, @Body() dto: RejectDoctorAppointmentApplicationServiceDto): Promise<Result<string>> {
         dto.doctorId = id;
 
         const eventBus = EventBus.getInstance();
@@ -150,7 +146,44 @@ export class AppointmentController {
                             patientId: appointment.Patient.Id,
                             message: {
                                 title: "Cita Rechazada",
-                                body: ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname + " rechazó su cita.",
+                                body: ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname + " ha rechazado la cita.",
+                                payload: JSON.stringify({ appointmentId: appointment.Id.Value })
+                            }
+                        };
+                    }
+                )
+            )
+        );
+
+        return await service.execute(dto);
+    }
+
+    @Post('reject/patient')
+    @Roles(Role.PATIENT)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async rejectAppointmentPatient(@GetPatientId() id, @Body() dto: RejectPatientAppointmentApplicationServiceDto): Promise<Result<string>> {
+        console.log(dto);
+
+        dto.patientId = id;
+
+        const eventBus = EventBus.getInstance();
+
+        const service = new ErrorApplicationServiceDecorator(
+            new NotifierApplicationServiceDecorator(
+                new LoggingApplicationServiceDecorator(
+                    new RejectPatientAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormPatientRepository),
+                    new NestLogger()
+                ),
+                new FirebaseNotifier(
+                    async (data: RejectPatientAppointmentApplicationServiceDto) => {
+                        const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
+                        const patient = await this.ormPatientRepository.findOneById(PatientId.create(id));
+                        return {
+                            doctorId: appointment.Doctor.Id,
+                            message: {
+                                title: "Cita Rechazada",
+                                body: "Paciente: " + patient.Names.FirstName + " " + patient.SurNames.FirstSurname + " ha rechazado la cita agendada.",
                                 payload: JSON.stringify({ appointmentId: appointment.Id.Value })
                             }
                         };
@@ -166,15 +199,66 @@ export class AppointmentController {
     @Roles(Role.PATIENT)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
-    async acceptAppointment(@GetPatientId() id, @Body() dto: AcceptPatientAppointmentApplicationServiceDto): Promise<Result<string>> {
+    async acceptAppointmentPatient(@GetPatientId() id, @Body() dto: AcceptPatientAppointmentApplicationServiceDto): Promise<Result<string>> {
         dto.patientId = id;
 
         const eventBus = EventBus.getInstance();
 
         const service = new ErrorApplicationServiceDecorator(
-            new LoggingApplicationServiceDecorator(
-                new AcceptPatientAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormPatientRepository),
-                new NestLogger()
+            new NotifierApplicationServiceDecorator(
+                new LoggingApplicationServiceDecorator(
+                    new AcceptPatientAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormPatientRepository),
+                    new NestLogger()
+                ),
+                new FirebaseNotifier(
+                    async (data: AcceptPatientAppointmentApplicationServiceDto) => {
+                        const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
+                        const patient = await this.ormPatientRepository.findOneById(PatientId.create(id));
+                        return {
+                            doctorId: appointment.Doctor.Id,
+                            message: {
+                                title: "Cita Aceptada",
+                                body: "Paciente: " + patient.Names.FirstName + " " + patient.SurNames.FirstSurname + " ha aceptado la cita agendada.",
+                                payload: ""
+                            }
+                        };
+                    }
+                )
+            )
+        );
+        return await service.execute(dto);
+    }
+
+    @Post('cancel/doctor')
+    @Roles(Role.DOCTOR)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async cancelAppointmentDoctor(@GetDoctorId() id, @Body() dto: CancelDoctorAppointmentApplicationServiceDto): Promise<Result<string>> {
+
+        dto.doctorId = id;
+
+        const eventBus = EventBus.getInstance();
+
+        const service = new ErrorApplicationServiceDecorator(
+            new NotifierApplicationServiceDecorator(
+                new LoggingApplicationServiceDecorator(
+                    new CancelDoctorAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormDoctorRepository),
+                    new NestLogger()
+                ),
+                new FirebaseNotifier(
+                    async (data: CancelDoctorAppointmentApplicationServiceDto) => {
+                        const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
+                        const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
+                        return {
+                            patientId: appointment.Patient.Id,
+                            message: {
+                                title: "Cita Cancelada",
+                                body: ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname + " rechazó su cita.",
+                                payload: JSON.stringify({ appointmentId: appointment.Id.Value })
+                            }
+                        };
+                    }
+                )
             )
         );
         return await service.execute(dto);
@@ -184,15 +268,31 @@ export class AppointmentController {
     @Roles(Role.PATIENT)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
-    async cancelPatientAppointment(@GetPatientId() id, @Body() dto: CancelPatientAppointmentApplicationServiceDto): Promise<Result<string>> {
+    async cancelAppointmentPatient(@GetPatientId() id, @Body() dto: CancelPatientAppointmentApplicationServiceDto): Promise<Result<string>> {
         dto.patientId = id;
 
         const eventBus = EventBus.getInstance();
 
         const service = new ErrorApplicationServiceDecorator(
-            new LoggingApplicationServiceDecorator(
-                new CancelPatientAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormPatientRepository),
-                new NestLogger()
+            new NotifierApplicationServiceDecorator(
+                new LoggingApplicationServiceDecorator(
+                    new CancelPatientAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormPatientRepository),
+                    new NestLogger()
+                ),
+                new FirebaseNotifier(
+                    async (data: CancelPatientAppointmentApplicationServiceDto) => {
+                        const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
+                        const patient = await this.ormPatientRepository.findOneById(PatientId.create(id));
+                        return {
+                            doctorId: appointment.Doctor.Id,
+                            message: {
+                                title: "Cita Cancelada",
+                                body: "Paciente: " + patient.Names.FirstName + " " + patient.SurNames.FirstSurname + " ha cancelado la cita agendada.",
+                                payload: ""
+                            }
+                        };
+                    }
+                )
             )
         );
         return await service.execute(dto);
@@ -239,41 +339,6 @@ export class AppointmentController {
                 return token;
             }
         )
-    }
-
-    @Post('cancel/doctor')
-    @Roles(Role.DOCTOR)
-    @UseGuards(RolesGuard)
-    @UseGuards(SessionGuard)
-    async cancelDoctorAppointment(@GetDoctorId() id, @Body() dto: CancelDoctorAppointmentApplicationServiceDto): Promise<Result<string>> {
-
-        dto.doctorId = id;
-
-        const eventBus = EventBus.getInstance();
-
-        const service = new ErrorApplicationServiceDecorator(
-            new NotifierApplicationServiceDecorator(
-                new LoggingApplicationServiceDecorator(
-                    new CancelDoctorAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormDoctorRepository),
-                    new NestLogger()
-                ),
-                new FirebaseNotifier(
-                    async (data: CancelDoctorAppointmentApplicationServiceDto) => {
-                        const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
-                        const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
-                        return {
-                            patientId: appointment.Patient.Id,
-                            message: {
-                                title: "Cita Cancelada",
-                                body: ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname + " rechazó su cita.",
-                                payload: JSON.stringify({ appointmentId: appointment.Id.Value })
-                            }
-                        };
-                    }
-                )
-            )
-        );
-        return await service.execute(dto);
     }
 
     @Post('rate/patient')
