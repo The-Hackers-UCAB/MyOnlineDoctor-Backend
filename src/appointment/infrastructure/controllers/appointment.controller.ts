@@ -23,6 +23,7 @@ import { EntityManager } from "typeorm";
 import { FirebaseMovilNotifier } from "src/core/infrastructure/firebase-notifications/notifier/firebase-movil-notifier";
 import { RejectPatientAppointmentApplicationService, RejectPatientAppointmentApplicationServiceDto } from "src/appointment/application/services/reject-patient-appointment.application.service";
 import { RejectDoctorAppointmentApplicationService, RejectDoctorAppointmentApplicationServiceDto } from "src/appointment/application/services/reject-doctor-appointment.application.service";
+import { AcceptPatientAppointmentApplicationService, AcceptPatientAppointmentApplicationServiceDto } from "src/appointment/application/services/accept-patient-appointment.application.service";
 
 @Controller('appointment')
 export class AppointmentController {
@@ -148,6 +149,24 @@ export class AppointmentController {
             )
         );
 
+        return await service.execute(dto);
+    }
+
+    @Post('accept/patient')
+    @Roles(Role.PATIENT)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async acceptAppointment(@GetPatientId() id, @Body() dto: AcceptPatientAppointmentApplicationServiceDto): Promise<Result<string>> {
+        dto.patientId = id;
+
+        const eventBus = EventBus.getInstance();
+
+        const service = new ErrorApplicationServiceDecorator(
+            new LoggingApplicationServiceDecorator(
+                new AcceptPatientAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormPatientRepository),
+                new NestLogger()
+            )
+        );
         return await service.execute(dto);
     }
 }
