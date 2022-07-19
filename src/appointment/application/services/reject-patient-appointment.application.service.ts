@@ -7,15 +7,13 @@ import { IApplicationService } from "src/core/application/application-service/ap
 import { IEventHandler } from "src/core/application/event-handler/event-handler.interface";
 import { Result } from "src/core/application/result-handler/result";
 import { PatientId } from "src/patient/domain/value-objects/patient-id";
-import { IPatientRepository } from "../repositories/patient.repository.interface";
+import { IPatientRepository } from "../../../patient/application/repositories/patient.repository.interface";
 
 //#Region Service Dtos
-
-export class RejectPatientAppointmentApplicationServiceDto {
-    appointmentId: AppointmentId;
-    patientId: PatientId;
+export interface RejectPatientAppointmentApplicationServiceDto {
+    id?: string;
+    patientId?: string;
 }
-
 //#endregion
 
 export class RejectPatientAppointmentApplicationService implements IApplicationService<RejectPatientAppointmentApplicationServiceDto, string> {
@@ -26,22 +24,21 @@ export class RejectPatientAppointmentApplicationService implements IApplicationS
         private readonly appointmentRepository: IAppointmentRepository,
         private readonly eventHandler: IEventHandler,
         private readonly patientRepository: IPatientRepository
-        ){}
+    ) { }
 
     async execute(dto: RejectPatientAppointmentApplicationServiceDto): Promise<Result<string>> {
-        
         //Encuentro la cita medica
-        const appointment = await this.appointmentRepository.findOneByIdOrFail(dto.appointmentId);
+        const appointment = await this.appointmentRepository.findOneByIdOrFail(AppointmentId.create(dto.id));
 
         //Verifico que la cita este asginada al paciente
-        const patient = await this.patientRepository.findOneByIdOrFail(dto.patientId);
+        const patient = await this.patientRepository.findOneByIdOrFail(PatientId.create(dto.patientId));
 
-        if(!patient.Id.equals(appointment.Patient.Id)) {
+        if (!patient.Id.equals(appointment.Patient.Id)) {
             throw new InvalidPatientAppointmentException();
         }
- 
+
         //Cambio el estado de la cita a rechazada
-        if(appointment.Status.Value != AppointmentStatusEnum.SCHEDULED){ 
+        if (appointment.Status.Value != AppointmentStatusEnum.SCHEDULED) {
             throw new InvalidAppointmentException();
         }
         appointment.reject();
@@ -54,6 +51,6 @@ export class RejectPatientAppointmentApplicationService implements IApplicationS
 
         //Retorno el resultado
         return Result.success('Cita rechazada');
-        
+
     }
 }

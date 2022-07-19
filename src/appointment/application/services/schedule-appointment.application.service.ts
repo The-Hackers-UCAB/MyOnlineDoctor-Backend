@@ -15,10 +15,10 @@ import { InvalidDateAppointmentException } from "src/appointment/domain/exceptio
 
 //#region Service DTOs
 export interface ScheduleAppointmentApplicationServiceDto {
-    id: string;
-    date: Date;
-    duration: number;
-    doctorId: string;
+    id?: string;
+    date?: Date;
+    duration?: number;
+    doctorId?: string;
 }
 //#endregion
 

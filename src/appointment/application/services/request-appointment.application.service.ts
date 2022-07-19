@@ -27,10 +27,10 @@ import { AppointmentDate } from "src/appointment/domain/value-objects/appointmen
 
 //#region Service DTOs
 export interface RequestAppointmentApplicationServiceDto {
-    description: string,
-    type: AppointmentTypeEnum,
-    patientId: string,
-    doctorId: string,
+    description?: string,
+    type?: AppointmentTypeEnum,
+    patientId?: string,
+    doctorId?: string,
     doctorSpecialty?: DoctorSpecialtyEnum
 }
 //#endregion

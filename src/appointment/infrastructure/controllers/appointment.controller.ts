@@ -21,6 +21,8 @@ import { RolesGuard } from "src/security/users/roles/roles.guard";
 import { OrmAppointmentRepository } from "../repositories/orm-appointment.repository";
 import { EntityManager } from "typeorm";
 import { FirebaseMovilNotifier } from "src/core/infrastructure/firebase-notifications/notifier/firebase-movil-notifier";
+import { RejectPatientAppointmentApplicationService, RejectPatientAppointmentApplicationServiceDto } from "src/appointment/application/services/reject-patient-appointment.application.service";
+import { RejectDoctorAppointmentApplicationService, RejectDoctorAppointmentApplicationServiceDto } from "src/appointment/application/services/reject-doctor-appointment.application.service";
 
 @Controller('appointment')
 export class AppointmentController {
@@ -82,6 +84,62 @@ export class AppointmentController {
                             message: {
                                 title: "Cita Agendada",
                                 body: ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname + " - " + (new Date(data.date).toLocaleString()),
+                                payload: JSON.stringify({ appointmentId: appointment.Id.Value })
+                            }
+                        };
+                    }
+                )
+            )
+        );
+
+        return await service.execute(dto);
+    }
+
+    @Post('reject/patient')
+    @Roles(Role.PATIENT)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async rejectPatientAppointment(@GetPatientId() id, @Body() dto: RejectPatientAppointmentApplicationServiceDto): Promise<Result<string>> {
+        console.log(dto);
+
+        dto.patientId = id;
+
+        const eventBus = EventBus.getInstance();
+
+        const service = new ErrorApplicationServiceDecorator(
+            new LoggingApplicationServiceDecorator(
+                new RejectPatientAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormPatientRepository),
+                new NestLogger()
+            )
+        );
+
+        return await service.execute(dto);
+    }
+
+    @Post('reject/doctor')
+    @Roles(Role.DOCTOR)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async rejectDoctorAppointment(@GetDoctorId() id, @Body() dto: RejectDoctorAppointmentApplicationServiceDto): Promise<Result<string>> {
+        dto.doctorId = id;
+
+        const eventBus = EventBus.getInstance();
+
+        const service = new ErrorApplicationServiceDecorator(
+            new NotifierApplicationServiceDecorator(
+                new LoggingApplicationServiceDecorator(
+                    new RejectDoctorAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormDoctorRepository),
+                    new NestLogger()
+                ),
+                new FirebaseMovilNotifier(
+                    async (data: RejectDoctorAppointmentApplicationServiceDto) => {
+                        const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
+                        const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
+                        return {
+                            patientId: appointment.Patient.Id,
+                            message: {
+                                title: "Cita Rechazada",
+                                body: ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname + " rechazó su cita.",
                                 payload: JSON.stringify({ appointmentId: appointment.Id.Value })
                             }
                         };
