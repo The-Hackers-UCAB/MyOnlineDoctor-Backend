@@ -375,7 +375,7 @@ export class AppointmentController {
         return await service.execute(dto);
     }
 
-    @Post('iniciate/patient')
+    @Post('initiate/patient')
     @Roles(Role.PATIENT)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
