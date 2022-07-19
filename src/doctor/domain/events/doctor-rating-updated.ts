@@ -8,7 +8,6 @@ export class DoctorRatingUpdated extends DomainEvent {
     protected constructor(
         public id: DoctorId,
         public rating: DoctorRating,
-
     ) {
         super();
     }
@@ -16,5 +15,4 @@ export class DoctorRatingUpdated extends DomainEvent {
     static create(id: DoctorId, rating: DoctorRating): DoctorRatingUpdated {
         return new DoctorRatingUpdated(id, rating);
     }
-
 }

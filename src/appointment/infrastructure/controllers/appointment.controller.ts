@@ -30,6 +30,9 @@ import { ResultMapper } from "src/core/application/result-handler/result.mapper"
 import { AcceptPatientAppointmentApplicationService, AcceptPatientAppointmentApplicationServiceDto } from "src/appointment/application/services/accept-patient-appointment.application.service";
 import { CancelPatientAppointmentApplicationService, CancelPatientAppointmentApplicationServiceDto } from "src/appointment/application/services/cancel-patient-appointment.application.service";
 import { CancelDoctorAppointmentApplicationService, CancelDoctorAppointmentApplicationServiceDto } from "src/appointment/application/services/cancel-doctor-appointment.application.service";
+import { RateAppointmentApplicationService, RateAppointmentApplicationServiceDto } from "src/appointment/application/services/rate-appointment.application.service";
+import { AppointmentRated } from "src/appointment/domain/events/appointment-rated";
+import { UpdateDoctorRatingApplicationService } from "src/doctor/application/services/update-doctor-rating.application.service";
 
 @Controller('appointment')
 export class AppointmentController {
@@ -270,6 +273,38 @@ export class AppointmentController {
                 )
             )
         );
+        return await service.execute(dto);
+    }
+
+    @Post('rate/patient')
+    @Roles(Role.PATIENT)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async ratePatientAppointment(@GetPatientId() id, @Body() dto: RateAppointmentApplicationServiceDto): Promise<Result<string>> {
+        dto.patientId = id;
+
+        const eventBus = EventBus.getInstance();
+
+        eventBus.subscribe(
+            AppointmentRated.eventName(),
+            async (value: AppointmentRated) => {
+                const service = new ErrorApplicationServiceDecorator(
+                    new LoggingApplicationServiceDecorator(
+                        new UpdateDoctorRatingApplicationService(this.ormAppointmentRepository, this.ormDoctorRepository, eventBus),
+                        new NestLogger()
+                    )
+                );
+                await service.execute({ doctorId: value.doctorId.Value });
+            }
+        );
+
+        const service = new ErrorApplicationServiceDecorator(
+            new LoggingApplicationServiceDecorator(
+                new RateAppointmentApplicationService(this.ormAppointmentRepository, this.ormPatientRepository, eventBus),
+                new NestLogger()
+            )
+        );
+
         return await service.execute(dto);
     }
 }

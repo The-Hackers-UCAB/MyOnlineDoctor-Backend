@@ -38,9 +38,9 @@ export class Doctor extends AggregateRoot<DoctorId>{
         super(id, doctorCreated);
     }
 
-    public updateRating(rating: DoctorRating){
-        this.apply(DoctorRatingUpdated.create(this.Id,rating));
-    }   
+    public updateRating(rating: DoctorRating) {
+        this.apply(DoctorRatingUpdated.create(this.Id, rating));
+    }
 
     //Asignador de estados.
     protected when(event: DomainEvent): void {
@@ -54,8 +54,8 @@ export class Doctor extends AggregateRoot<DoctorId>{
                 this.gender = doctorCreated.gender;
                 this.status = doctorCreated.status;
                 this.specialties = doctorCreated.specialties;
-            case DoctorRatingUpdated: 
-                const doctorRatingUpdated : DoctorRatingUpdated = event as DoctorRatingUpdated;
+            case DoctorRatingUpdated:
+                const doctorRatingUpdated: DoctorRatingUpdated = event as DoctorRatingUpdated;
                 this.rating = doctorRatingUpdated.rating;
                 break;
             default:
