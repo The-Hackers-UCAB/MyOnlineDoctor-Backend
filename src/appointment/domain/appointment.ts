@@ -1,6 +1,7 @@
 import { AggregateRoot } from "../../core/domain/aggregates/aggregate-root";
 import { DomainEvent } from "../../core/domain/events/domain-event";
 import { AppointmentCreated } from "./events/appointment-created";
+import { AppointmentRejected } from "./events/appointment-rejected";
 import { InvalidAppointmentException } from "./exceptions/invalid-appointment-exception";
 import { AppointmentDate } from "./value-objects/appointment-date";
 import { AppointmentDescription } from "./value-objects/appointment-description";
@@ -46,6 +47,10 @@ export class Appointment extends AggregateRoot<AppointmentId>{
         super(id, appointmentCreated);
     }
 
+    public reject() : void {
+        this.apply(AppointmentRejected.create(this.Id));
+    }
+
     //Asignador de estados.
     protected when(event: DomainEvent): void {
         switch (event.constructor) {
@@ -58,6 +63,9 @@ export class Appointment extends AggregateRoot<AppointmentId>{
                 this.type = appointmentCreated.type;
                 this.patient = appointmentCreated.patient;
                 this.doctor = appointmentCreated.doctor;
+            case AppointmentRejected:
+                const appointmentRejected: AppointmentRejected = event as AppointmentRejected;
+                this.status = appointmentRejected.status;
                 break;
             default:
                 throw new Error("Event not implemented.");
