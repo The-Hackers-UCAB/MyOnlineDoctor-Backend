@@ -3,7 +3,9 @@ import { AggregateRoot } from "../../core/domain/aggregates/aggregate-root";
 import { DomainEvent } from "../../core/domain/events/domain-event";
 import { AppointmentAccepted } from "./events/appointment-accepted";
 import { AppointmentCanceled } from "./events/appointment-canceled";
+import { AppointmentCompleted } from "./events/appointment-completed";
 import { AppointmentCreated } from "./events/appointment-created";
+import { AppointmentIniciated } from "./events/appointment-iniciated";
 import { AppointmentRated } from "./events/appointment-rated";
 import { AppointmentRejected } from "./events/appointment-rejected";
 import { AppointmentScheduled } from "./events/appointment-scheduled";
@@ -72,6 +74,15 @@ export class Appointment extends AggregateRoot<AppointmentId>{
         this.apply(AppointmentRated.create(this.Id, this.Doctor.Id, doctorRating));
     }
 
+    //Iniciar cita
+    public iniciate(): void {
+        this.apply(AppointmentIniciated.create(this.Id));
+    }
+
+    //Completar cita.
+    public complete(): void {
+        this.apply(AppointmentCompleted.create(this.Id));
+    }
     //Programar cita.
     public scheduleAppointment(date: AppointmentDate, duration: AppointmentDuration) {
         this.apply(AppointmentScheduled.create(this.Id, date, duration));
@@ -89,6 +100,7 @@ export class Appointment extends AggregateRoot<AppointmentId>{
                 this.type = appointmentCreated.type;
                 this.patient = appointmentCreated.patient;
                 this.doctor = appointmentCreated.doctor;
+                break;
             case AppointmentRejected:
                 const appointmentRejected: AppointmentRejected = event as AppointmentRejected;
                 this.status = appointmentRejected.status;
@@ -98,12 +110,23 @@ export class Appointment extends AggregateRoot<AppointmentId>{
                 this.date = appointmentScheduled.date;
                 this.duration = appointmentScheduled.duration;
                 this.status = appointmentScheduled.status;
+                break;
             case AppointmentAccepted:
                 const appointmentAccepted: AppointmentAccepted = event as AppointmentAccepted;
                 this.status = appointmentAccepted.status;
+                break;
             case AppointmentCanceled:
                 const appointmentCanceled: AppointmentCanceled = event as AppointmentCanceled;
                 this.status = appointmentCanceled.status;
+                break;
+            case AppointmentIniciated:
+                const appointmentIniciated: AppointmentIniciated = event as AppointmentIniciated;
+                this.status = appointmentIniciated.status;
+                break;
+            case AppointmentCompleted:
+                const appointmentCompleted: AppointmentCompleted = event as AppointmentCompleted;
+                this.status = appointmentCompleted.status;
+                break;
             case AppointmentRated:
                 const appointmentRated: AppointmentRated = event as AppointmentRated;
                 this.doctor = AppointmentDoctor.create(this.doctor.Id, this.doctor.Specialty, appointmentRated.doctorRating);
