@@ -1,6 +1,7 @@
 import { AggregateRoot } from "../../core/domain/aggregates/aggregate-root";
 import { DomainEvent } from "../../core/domain/events/domain-event";
 import { AppointmentAccepted } from "./events/appointment-accepted";
+import { AppointmentCanceled } from "./events/appointment-canceled";
 import { AppointmentCreated } from "./events/appointment-created";
 import { AppointmentRejected } from "./events/appointment-rejected";
 import { AppointmentScheduled } from "./events/appointment-scheduled";
@@ -59,6 +60,11 @@ export class Appointment extends AggregateRoot<AppointmentId>{
         this.apply(AppointmentAccepted.create(this.Id));
     }
 
+    //Cancelar Cita.
+    public cancel() : void {
+        this.apply(AppointmentCanceled.create(this.Id));
+    }
+
     //Programar cita.
     public scheduleAppointment(date: AppointmentDate, duration: AppointmentDuration) {
         this.apply(AppointmentScheduled.create(this.Id, date, duration));
@@ -88,6 +94,9 @@ export class Appointment extends AggregateRoot<AppointmentId>{
             case AppointmentAccepted:
                 const appointmentAccepted: AppointmentAccepted = event as AppointmentAccepted;
                 this.status = appointmentAccepted.status;
+            case AppointmentCanceled:
+                const appointmentCanceled: AppointmentCanceled = event as AppointmentCanceled;
+                this.status = appointmentCanceled.status;
                 break;
             default:
                 throw new Error("Event not implemented.");
