@@ -4,5 +4,6 @@ export enum AppointmentStatusEnum {
     SCHEDULED = "AGENDADA",
     ACCEPTED = "ACEPTADA",
     CANCELED = "CANCELADA",
-    COMPLETED = "COMPLETADA"
+    COMPLETED = "COMPLETADA",
+    INICIATED = "INICIADA"
 }

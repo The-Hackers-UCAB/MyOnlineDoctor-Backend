@@ -35,7 +35,7 @@ export class OrmAppointment {
     @UpdateDateColumn({ name: 'updated_at' }) updatedAt: Date;
 
     // TODO REVISAR AQUI
-    static async create(id: string, date: Date, description: string, duration: number, status: AppointmentStatusEnum, type: AppointmentTypeEnum, patientId: string, doctorId: string, rating: number, doctorSpecialty?: DoctorSpecialtyEnum): Promise<OrmAppointment> {
+    static async create(id: string, date: Date, description: string, duration: number, status: AppointmentStatusEnum, type: AppointmentTypeEnum, patientId: string, doctorId: string, rating: number | null, doctorSpecialty?: DoctorSpecialtyEnum): Promise<OrmAppointment> {
         const ormAppointment: OrmAppointment = new OrmAppointment();
         ormAppointment.id = id;
         ormAppointment.date = date;

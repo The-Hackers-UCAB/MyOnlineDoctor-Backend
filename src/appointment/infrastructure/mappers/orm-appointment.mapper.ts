@@ -7,6 +7,7 @@ import { AppointmentPatient } from "src/appointment/domain/value-objects/appoint
 import { AppointmentStatus } from "src/appointment/domain/value-objects/appointment-status";
 import { AppointmentType } from "src/appointment/domain/value-objects/appointment-type";
 import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
+import { DoctorRating } from "src/doctor/domain/value-objects/doctor-rating";
 import { DoctorSpecialty } from "src/doctor/domain/value-objects/doctor-specialty";
 import { PatientId } from "src/patient/domain/value-objects/patient-id";
 import { Appointment } from "../../../appointment/domain/appointment";
@@ -28,7 +29,7 @@ export class OrmAppointmentMapper implements IMapper<Appointment, OrmAppointment
             domain.Type.Value,
             domain.Patient.Id.Value,
             domain.Doctor.Id.Value,
-            domain.Doctor.Rating,
+            domain.Doctor.Rating?.Rating,
             domain.Doctor.Specialty.Value,
         );
 
@@ -50,7 +51,8 @@ export class OrmAppointmentMapper implements IMapper<Appointment, OrmAppointment
             AppointmentPatient.create(PatientId.create(other.patientId)),
             AppointmentDoctor.create(
                 DoctorId.create(other.doctorId),
-                DoctorSpecialty.create(other.specialty.specialty)
+                DoctorSpecialty.create(other.specialty.specialty),
+                other.rating? DoctorRating.create(other.rating) : null,
             )
         );
 
