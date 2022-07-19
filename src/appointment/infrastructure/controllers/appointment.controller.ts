@@ -20,7 +20,7 @@ import { Roles } from "src/security/users/roles/roles.decorator";
 import { RolesGuard } from "src/security/users/roles/roles.guard";
 import { OrmAppointmentRepository } from "../repositories/orm-appointment.repository";
 import { EntityManager } from "typeorm";
-import { FirebaseMovilNotifier } from "src/core/infrastructure/firebase-notifications/notifier/firebase-movil-notifier";
+import { FirebaseNotifier } from "src/core/infrastructure/firebase-notifications/notifier/firebase-notifier";
 import { RejectPatientAppointmentApplicationService, RejectPatientAppointmentApplicationServiceDto } from "src/appointment/application/services/reject-patient-appointment.application.service";
 import { RejectDoctorAppointmentApplicationService, RejectDoctorAppointmentApplicationServiceDto } from "src/appointment/application/services/reject-doctor-appointment.application.service";
 import { AgoraApiTokenGenerator } from "src/core/infrastructure/agora-api/agora-api";
@@ -68,7 +68,6 @@ export class AppointmentController {
         return await service.execute(dto);
     }
 
-
     @Post('schedule')
     @Roles(Role.DOCTOR)
     @UseGuards(RolesGuard)
@@ -84,7 +83,7 @@ export class AppointmentController {
                     new ScheduleAppointmentApplicationService(this.ormAppointmentRepository, this.ormDoctorRepository, eventBus),
                     new NestLogger()
                 ),
-                new FirebaseMovilNotifier(
+                new FirebaseNotifier(
                     async (data: ScheduleAppointmentApplicationServiceDto) => {
                         const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
                         const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
@@ -140,7 +139,7 @@ export class AppointmentController {
                     new RejectDoctorAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormDoctorRepository),
                     new NestLogger()
                 ),
-                new FirebaseMovilNotifier(
+                new FirebaseNotifier(
                     async (data: RejectDoctorAppointmentApplicationServiceDto) => {
                         const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
                         const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
@@ -159,7 +158,7 @@ export class AppointmentController {
 
         return await service.execute(dto);
     }
-    
+
     @Post('accept/patient')
     @Roles(Role.PATIENT)
     @UseGuards(RolesGuard)
@@ -211,7 +210,7 @@ export class AppointmentController {
                     new InitiateAppointmentCallApplicationService(this.ormAppointmentRepository, this.ormDoctorRepository, this.ormPatientRepository),
                     new NestLogger()
                 ),
-                new FirebaseMovilNotifier(
+                new FirebaseNotifier(
                     async (data: RejectDoctorAppointmentApplicationServiceDto) => {
                         const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
                         const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
@@ -244,7 +243,7 @@ export class AppointmentController {
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
     async cancelDoctorAppointment(@GetDoctorId() id, @Body() dto: CancelDoctorAppointmentApplicationServiceDto): Promise<Result<string>> {
-        
+
         dto.doctorId = id;
 
         const eventBus = EventBus.getInstance();
@@ -255,7 +254,7 @@ export class AppointmentController {
                     new CancelDoctorAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormDoctorRepository),
                     new NestLogger()
                 ),
-                new FirebaseMovilNotifier(
+                new FirebaseNotifier(
                     async (data: CancelDoctorAppointmentApplicationServiceDto) => {
                         const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
                         const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
@@ -273,5 +272,4 @@ export class AppointmentController {
         );
         return await service.execute(dto);
     }
-    
 }
