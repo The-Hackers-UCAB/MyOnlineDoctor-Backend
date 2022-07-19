@@ -1,11 +1,11 @@
-import { Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { SessionDto } from "../sessions/dtos/session.dto";
 import { PassportStrategy } from "@nestjs/passport";
 import { AuthService } from "../auth.service";
 import { Strategy } from "passport-local";
-import { Role } from "src/security/users/roles/role.entity.enum";
 import { DoctorStatusEnum } from "src/doctor/domain/value-objects/doctor-status.enum";
 import { PatientStatusEnum } from "src/patient/domain/value-objects/patient-status.enum";
+import { Role } from "../../users/roles/role.entity.enum";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {

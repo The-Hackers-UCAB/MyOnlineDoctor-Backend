@@ -1,6 +1,6 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { ISession } from "connect-typeorm";
-import { UserEntity } from "src/security/users/entities/user.entity";
+import { UserEntity } from "../../../users/entities/user.entity";
 
 @Entity({ name: 'sessions' })
 export class SessionEntity implements ISession {
@@ -16,6 +16,6 @@ export class SessionEntity implements ISession {
 
     @ManyToOne(() => UserEntity) @JoinColumn({ name: 'user_id' }) user: Promise<UserEntity>;
 
-    
+
     @Column({ name: 'firebase_token', nullable: true }) firebaseToken: string;
 }

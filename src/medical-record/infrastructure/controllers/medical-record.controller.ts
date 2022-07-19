@@ -4,11 +4,6 @@ import { OrmPatientRepository } from "src/patient/infrastructure/repositories/or
 import { OrmAppointmentRepository } from "src/appointment/infrastructure/repositories/orm-appointment.repository";
 import { OrmDoctorRepository } from "src/doctor/infrastructure/repositories/orm-doctor.repository";
 import { EntityManager } from "typeorm";
-import { Roles } from "src/security/users/roles/roles.decorator";
-import { Role } from "src/security/users/roles/role.entity.enum";
-import { RolesGuard } from "src/security/users/roles/roles.guard";
-import { SessionGuard } from "src/security/auth/sessions/session.guard";
-import { GetDoctorId } from "src/security/users/decorators/get-doctor-id.decortator";
 import { CreateMedicalRecordApplicationService, CreateMedicalRecordApplicationServiceDto } from "src/medical-record/application/services/create-medical-record.aplication.service";
 import { Result } from "src/core/application/result-handler/result";
 import { UUIDGenerator } from "src/core/infrastructure/uuid/uuid-generator";
@@ -16,6 +11,11 @@ import { EventBus } from "src/core/infrastructure/event-handler/event-bus";
 import { ErrorApplicationServiceDecorator } from "src/core/application/application-service/decoratos/error-decorator/error-application.service.decorator";
 import { LoggingApplicationServiceDecorator } from "src/core/application/application-service/decoratos/logging-decorator/logging-application.service.decorator";
 import { NestLogger } from "src/core/infrastructure/logger/nest-logger";
+import { SessionGuard } from "src/core/infrastructure/security/auth/sessions/session.guard";
+import { GetDoctorId } from "src/core/infrastructure/security/users/decorators/get-doctor-id.decortator";
+import { Role } from "src/core/infrastructure/security/users/roles/role.entity.enum";
+import { Roles } from "src/core/infrastructure/security/users/roles/roles.decorator";
+import { RolesGuard } from "src/core/infrastructure/security/users/roles/roles.guard";
 
 @Controller('medical-record')
 export class MedicalRecordController {

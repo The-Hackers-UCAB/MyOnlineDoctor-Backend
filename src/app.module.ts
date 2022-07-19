@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './security/auth/auth.module';
+import { AuthModule } from './core/infrastructure/security/auth/auth.module';
 import { DoctorController } from './doctor/infrastructure/controllers/doctor.controller';
 import { PatientController } from './patient/infrastructure/controllers/patient.controller';
 import { AppointmentController } from './appointment/infrastructure/controllers/appointment.controller';

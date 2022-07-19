@@ -18,14 +18,15 @@ import { OrmAppointment } from 'src/appointment/infrastructure/entities/orm.appo
 import { Appointment } from 'src/appointment/domain/appointment';
 import { OrmAppointmentRepository } from 'src/appointment/infrastructure/repositories/orm-appointment.repository';
 import { OrmAppointmentMulMapper } from 'src/appointment/infrastructure/mappers/orm-appointment-mul.mapper';
-import { GetDoctorId } from 'src/security/users/decorators/get-doctor-id.decortator';
-import { SessionGuard } from 'src/security/auth/sessions/session.guard';
-import { Role } from 'src/security/users/roles/role.entity.enum';
-import { Roles } from 'src/security/users/roles/roles.decorator';
-import { RolesGuard } from 'src/security/users/roles/roles.guard';
-import { UsersRepository } from 'src/security/users/repositories/users.repository';
-import { CreateUserDto } from 'src/security/users/dtos/create-user.dto';
 import { RegisterDoctorApplicationService, RegisterDoctorApplicationServiceDto } from 'src/doctor/application/services/register-doctor.application.service';
+import { SessionGuard } from 'src/core/infrastructure/security/auth/sessions/session.guard';
+import { GetDoctorId } from 'src/core/infrastructure/security/users/decorators/get-doctor-id.decortator';
+import { CreateUserDto } from 'src/core/infrastructure/security/users/dtos/create-user.dto';
+import { UsersRepository } from 'src/core/infrastructure/security/users/repositories/users.repository';
+import { Role } from 'src/core/infrastructure/security/users/roles/role.entity.enum';
+import { Roles } from 'src/core/infrastructure/security/users/roles/roles.decorator';
+import { RolesGuard } from 'src/core/infrastructure/security/users/roles/roles.guard';
+
 @Controller('doctor')
 export class DoctorController {
 
