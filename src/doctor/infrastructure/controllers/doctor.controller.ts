@@ -26,7 +26,6 @@ import { RolesGuard } from 'src/security/users/roles/roles.guard';
 import { UsersRepository } from 'src/security/users/repositories/users.repository';
 import { CreateUserDto } from 'src/security/users/dtos/create-user.dto';
 import { RegisterDoctorApplicationService, RegisterDoctorApplicationServiceDto } from 'src/doctor/application/services/register-doctor.application.service';
-
 @Controller('doctor')
 export class DoctorController {
 
@@ -38,8 +37,8 @@ export class DoctorController {
 
     constructor(private readonly manager: EntityManager) {
         if (!manager) { throw new Error("Enity manager can't be null.") }
-        this.ormDoctorRepository = manager.getCustomRepository(OrmDoctorRepository);
-        this.ormAppointmentRepository = manager.getCustomRepository(OrmAppointmentRepository);
+        this.ormDoctorRepository = this.manager.getCustomRepository(OrmDoctorRepository);
+        this.ormAppointmentRepository = this.manager.getCustomRepository(OrmAppointmentRepository);
     }
 
     @Post('')

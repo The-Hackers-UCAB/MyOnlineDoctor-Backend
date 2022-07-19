@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { RequestAppointmentApplicationService, RequestAppointmentApplicationServiceDto } from "src/appointment/application/services/request-appointment.application.service";
 import { ScheduleAppointmentApplicationService, ScheduleAppointmentApplicationServiceDto } from "src/appointment/application/services/schedule-appointment.application.service";
 import { AppointmentId } from "src/appointment/domain/value-objects/appointment-id";
@@ -23,6 +23,10 @@ import { EntityManager } from "typeorm";
 import { FirebaseMovilNotifier } from "src/core/infrastructure/firebase-notifications/notifier/firebase-movil-notifier";
 import { RejectPatientAppointmentApplicationService, RejectPatientAppointmentApplicationServiceDto } from "src/appointment/application/services/reject-patient-appointment.application.service";
 import { RejectDoctorAppointmentApplicationService, RejectDoctorAppointmentApplicationServiceDto } from "src/appointment/application/services/reject-doctor-appointment.application.service";
+import { AgoraApiTokenGenerator } from "src/core/infrastructure/agora-api/agora-api";
+import { HttpService } from "@nestjs/axios";
+import { InitiateAppointmentCallApplicationService, InitiateAppointmentCallApplicationServiceDto } from "src/appointment/application/services/initiate-appointment-call.application.service";
+import { ResultMapper } from "src/core/application/result-handler/result.mapper";
 import { AcceptPatientAppointmentApplicationService, AcceptPatientAppointmentApplicationServiceDto } from "src/appointment/application/services/accept-patient-appointment.application.service";
 import { CancelPatientAppointmentApplicationService, CancelPatientAppointmentApplicationServiceDto } from "src/appointment/application/services/cancel-patient-appointment.application.service";
 import { CancelDoctorAppointmentApplicationService, CancelDoctorAppointmentApplicationServiceDto } from "src/appointment/application/services/cancel-doctor-appointment.application.service";
@@ -34,12 +38,14 @@ export class AppointmentController {
     private readonly ormAppointmentRepository: OrmAppointmentRepository;
     private readonly ormDoctorRepository: OrmDoctorRepository;
     private readonly uuidGenerator: UUIDGenerator = new UUIDGenerator();
+    private readonly agoraApiTokenGenerator: AgoraApiTokenGenerator;
 
-    constructor(private readonly manager: EntityManager) {
+    constructor(private readonly manager: EntityManager, private readonly httpService: HttpService) {
         if (!manager) { throw new Error("Entity manager can't be null"); }
         this.ormPatientRepository = this.manager.getCustomRepository(OrmPatientRepository);
         this.ormAppointmentRepository = this.manager.getCustomRepository(OrmAppointmentRepository);
         this.ormDoctorRepository = this.manager.getCustomRepository(OrmDoctorRepository);
+        this.agoraApiTokenGenerator = new AgoraApiTokenGenerator(this.httpService);
     }
 
 
@@ -153,7 +159,7 @@ export class AppointmentController {
 
         return await service.execute(dto);
     }
-
+    
     @Post('accept/patient')
     @Roles(Role.PATIENT)
     @UseGuards(RolesGuard)
@@ -190,6 +196,49 @@ export class AppointmentController {
         return await service.execute(dto);
     }
 
+    @Post('call')
+    @Roles(Role.DOCTOR)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async initiateCall(@GetDoctorId() id, @Body() dto: InitiateAppointmentCallApplicationServiceDto): Promise<Result<string>> {
+        dto.doctorId = id;
+
+        let token = "";
+
+        const service = new ErrorApplicationServiceDecorator(
+            new NotifierApplicationServiceDecorator(
+                new LoggingApplicationServiceDecorator(
+                    new InitiateAppointmentCallApplicationService(this.ormAppointmentRepository, this.ormDoctorRepository, this.ormPatientRepository),
+                    new NestLogger()
+                ),
+                new FirebaseMovilNotifier(
+                    async (data: RejectDoctorAppointmentApplicationServiceDto) => {
+                        const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
+                        const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
+                        token = await this.agoraApiTokenGenerator.generateCallToken();
+                        return {
+                            patientId: appointment.Patient.Id,
+                            message: {
+                                title: "Llamada Entrante",
+                                body: "Videollamada del " + ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname,
+                                payload: JSON.stringify({ token: token })
+                            }
+                        };
+                    }
+                )
+            )
+        );
+
+        const result = await service.execute(dto);
+
+        return ResultMapper.map(
+            result,
+            (value: string) => {
+                return token;
+            }
+        )
+    }
+
     @Post('cancel/doctor')
     @Roles(Role.DOCTOR)
     @UseGuards(RolesGuard)
@@ -224,4 +273,5 @@ export class AppointmentController {
         );
         return await service.execute(dto);
     }
+    
 }
