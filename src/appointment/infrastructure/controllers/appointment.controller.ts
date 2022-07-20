@@ -304,10 +304,10 @@ export class AppointmentController {
     @Roles(Role.DOCTOR)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
-    async initiateCall(@GetDoctorId() id, @Body() dto: InitiateAppointmentCallApplicationServiceDto): Promise<Result<string>> {
+    async initiateCall(@GetDoctorId() id, @Body() dto: InitiateAppointmentCallApplicationServiceDto): Promise<Result<{ token: string, channelName: string }>> {
         dto.doctorId = id;
 
-        let token = "";
+        const channelName = this.uuidGenerator.generate()
 
         const service = new ErrorApplicationServiceDecorator(
             new NotifierApplicationServiceDecorator(
@@ -319,13 +319,13 @@ export class AppointmentController {
                     async (data: RejectDoctorAppointmentApplicationServiceDto) => {
                         const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
                         const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
-                        token = await this.agoraApiTokenGenerator.generateCallToken();
+                        const pattientToken = await this.agoraApiTokenGenerator.generateCallToken(channelName);
                         return {
                             patientId: appointment.Patient.Id,
                             message: {
                                 title: "Llamada Entrante",
                                 body: "Videollamada del " + ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname,
-                                payload: JSON.stringify({ token: token })
+                                payload: JSON.stringify({ token: pattientToken, channelName: channelName })
                             }
                         };
                     }
@@ -334,11 +334,12 @@ export class AppointmentController {
         );
 
         const result = await service.execute(dto);
+        const doctorToken = await this.agoraApiTokenGenerator.generateCallToken(channelName);
 
         return ResultMapper.map(
             result,
             (value: string) => {
-                return token;
+                return { token: doctorToken, channelName: channelName };
             }
         )
     }
