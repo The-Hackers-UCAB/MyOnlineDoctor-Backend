@@ -1,7 +1,7 @@
-import { AggregateRoot } from "src/core/domain/aggregates/aggregate-root";
+import { AggregateRoot } from "../../core/domain/aggregates/aggregate-root";
 import { InvalidMedicalRecordException } from "./exceptions/invalid-medical-record.exception";
 import { MedicalRecordCreated } from "./events/medical-record-created";
-import { DomainEvent } from "src/core/domain/events/domain-event";
+import { DomainEvent } from "../../core/domain/events/domain-event";
 import { MedicalRecordID } from "./value-objects/medical-record-id";
 import { MedicalRecordDate } from "./value-objects/medical-record-date";
 import { MedicalRecordDescription } from "./value-objects/medical-record-description";
@@ -27,15 +27,15 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
     private doctor: MedicalRecordDoctor;
 
     //Getters
-    get Date(){ return this.date; }
-    get Description(){ return this.description; }
-    get Diagnostic(){ return this.diagnostic; }
-    get Patient(){ return this.patient; }
-    get Appointment(){ return this.appointment; }
-    get Exams(){ return this.exams; }
-    get Recipe(){ return this.recipe; }
-    get Plannig(){ return this.plannig; }
-    get Doctor(){ return this.doctor; }
+    get Date() { return this.date; }
+    get Description() { return this.description; }
+    get Diagnostic() { return this.diagnostic; }
+    get Patient() { return this.patient; }
+    get Appointment() { return this.appointment; }
+    get Exams() { return this.exams; }
+    get Recipe() { return this.recipe; }
+    get Plannig() { return this.plannig; }
+    get Doctor() { return this.doctor; }
 
     //Constructor
     protected constructor(
@@ -49,7 +49,7 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
         recipe: MedicalRecordRecipe,
         plannig: MedicalRecordPlannig,
         doctor: MedicalRecordDoctor
-    ){
+    ) {
         const medicalRecordCreated = MedicalRecordCreated.create(
             id,
             date,
@@ -67,9 +67,9 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
 
     //Asignador de estados.
     protected when(event: DomainEvent): void {
-        
-        switch(event.constructor){
-            
+
+        switch (event.constructor) {
+
             case MedicalRecordCreated:
                 const medicalRecordCreated: MedicalRecordCreated = event as MedicalRecordCreated;
                 this.date = medicalRecordCreated.date;
@@ -91,7 +91,7 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
 
     //Validar estados.
     protected ensureValidState(): void {
-        if(
+        if (
             !this.date ||
             !this.description ||
             !this.diagnostic ||
@@ -101,11 +101,11 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
             !this.recipe ||
             !this.plannig ||
             !this.doctor
-        ){
+        ) {
             throw new InvalidMedicalRecordException();
         }
     }
-    
+
     static create(
         id: MedicalRecordID,
         date: MedicalRecordDate,
@@ -117,8 +117,8 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
         recipe: MedicalRecordRecipe,
         plannig: MedicalRecordPlannig,
         doctor: MedicalRecordDoctor
-    ): MedicalRecord{
-        return new MedicalRecord(id,date,description,diagnostic,patient,appointment,exams,recipe,plannig,doctor);
+    ): MedicalRecord {
+        return new MedicalRecord(id, date, description, diagnostic, patient, appointment, exams, recipe, plannig, doctor);
     }
 
 }

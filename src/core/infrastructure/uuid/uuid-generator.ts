@@ -1,4 +1,4 @@
-import { IUUIDGenerator } from 'src/core/application/uuid/uuid-generator.interface';
+import { IUUIDGenerator } from '../../../core/application/uuid/uuid-generator.interface';
 import { v4 as uuidv4 } from 'uuid';
 
 /**UUIDGenerator: Es una clase que genera UUIDs.*/

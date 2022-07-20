@@ -11,10 +11,10 @@ import { PatientSurnames } from "../../../patient/domain/value-objects/patient-s
 import { Patient } from "../../../patient/domain/patient";
 import { OrmPatient } from "../entities/orm-patient.entity";
 import { IMapper } from "../../../core/application/mappers/mapper.interface";
-import { PatientStatusEnum } from "src/patient/domain/value-objects/patient-status.enum";
-import { PatientGenderEnum } from "src/patient/domain/value-objects/patient-gender.enum";
-import { PatientStatus } from "src/patient/domain/value-objects/patient-status";
-import { PatientGender } from "src/patient/domain/value-objects/patient-gender";
+import { PatientStatusEnum } from "../../../patient/domain/value-objects/patient-status.enum";
+import { PatientGenderEnum } from "../../../patient/domain/value-objects/patient-gender.enum";
+import { PatientStatus } from "../../../patient/domain/value-objects/patient-status";
+import { PatientGender } from "../../../patient/domain/value-objects/patient-gender";
 
 export class OrmPatientMapper implements IMapper<Patient, OrmPatient> {
 

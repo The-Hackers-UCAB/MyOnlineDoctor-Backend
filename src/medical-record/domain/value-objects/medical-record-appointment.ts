@@ -1,19 +1,19 @@
-import { IValueObject } from "src/core/domain/value-objects/value-object.interface";
+import { IValueObject } from "../../../core/domain/value-objects/value-object.interface";
 import { InvalidMedicalRecordAppointmentException } from "../exceptions/invalid-medical-record-appointment.exception";
-import { AppointmentId } from "src/appointment/domain/value-objects/appointment-id";
+import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";
 
 export class MedicalRecordAppointment implements IValueObject<MedicalRecordAppointment>{
 
     private readonly id: AppointmentId;
 
-    get Id(){
+    get Id() {
         return this.id;
     }
 
-    private constructor(id: AppointmentId){
-        if(id){
+    private constructor(id: AppointmentId) {
+        if (id) {
             this.id = id;
-        }else{
+        } else {
             throw new InvalidMedicalRecordAppointmentException();
         }
     }
@@ -22,7 +22,7 @@ export class MedicalRecordAppointment implements IValueObject<MedicalRecordAppoi
         return this.id == other.id;
     }
 
-    static create(id: AppointmentId): MedicalRecordAppointment{
+    static create(id: AppointmentId): MedicalRecordAppointment {
         return new MedicalRecordAppointment(id);
     }
 }

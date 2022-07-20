@@ -1,8 +1,7 @@
 import { EntityRepository, Repository } from "typeorm";
 import { OrmPatient } from "../entities/orm-patient.entity";
-
 import { RepositoryPagingDto } from "../../../core/application/repositories/repository-paging.dto";
-import { IPatientRepository, SearchAssociatedPatientsDomainDto } from "src/patient/application/repositories/patient.repository.interface";
+import { IPatientRepository, SearchAssociatedPatientsDomainDto } from "../../../patient/application/repositories/patient.repository.interface";
 import { Patient } from "../../../patient/domain/patient";
 import { PatientId } from "../../../patient/domain/value-objects/patient-id";
 import { OrmPatientMapper } from "../mappers/orm-patient-mapper";

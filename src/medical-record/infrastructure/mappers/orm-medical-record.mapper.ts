@@ -1,25 +1,25 @@
-import { AppointmentId } from "src/appointment/domain/value-objects/appointment-id";
-import { IMapper } from "src/core/application/mappers/mapper.interface";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
-import { DoctorSpecialty } from "src/doctor/domain/value-objects/doctor-specialty";
-import { MedicalRecord } from "src/medical-record/domain/medical-record";
-import { MedicalRecordAppointment } from "src/medical-record/domain/value-objects/medical-record-appointment";
-import { MedicalRecordDate } from "src/medical-record/domain/value-objects/medical-record-date";
-import { MedicalRecordDescription } from "src/medical-record/domain/value-objects/medical-record-description";
-import { MedicalRecordDiagnostic } from "src/medical-record/domain/value-objects/medical-record-diagnostic";
-import { MedicalRecordDoctor } from "src/medical-record/domain/value-objects/medical-record-doctor";
-import { MedicalRecordExams } from "src/medical-record/domain/value-objects/medical-record-exams";
-import { MedicalRecordID } from "src/medical-record/domain/value-objects/medical-record-id";
-import { MedicalRecordPatient } from "src/medical-record/domain/value-objects/medical-record-patient";
-import { MedicalRecordPlannig } from "src/medical-record/domain/value-objects/medical-record-plannig";
-import { MedicalRecordRecipe } from "src/medical-record/domain/value-objects/medical-record-recipe";
-import { PatientId } from "src/patient/domain/value-objects/patient-id";
+import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";
+import { IMapper } from "../../../core/application/mappers/mapper.interface";
+import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
+import { DoctorSpecialty } from "../../../doctor/domain/value-objects/doctor-specialty";
+import { MedicalRecord } from "../../../medical-record/domain/medical-record";
+import { MedicalRecordAppointment } from "../../../medical-record/domain/value-objects/medical-record-appointment";
+import { MedicalRecordDate } from "../../../medical-record/domain/value-objects/medical-record-date";
+import { MedicalRecordDescription } from "../../../medical-record/domain/value-objects/medical-record-description";
+import { MedicalRecordDiagnostic } from "../../../medical-record/domain/value-objects/medical-record-diagnostic";
+import { MedicalRecordDoctor } from "../../../medical-record/domain/value-objects/medical-record-doctor";
+import { MedicalRecordExams } from "../../../medical-record/domain/value-objects/medical-record-exams";
+import { MedicalRecordID } from "../../../medical-record/domain/value-objects/medical-record-id";
+import { MedicalRecordPatient } from "../../../medical-record/domain/value-objects/medical-record-patient";
+import { MedicalRecordPlannig } from "../../../medical-record/domain/value-objects/medical-record-plannig";
+import { MedicalRecordRecipe } from "../../../medical-record/domain/value-objects/medical-record-recipe";
+import { PatientId } from "../../../patient/domain/value-objects/patient-id";
 import { OrmMedicalRecord } from "../entities/orm.medical-record.entity";
 
 export class OrmMedicalRecordMapper implements IMapper<MedicalRecord, OrmMedicalRecord>{
 
     async fromDomainToOther(domain: MedicalRecord): Promise<OrmMedicalRecord> {
-        
+
         //Verificamos que no sea null
         if (!domain) { return null; }
 
@@ -42,7 +42,7 @@ export class OrmMedicalRecordMapper implements IMapper<MedicalRecord, OrmMedical
     }
 
     async fromOtherToDomain(other: OrmMedicalRecord): Promise<MedicalRecord> {
-        
+
         //Verificamos que no sea null
         if (!other) { return null; }
 
@@ -67,6 +67,6 @@ export class OrmMedicalRecordMapper implements IMapper<MedicalRecord, OrmMedical
         medicalRecord.pullEvents();
 
         return medicalRecord;
-        
+
     }
 }

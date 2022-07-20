@@ -8,7 +8,6 @@ import { AppointmentPatient } from "../value-objects/appointment-patient";
 import { AppointmentStatus } from "../value-objects/appointment-status";
 import { AppointmentType } from "../value-objects/appointment-type";
 
-
 export class AppointmentCreated extends DomainEvent {
     protected constructor(
         public id: AppointmentId,

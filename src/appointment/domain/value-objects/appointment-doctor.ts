@@ -2,7 +2,7 @@ import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
 import { IValueObject } from "../../../core/domain/value-objects/value-object.interface";
 import { InvalidDoctorAppointmentException } from "../exceptions/invalid-appointment-doctor-exception";
 import { DoctorSpecialty } from "../../../doctor/domain/value-objects/doctor-specialty";
-import { DoctorRating } from "src/doctor/domain/value-objects/doctor-rating";
+import { DoctorRating } from "../../../doctor/domain/value-objects/doctor-rating";
 
 export class AppointmentDoctor implements IValueObject<AppointmentDoctor>{
 

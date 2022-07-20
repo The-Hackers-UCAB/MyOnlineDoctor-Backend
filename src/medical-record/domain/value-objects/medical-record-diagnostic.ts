@@ -1,18 +1,18 @@
-import { IValueObject } from "src/core/domain/value-objects/value-object.interface";
+import { IValueObject } from "../../../core/domain/value-objects/value-object.interface";
 import { InvalidMedicalRecordDiagnosticException } from "../exceptions/invalid-medical-record-diagnostic.exception";
 
 export class MedicalRecordDiagnostic implements IValueObject<MedicalRecordDiagnostic>{
-    
+
     private readonly diagnostic: string;
 
-    get Value(){ 
-        return this.diagnostic; 
+    get Value() {
+        return this.diagnostic;
     }
 
-    private constructor(diagnostic: string){
-        if(diagnostic){
+    private constructor(diagnostic: string) {
+        if (diagnostic) {
             this.diagnostic = diagnostic;
-        }else{
+        } else {
             throw new InvalidMedicalRecordDiagnosticException();
         }
     }
@@ -21,7 +21,7 @@ export class MedicalRecordDiagnostic implements IValueObject<MedicalRecordDiagno
         return this.diagnostic === other.diagnostic;
     }
 
-    static create(diagnostic: string): MedicalRecordDiagnostic{
+    static create(diagnostic: string): MedicalRecordDiagnostic {
         return new MedicalRecordDiagnostic(diagnostic);
     }
 }

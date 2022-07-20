@@ -8,7 +8,7 @@ import { MedicalRecordExams } from "../value-objects/medical-record-exams";
 import { MedicalRecordRecipe } from "../value-objects/medical-record-recipe";
 import { MedicalRecordPlannig } from "../value-objects/medical-record-plannig";
 import { MedicalRecordDoctor } from "../value-objects/medical-record-doctor";
-import { DomainEvent } from "src/core/domain/events/domain-event";
+import { DomainEvent } from "../../../core/domain/events/domain-event";
 
 export class MedicalRecordCreated extends DomainEvent{
 

@@ -2,7 +2,7 @@ import { ISubscription } from "../../application/event-handler/subscription.inte
 import { DomainEvent } from "../../domain/events/domain-event";
 import { IEventHandler } from "../../../core/application/event-handler/event-handler.interface";
 import { ISubscriber } from "./subscribers/subscriber.interface";
-import { LoggingEventHandlerDecorator } from "src/core/application/event-handler/decorators/logging-decorator/logging-event-handler.decorator";
+import { LoggingEventHandlerDecorator } from "../../../core/application/event-handler/decorators/logging-decorator/logging-event-handler.decorator";
 import { NestLogger } from "../logger/nest-logger";
 
 /**EventBus: Es una clase tipo IEventHandler que se utiliza para implementar un bus de eventos, de forma tal 

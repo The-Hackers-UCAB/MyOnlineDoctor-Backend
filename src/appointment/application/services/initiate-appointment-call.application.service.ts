@@ -1,14 +1,14 @@
-import { IAppointmentRepository } from "src/appointment/application/repositories/appointment.repository.interface";
-import { InvalidDoctorAppointmentException } from "src/appointment/domain/exceptions/invalid-appointment-doctor-exception";
-import { InvalidAppointmentException } from "src/appointment/domain/exceptions/invalid-appointment-exception";
-import { AppointmentId } from "src/appointment/domain/value-objects/appointment-id";
-import { AppointmentStatusEnum } from "src/appointment/domain/value-objects/appointment-status.enum";
-import { IApplicationService } from "src/core/application/application-service/application.service.interface";
-import { Result } from "src/core/application/result-handler/result";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
-import { IPatientRepository } from "src/patient/application/repositories/patient.repository.interface";
-import { InvalidPatientException } from "src/patient/domain/exceptions/invalid-patient.exception";
-import { ValidatePatientActiveStatusDomainService } from "src/patient/domain/services/validate-patient-active-status.domain.service";
+import { IAppointmentRepository } from "../../../appointment/application/repositories/appointment.repository.interface";
+import { InvalidDoctorAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-doctor-exception";
+import { InvalidAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-exception";
+import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";
+import { AppointmentStatusEnum } from "../../../appointment/domain/value-objects/appointment-status.enum";
+import { IApplicationService } from "../../../core/application/application-service/application.service.interface";
+import { Result } from "../../../core/application/result-handler/result";
+import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
+import { IPatientRepository } from "../../../patient/application/repositories/patient.repository.interface";
+import { InvalidPatientException } from "../../../patient/domain/exceptions/invalid-patient.exception";
+import { ValidatePatientActiveStatusDomainService } from "../../../patient/domain/services/validate-patient-active-status.domain.service";
 import { IDoctorRepository } from "../../../doctor/application/repositories/doctor.repository.inteface";
 
 //#Region Service Dtos

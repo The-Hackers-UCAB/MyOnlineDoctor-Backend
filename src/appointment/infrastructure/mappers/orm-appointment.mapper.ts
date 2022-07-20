@@ -1,15 +1,15 @@
-import { AppointmentDate } from "src/appointment/domain/value-objects/appointment-date";
-import { AppointmentDescription } from "src/appointment/domain/value-objects/appointment-description";
-import { AppointmentDoctor } from "src/appointment/domain/value-objects/appointment-doctor";
-import { AppointmentDuration } from "src/appointment/domain/value-objects/appointment-duration";
-import { AppointmentId } from "src/appointment/domain/value-objects/appointment-id";
-import { AppointmentPatient } from "src/appointment/domain/value-objects/appointment-patient";
-import { AppointmentStatus } from "src/appointment/domain/value-objects/appointment-status";
-import { AppointmentType } from "src/appointment/domain/value-objects/appointment-type";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
-import { DoctorRating } from "src/doctor/domain/value-objects/doctor-rating";
-import { DoctorSpecialty } from "src/doctor/domain/value-objects/doctor-specialty";
-import { PatientId } from "src/patient/domain/value-objects/patient-id";
+import { AppointmentDate } from "../../../appointment/domain/value-objects/appointment-date";
+import { AppointmentDescription } from "../../../appointment/domain/value-objects/appointment-description";
+import { AppointmentDoctor } from "../../../appointment/domain/value-objects/appointment-doctor";
+import { AppointmentDuration } from "../../../appointment/domain/value-objects/appointment-duration";
+import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";
+import { AppointmentPatient } from "../../../appointment/domain/value-objects/appointment-patient";
+import { AppointmentStatus } from "../../../appointment/domain/value-objects/appointment-status";
+import { AppointmentType } from "../../../appointment/domain/value-objects/appointment-type";
+import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
+import { DoctorRating } from "../../../doctor/domain/value-objects/doctor-rating";
+import { DoctorSpecialty } from "../../../doctor/domain/value-objects/doctor-specialty";
+import { PatientId } from "../../../patient/domain/value-objects/patient-id";
 import { Appointment } from "../../../appointment/domain/appointment";
 import { IMapper } from "../../../core/application/mappers/mapper.interface";
 import { OrmAppointment } from "../entities/orm.appointment.entity";
@@ -52,7 +52,7 @@ export class OrmAppointmentMapper implements IMapper<Appointment, OrmAppointment
             AppointmentDoctor.create(
                 DoctorId.create(other.doctorId),
                 DoctorSpecialty.create(other.specialty.specialty),
-                other.rating? DoctorRating.create(other.rating) : null,
+                other.rating ? DoctorRating.create(other.rating) : null,
             )
         );
 

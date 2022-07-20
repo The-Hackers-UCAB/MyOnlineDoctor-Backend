@@ -1,5 +1,5 @@
 import { IMapper } from "../../../core/application/mappers/mapper.interface";
-import { Patient } from "src/patient/domain/patient";
+import { Patient } from "../../../patient/domain/patient";
 import { OrmPatient } from "../entities/orm-patient.entity";
 import { OrmPatientMapper } from "./orm-patient-mapper";
 

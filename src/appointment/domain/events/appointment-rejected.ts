@@ -1,9 +1,7 @@
 import { DomainEvent } from "../../../core/domain/events/domain-event";
-import { AppointmentDoctor } from "../value-objects/appointment-doctor";
 import { AppointmentId } from "../value-objects/appointment-id";
 import { AppointmentStatus } from "../value-objects/appointment-status";
 import { AppointmentStatusEnum } from "../value-objects/appointment-status.enum";
-
 
 export class AppointmentRejected extends DomainEvent {
     protected constructor(

@@ -1,27 +1,27 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { OrmPatientRepository } from '../repositories/orm-patient.repository';
 import { EntityManager, getManager } from 'typeorm';
-import { ErrorApplicationServiceDecorator } from 'src/core/application/application-service/decoratos/error-decorator/error-application.service.decorator';
-import { LoggingApplicationServiceDecorator } from 'src/core/application/application-service/decoratos/logging-decorator/logging-application.service.decorator';
-import { Result } from 'src/core/application/result-handler/result';
-import { NestLogger } from 'src/core/infrastructure/logger/nest-logger';
+import { ErrorApplicationServiceDecorator } from '../../../core/application/application-service/decoratos/error-decorator/error-application.service.decorator';
+import { LoggingApplicationServiceDecorator } from '../../../core/application/application-service/decoratos/logging-decorator/logging-application.service.decorator';
+import { Result } from '../../../core/application/result-handler/result';
+import { NestLogger } from '../../../core/infrastructure/logger/nest-logger';
 import { EventBus } from '../../../core/infrastructure/event-handler/event-bus';
-import { PatientCreated } from 'src/patient/domain/events/patient-created.event';
-import { UUIDGenerator } from 'src/core/infrastructure/uuid/uuid-generator';
-import { RegisterPatientApplicationServiceDto, RegisterPatientApplicationService } from 'src/patient/application/services/register-patient.application.service';
-import { Appointment } from 'src/appointment/domain/appointment';
-import { SearchPatientAppointmentsApplicationService, SearchPatientAppointmentsApplicationServiceDto } from 'src/patient/application/services/search-patient-appointment.application.service';
-import { OrmAppointmentRepository } from 'src/appointment/infrastructure/repositories/orm-appointment.repository';
-import { ResultMapper } from 'src/core/application/result-handler/result.mapper';
-import { OrmAppointmentMulMapper } from 'src/appointment/infrastructure/mappers/orm-appointment-mul.mapper';
-import { OrmAppointment } from 'src/appointment/infrastructure/entities/orm.appointment.entity';
-import { SessionGuard } from 'src/core/infrastructure/security/auth/sessions/session.guard';
-import { GetPatientId } from 'src/core/infrastructure/security/users/decorators/get-patient-id.decorator';
-import { CreateUserDto } from 'src/core/infrastructure/security/users/dtos/create-user.dto';
-import { UsersRepository } from 'src/core/infrastructure/security/users/repositories/users.repository';
-import { Role } from 'src/core/infrastructure/security/users/roles/role.entity.enum';
-import { Roles } from 'src/core/infrastructure/security/users/roles/roles.decorator';
-import { RolesGuard } from 'src/core/infrastructure/security/users/roles/roles.guard';
+import { PatientCreated } from '../../../patient/domain/events/patient-created.event';
+import { UUIDGenerator } from '../../../core/infrastructure/uuid/uuid-generator';
+import { RegisterPatientApplicationServiceDto, RegisterPatientApplicationService } from '../../../patient/application/services/register-patient.application.service';
+import { Appointment } from '../../../appointment/domain/appointment';
+import { SearchPatientAppointmentsApplicationService, SearchPatientAppointmentsApplicationServiceDto } from '../../../patient/application/services/search-patient-appointment.application.service';
+import { OrmAppointmentRepository } from '../../../appointment/infrastructure/repositories/orm-appointment.repository';
+import { ResultMapper } from '../../../core/application/result-handler/result.mapper';
+import { OrmAppointmentMulMapper } from '../../../appointment/infrastructure/mappers/orm-appointment-mul.mapper';
+import { OrmAppointment } from '../../../appointment/infrastructure/entities/orm.appointment.entity';
+import { SessionGuard } from '../../../core/infrastructure/security/auth/sessions/session.guard';
+import { GetPatientId } from '../../../core/infrastructure/security/users/decorators/get-patient-id.decorator';
+import { CreateUserDto } from '../../../core/infrastructure/security/users/dtos/create-user.dto';
+import { UsersRepository } from '../../../core/infrastructure/security/users/repositories/users.repository';
+import { Role } from '../../../core/infrastructure/security/users/roles/role.entity.enum';
+import { Roles } from '../../../core/infrastructure/security/users/roles/roles.decorator';
+import { RolesGuard } from '../../../core/infrastructure/security/users/roles/roles.guard';
 
 @Controller('patient')
 export class PatientController {

@@ -1,5 +1,5 @@
-import { IMapper } from "src/core/application/mappers/mapper.interface";
-import { MedicalRecord } from "src/medical-record/domain/medical-record";
+import { IMapper } from "../../../core/application/mappers/mapper.interface";
+import { MedicalRecord } from "../../../medical-record/domain/medical-record";
 import { OrmMedicalRecord } from "../entities/orm.medical-record.entity";
 import { OrmMedicalRecordMapper } from "./orm-medical-record.mapper";
 
@@ -7,16 +7,16 @@ export class OrmMedicalRecordMulMapper implements IMapper<MedicalRecord[], OrmMe
 
     private readonly ormMedicalRecordMapper: OrmMedicalRecordMapper;
 
-    constructor(){
+    constructor() {
         this.ormMedicalRecordMapper = new OrmMedicalRecordMapper();
     }
 
     async fromDomainToOther(domain: MedicalRecord[]): Promise<OrmMedicalRecord[]> {
-        
+
         if (!domain) { return null; }
 
         const ormMedicalRecords: OrmMedicalRecord[] = [];
-        for await (const medicalRecord of domain){
+        for await (const medicalRecord of domain) {
             ormMedicalRecords.push(await this.ormMedicalRecordMapper.fromDomainToOther(medicalRecord));
         }
 
@@ -24,11 +24,11 @@ export class OrmMedicalRecordMulMapper implements IMapper<MedicalRecord[], OrmMe
     }
 
     async fromOtherToDomain(other: OrmMedicalRecord[]): Promise<MedicalRecord[]> {
-        
+
         if (!other) { return null; }
 
         const medicalRecords: MedicalRecord[] = [];
-        for await (const ormMedicalRecord of other){
+        for await (const ormMedicalRecord of other) {
             medicalRecords.push(await this.ormMedicalRecordMapper.fromOtherToDomain(ormMedicalRecord))
         }
 
