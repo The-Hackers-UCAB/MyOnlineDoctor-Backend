@@ -316,7 +316,7 @@ export class AppointmentController {
                     new NestLogger()
                 ),
                 new FirebaseNotifier(
-                    async (data: RejectDoctorAppointmentApplicationServiceDto) => {
+                    async (data: InitiateAppointmentApplicationServiceDto) => {
                         const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
                         const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
                         const pattientToken = await this.agoraApiTokenGenerator.generateCallToken(channelName);
