@@ -1,4 +1,4 @@
-import { IValueObject } from "src/core/domain/value-objects/value-object.interface";
+import { IValueObject } from "../../../core/domain/value-objects/value-object.interface";
 import { InvalidPatientBackgroundException } from "../exceptions/invalid-patient-background.exception";
 
 

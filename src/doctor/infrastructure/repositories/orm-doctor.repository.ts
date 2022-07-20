@@ -1,6 +1,5 @@
 import { EntityRepository, Repository } from "typeorm";
 import { OrmDoctor } from "../entities/orm-doctor.entity";
-
 import { RepositoryPagingDto } from "../../../core/application/repositories/repository-paging.dto";
 import { IDoctorRepository } from "../../../doctor/application/repositories/doctor.repository.inteface";
 import { Doctor } from "../../../doctor/domain/doctor";

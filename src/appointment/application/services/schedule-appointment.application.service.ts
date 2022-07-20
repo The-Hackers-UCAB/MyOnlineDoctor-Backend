@@ -1,17 +1,17 @@
 import { IApplicationService } from "../../../core/application/application-service/application.service.interface";
 import { Result } from "../../../core/application/result-handler/result";
 import { IAppointmentRepository } from "../repositories/appointment.repository.interface";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
-import { IEventHandler } from "src/core/application/event-handler/event-handler.interface";
-import { AppointmentId } from "src/appointment/domain/value-objects/appointment-id";
-import { IDoctorRepository } from "src/doctor/application/repositories/doctor.repository.inteface";
-import { AppointmentDuration } from "src/appointment/domain/value-objects/appointment-duration";
-import { AppointmentDate } from "src/appointment/domain/value-objects/appointment-date";
-import { InvalidAppointmentException } from "src/appointment/domain/exceptions/invalid-appointment-exception";
+import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
+import { IEventHandler } from "../../../core/application/event-handler/event-handler.interface";
+import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";
+import { IDoctorRepository } from "../../../doctor/application/repositories/doctor.repository.inteface";
+import { AppointmentDuration } from "../../../appointment/domain/value-objects/appointment-duration";
+import { AppointmentDate } from "../../../appointment/domain/value-objects/appointment-date";
+import { InvalidAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-exception";
 import { ValidateAppointmentSchedulingStatusDomainService } from "../../../appointment/domain/services/validate-appointment-scheduling-status.domain.service";
-import { DoctorStatusEnum } from "src/doctor/domain/value-objects/doctor-status.enum";
-import { InvalidDoctorException } from "src/doctor/domain/exceptions/invalid-doctor.exception";
-import { InvalidDateAppointmentException } from "src/appointment/domain/exceptions/invalid-appointment-date-exception";
+import { DoctorStatusEnum } from "../../../doctor/domain/value-objects/doctor-status.enum";
+import { InvalidDoctorException } from "../../../doctor/domain/exceptions/invalid-doctor.exception";
+import { InvalidDateAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-date-exception";
 
 //#region Service DTOs
 export interface ScheduleAppointmentApplicationServiceDto {

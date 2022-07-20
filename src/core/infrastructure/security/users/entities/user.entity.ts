@@ -1,5 +1,5 @@
-import { OrmDoctor } from "src/doctor/infrastructure/entities/orm-doctor.entity";
-import { OrmPatient } from "src/patient/infrastructure/entities/orm-patient.entity";
+import { OrmDoctor } from "../../../../../doctor/infrastructure/entities/orm-doctor.entity";
+import { OrmPatient } from "../../../../../patient/infrastructure/entities/orm-patient.entity";
 import { Check, Column, CreateDateColumn, Entity, Index, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { SessionEntity } from "../../../security/auth/sessions/entities/session.entity";
 import { Role } from "../roles/role.entity.enum";

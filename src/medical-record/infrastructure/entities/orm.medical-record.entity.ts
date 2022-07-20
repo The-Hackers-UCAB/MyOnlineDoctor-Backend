@@ -1,12 +1,12 @@
 import { Column, CreateDateColumn, Entity, getManager, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
-import { OrmDoctor } from "src/doctor/infrastructure/entities/orm-doctor.entity";
-import { OrmDoctorSpecialty } from "src/doctor/infrastructure/entities/orm-doctor-specialty.entity";
-import { OrmPatient } from "src/patient/infrastructure/entities/orm-patient.entity";
-import { OrmAppointment } from "src/appointment/infrastructure/entities/orm.appointment.entity";
-import { DoctorSpecialtyEnum } from "src/doctor/domain/value-objects/doctor-specialty.enum";
-import { OrmDoctorRepository } from "src/doctor/infrastructure/repositories/orm-doctor.repository";
-import { OrmPatientRepository } from "src/patient/infrastructure/repositories/orm-patient.repository";
-import { OrmAppointmentRepository } from "src/appointment/infrastructure/repositories/orm-appointment.repository";
+import { OrmDoctor } from "../../../doctor/infrastructure/entities/orm-doctor.entity";
+import { OrmDoctorSpecialty } from "../../../doctor/infrastructure/entities/orm-doctor-specialty.entity";
+import { OrmPatient } from "../../../patient/infrastructure/entities/orm-patient.entity";
+import { OrmAppointment } from "../../../appointment/infrastructure/entities/orm.appointment.entity";
+import { DoctorSpecialtyEnum } from "../../../doctor/domain/value-objects/doctor-specialty.enum";
+import { OrmDoctorRepository } from "../../../doctor/infrastructure/repositories/orm-doctor.repository";
+import { OrmPatientRepository } from "../../../patient/infrastructure/repositories/orm-patient.repository";
+import { OrmAppointmentRepository } from "../../../appointment/infrastructure/repositories/orm-appointment.repository";
 
 @Entity({ name: 'medical_records' })
 export class OrmMedicalRecord {

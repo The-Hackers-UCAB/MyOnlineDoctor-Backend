@@ -5,8 +5,8 @@ import { Appointment } from "../../../appointment/domain/appointment";
 import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";
 import { OrmAppointmentMapper } from "../mappers/orm-appointment.mapper";
 import { InvalidAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-exception";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
-import { PatientId } from "src/patient/domain/value-objects/patient-id";
+import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
+import { PatientId } from "../../../patient/domain/value-objects/patient-id";
 import { OrmAppointmentMulMapper } from "../mappers/orm-appointment-mul.mapper";
 
 @EntityRepository(OrmAppointment)

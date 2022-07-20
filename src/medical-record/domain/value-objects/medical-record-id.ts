@@ -1,9 +1,9 @@
-import { IValueObject } from "src/core/domain/value-objects/value-object.interface";
+import { IValueObject } from "../../../core/domain/value-objects/value-object.interface";
 import { InvalidMedicalRecordIdException } from "../exceptions/invalid-medical-record-id.exception";
 const UUID_FORMAT = /([0-9]|[a-f]){8,8}-([0-9]|[a-f]){4,4}-([0-9]|[a-f]){4,4}-([0-9]|[a-f]){4,4}-([0-9]|[a-f]){12,12}/g
 
 export class MedicalRecordID implements IValueObject<MedicalRecordID>{
-    
+
     private readonly id: string;
 
     get Value() { return this.id; }
@@ -11,7 +11,7 @@ export class MedicalRecordID implements IValueObject<MedicalRecordID>{
     private constructor(id: string) {
         if (id && id.match(UUID_FORMAT)) {
             this.id = id;
-        }else{
+        } else {
             throw new InvalidMedicalRecordIdException();
         }
     }
@@ -20,7 +20,7 @@ export class MedicalRecordID implements IValueObject<MedicalRecordID>{
         return this.id == other.id;
     }
 
-    static create(id: string): MedicalRecordID{
+    static create(id: string): MedicalRecordID {
         return new MedicalRecordID(id);
     }
 

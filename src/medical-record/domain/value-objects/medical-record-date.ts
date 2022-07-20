@@ -1,19 +1,19 @@
-import { IValueObject } from "src/core/domain/value-objects/value-object.interface";
+import { IValueObject } from "../../../core/domain/value-objects/value-object.interface";
 import { InvalidMedicalRecordDateException } from "../exceptions/invalid-medical-record-date.exception";
 
 export class MedicalRecordDate implements IValueObject<MedicalRecordDate>{
-    
+
     private readonly date: Date;
 
-    get Value(){ 
-        return this.date; 
+    get Value() {
+        return this.date;
     }
 
-    private constructor(date: Date){
+    private constructor(date: Date) {
         const today = new Date();
-        if(date <= today){
+        if (date <= today) {
             this.date = date;
-        }else{
+        } else {
             throw new InvalidMedicalRecordDateException();
         }
     }
@@ -22,7 +22,7 @@ export class MedicalRecordDate implements IValueObject<MedicalRecordDate>{
         return this.date == other.date;
     }
 
-    static create(date: Date): MedicalRecordDate{
+    static create(date: Date): MedicalRecordDate {
         return new MedicalRecordDate(date);
     }
 }

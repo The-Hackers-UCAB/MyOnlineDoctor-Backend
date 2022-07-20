@@ -1,12 +1,12 @@
-import { IAppointmentRepository } from "src/appointment/application/repositories/appointment.repository.interface";
-import { InvalidDoctorAppointmentException } from "src/appointment/domain/exceptions/invalid-appointment-doctor-exception";
-import { InvalidAppointmentException } from "src/appointment/domain/exceptions/invalid-appointment-exception";
-import { AppointmentId } from "src/appointment/domain/value-objects/appointment-id";
-import { AppointmentStatusEnum } from "src/appointment/domain/value-objects/appointment-status.enum";
-import { IApplicationService } from "src/core/application/application-service/application.service.interface";
-import { IEventHandler } from "src/core/application/event-handler/event-handler.interface";
-import { Result } from "src/core/application/result-handler/result";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
+import { IAppointmentRepository } from "../../../appointment/application/repositories/appointment.repository.interface";
+import { InvalidDoctorAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-doctor-exception";
+import { InvalidAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-exception";
+import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";
+import { AppointmentStatusEnum } from "../../../appointment/domain/value-objects/appointment-status.enum";
+import { IApplicationService } from "../../../core/application/application-service/application.service.interface";
+import { IEventHandler } from "../../../core/application/event-handler/event-handler.interface";
+import { Result } from "../../../core/application/result-handler/result";
+import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
 import { IDoctorRepository } from "../../../doctor/application/repositories/doctor.repository.inteface";
 
 //#Region Service Dtos

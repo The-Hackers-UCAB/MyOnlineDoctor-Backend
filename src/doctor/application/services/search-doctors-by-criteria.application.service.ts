@@ -2,13 +2,13 @@ import { Doctor } from "../../../doctor/domain/doctor";
 import { IApplicationService } from "../../../core/application/application-service/application.service.interface";
 import { IDoctorRepository, SearchDoctorsByCriteriaDomainDto } from "../repositories/doctor.repository.inteface";
 import { RepositoryPagingDto } from "../../../core/application/repositories/repository-paging.dto";
-import { DoctorSpecialtyEnum } from "src/doctor/domain/value-objects/doctor-specialty.enum";
+import { DoctorSpecialtyEnum } from "../../../doctor/domain/value-objects/doctor-specialty.enum";
 import { DoctorNames } from "../../../doctor/domain/value-objects/doctor-names";
 import { DoctorSurnames } from "../../../doctor/domain/value-objects/doctor-surnames";
 import { DoctorLocation } from "../../../doctor/domain/value-objects/doctor-location";
 import { DoctorRating } from "../../../doctor/domain/value-objects/doctor-rating";
 import { Result } from "../../../core/application/result-handler/result";
-import { DoctorSpecialty } from "src/doctor/domain/value-objects/doctor-specialty";
+import { DoctorSpecialty } from "../../../doctor/domain/value-objects/doctor-specialty";
 
 //#region Service DTOs
 export interface SearchDoctorsByCriteriaApplicationServiceDto {

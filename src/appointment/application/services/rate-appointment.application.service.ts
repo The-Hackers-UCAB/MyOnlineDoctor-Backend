@@ -1,13 +1,13 @@
-import { InvalidAppointmentException } from "src/appointment/domain/exceptions/invalid-appointment-exception";
-import { InvalidPatientAppointmentException } from "src/appointment/domain/exceptions/invalid-appointment-patient-exception";
-import { AppointmentId } from "src/appointment/domain/value-objects/appointment-id";
-import { AppointmentStatusEnum } from "src/appointment/domain/value-objects/appointment-status.enum";
-import { IApplicationService } from "src/core/application/application-service/application.service.interface";
-import { IEventHandler } from "src/core/application/event-handler/event-handler.interface";
-import { Result } from "src/core/application/result-handler/result";
-import { DoctorRating } from "src/doctor/domain/value-objects/doctor-rating";
-import { IPatientRepository } from "src/patient/application/repositories/patient.repository.interface";
-import { PatientId } from "src/patient/domain/value-objects/patient-id";
+import { InvalidAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-exception";
+import { InvalidPatientAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-patient-exception";
+import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";
+import { AppointmentStatusEnum } from "../../../appointment/domain/value-objects/appointment-status.enum";
+import { IApplicationService } from "../../../core/application/application-service/application.service.interface";
+import { IEventHandler } from "../../../core/application/event-handler/event-handler.interface";
+import { Result } from "../../../core/application/result-handler/result";
+import { DoctorRating } from "../../../doctor/domain/value-objects/doctor-rating";
+import { IPatientRepository } from "../../../patient/application/repositories/patient.repository.interface";
+import { PatientId } from "../../../patient/domain/value-objects/patient-id";
 import { IAppointmentRepository } from "../repositories/appointment.repository.interface";
 
 //#region DTOs

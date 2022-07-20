@@ -1,19 +1,19 @@
-import { IApplicationService } from "src/core/application/application-service/application.service.interface";
-import { IEventHandler } from "src/core/application/event-handler/event-handler.interface";
-import { Result } from "src/core/application/result-handler/result";
-import { IUUIDGenerator } from "src/core/application/uuid/uuid-generator.interface";
-import { Doctor } from "src/doctor/domain/doctor";
-import { DoctorGender } from "src/doctor/domain/value-objects/doctor-gender";
-import { DoctorGenderEnum } from "src/doctor/domain/value-objects/doctor-gender.enum";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
-import { DoctorLocation } from "src/doctor/domain/value-objects/doctor-location";
-import { DoctorNames } from "src/doctor/domain/value-objects/doctor-names";
-import { DoctorRating } from "src/doctor/domain/value-objects/doctor-rating";
-import { DoctorSpecialty } from "src/doctor/domain/value-objects/doctor-specialty";
-import { DoctorSpecialtyEnum } from "src/doctor/domain/value-objects/doctor-specialty.enum";
-import { DoctorStatus } from "src/doctor/domain/value-objects/doctor-status";
-import { DoctorStatusEnum } from "src/doctor/domain/value-objects/doctor-status.enum";
-import { DoctorSurnames } from "src/doctor/domain/value-objects/doctor-surnames";
+import { IApplicationService } from "../../../core/application/application-service/application.service.interface";
+import { IEventHandler } from "../../../core/application/event-handler/event-handler.interface";
+import { Result } from "../../../core/application/result-handler/result";
+import { IUUIDGenerator } from "../../../core/application/uuid/uuid-generator.interface";
+import { Doctor } from "../../../doctor/domain/doctor";
+import { DoctorGender } from "../../../doctor/domain/value-objects/doctor-gender";
+import { DoctorGenderEnum } from "../../../doctor/domain/value-objects/doctor-gender.enum";
+import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
+import { DoctorLocation } from "../../../doctor/domain/value-objects/doctor-location";
+import { DoctorNames } from "../../../doctor/domain/value-objects/doctor-names";
+import { DoctorRating } from "../../../doctor/domain/value-objects/doctor-rating";
+import { DoctorSpecialty } from "../../../doctor/domain/value-objects/doctor-specialty";
+import { DoctorSpecialtyEnum } from "../../../doctor/domain/value-objects/doctor-specialty.enum";
+import { DoctorStatus } from "../../../doctor/domain/value-objects/doctor-status";
+import { DoctorStatusEnum } from "../../../doctor/domain/value-objects/doctor-status.enum";
+import { DoctorSurnames } from "../../../doctor/domain/value-objects/doctor-surnames";
 import { IDoctorRepository } from "../repositories/doctor.repository.inteface";
 
 //#region Service DTOs

@@ -3,8 +3,8 @@ import { SessionDto } from "../sessions/dtos/session.dto";
 import { PassportStrategy } from "@nestjs/passport";
 import { AuthService } from "../auth.service";
 import { Strategy } from "passport-local";
-import { DoctorStatusEnum } from "src/doctor/domain/value-objects/doctor-status.enum";
-import { PatientStatusEnum } from "src/patient/domain/value-objects/patient-status.enum";
+import { DoctorStatusEnum } from "../../../../../doctor/domain/value-objects/doctor-status.enum";
+import { PatientStatusEnum } from "../../../../../patient/domain/value-objects/patient-status.enum";
 import { Role } from "../../users/roles/role.entity.enum";
 
 @Injectable()

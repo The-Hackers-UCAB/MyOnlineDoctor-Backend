@@ -9,7 +9,7 @@ import { PatientPhoneNumber } from "../../../patient/domain/value-objects/patien
 import { PatientSurgeries } from "../../../patient/domain/value-objects/patient-surgeries";
 import { PatientWeight } from "../../../patient/domain/value-objects/patient-weight";
 import { IRepository } from "../../../core/application/repositories/repository.interface";
-import { RepositoryPagingDto } from "src/core/application/repositories/repository-paging.dto";
+import { RepositoryPagingDto } from "../../../core/application/repositories/repository-paging.dto";
 import { Patient } from "../../../patient/domain/patient";
 import { PatientGender } from "../../../patient/domain/value-objects/patient-gender";
 import { PatientStatus } from "../../../patient/domain/value-objects/patient-status";

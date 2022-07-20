@@ -1,4 +1,4 @@
-import { IValueObject } from "src/core/domain/value-objects/value-object.interface";
+import { IValueObject } from "../../../core/domain/value-objects/value-object.interface";
 import { InvalidPatientPhoneNumberException} from "../exceptions/invalid-patient-phone-number.exception";
 
 

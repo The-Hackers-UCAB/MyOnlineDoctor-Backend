@@ -3,7 +3,6 @@ import { PatientGenderEnum } from "../../../patient/domain/value-objects/patient
 import { PatientStatusEnum } from "../../../patient/domain/value-objects/patient-status.enum";
 import { IApplicationService } from "../../../core/application/application-service/application.service.interface";
 import { IEventHandler } from "../../../core/application/event-handler/event-handler.interface";
-import { UUIDGenerator } from "../../../core/infrastructure/uuid/uuid-generator";
 import { Patient } from "../../../patient/domain/patient";
 import { PatientAllergies } from "../../../patient/domain/value-objects/patient-allergies";
 import { PatientBackground } from "../../../patient/domain/value-objects/patient-background";
@@ -18,7 +17,7 @@ import { PatientSurgeries } from "../../../patient/domain/value-objects/patient-
 import { PatientSurnames } from "../../../patient/domain/value-objects/patient-surnames";
 import { PatientWeight } from "../../../patient/domain/value-objects/patient-weight";
 import { IPatientRepository } from "../repositories/patient.repository.interface";
-import { IUUIDGenerator } from "src/core/application/uuid/uuid-generator.interface";
+import { IUUIDGenerator } from "../../../core/application/uuid/uuid-generator.interface";
 
 //#region Service DTOs
 export interface RegisterPatientApplicationServiceDto {

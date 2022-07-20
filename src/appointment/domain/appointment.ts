@@ -1,4 +1,4 @@
-import { DoctorRating } from "src/doctor/domain/value-objects/doctor-rating";
+import { DoctorRating } from "../../doctor/domain/value-objects/doctor-rating";
 import { AggregateRoot } from "../../core/domain/aggregates/aggregate-root";
 import { DomainEvent } from "../../core/domain/events/domain-event";
 import { AppointmentAccepted } from "./events/appointment-accepted";
