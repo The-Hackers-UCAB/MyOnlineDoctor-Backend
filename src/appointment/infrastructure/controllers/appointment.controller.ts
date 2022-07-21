@@ -255,7 +255,7 @@ export class AppointmentController {
                             patientId: appointment.Patient.Id,
                             message: {
                                 title: "Cita Cancelada",
-                                body: ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname + " rechazó su cita.",
+                                body: ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname + " canceló su cita.",
                                 payload: JSON.stringify({ appointmentId: appointment.Id.Value })
                             }
                         };
@@ -307,7 +307,8 @@ export class AppointmentController {
     async initiateCall(@GetDoctorId() id, @Body() dto: InitiateAppointmentCallApplicationServiceDto): Promise<Result<{ token: string, channelName: string }>> {
         dto.doctorId = id;
 
-        const channelName = this.uuidGenerator.generate()
+        // const channelName = this.uuidGenerator.generate()
+        const channelName = dto.id;
 
         const service = new ErrorApplicationServiceDecorator(
             new NotifierApplicationServiceDecorator(
