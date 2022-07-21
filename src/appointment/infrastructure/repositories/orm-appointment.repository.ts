@@ -31,12 +31,12 @@ export class OrmAppointmentRepository extends Repository<OrmAppointment> impleme
     }
 
     async findPatientAppointments(id: PatientId): Promise<Appointment[]> {
-        const ormAppointments = await this.find({ where: { patientId: id.Value } });
+        const ormAppointments = await this.find({ where: { patientId: id.Value }, order: { updatedAt: 'DESC' } });
         return await this.ormAppointmentMulMapper.fromOtherToDomain(ormAppointments);
     }
 
     async findDoctorAppointments(id: DoctorId): Promise<Appointment[]> {
-        const ormAppointments = await this.find({ where: { doctorId: id.Value } });
+        const ormAppointments = await this.find({ where: { doctorId: id.Value }, order: { updatedAt: 'DESC' } });
         return await this.ormAppointmentMulMapper.fromOtherToDomain(ormAppointments);
     }
 

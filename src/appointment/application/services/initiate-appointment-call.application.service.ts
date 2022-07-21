@@ -10,6 +10,8 @@ import { IPatientRepository } from "../../../patient/application/repositories/pa
 import { InvalidPatientException } from "../../../patient/domain/exceptions/invalid-patient.exception";
 import { ValidatePatientActiveStatusDomainService } from "../../../patient/domain/services/validate-patient-active-status.domain.service";
 import { IDoctorRepository } from "../../../doctor/application/repositories/doctor.repository.inteface";
+import { ValidateAppointmentDateCallDomainService } from "../../../appointment/domain/services/validate-appointment-date-calll.domain.service";
+import { InvalidDateAppointmentException } from "src/appointment/domain/exceptions/invalid-appointment-date-exception";
 
 //#Region Service Dtos
 export interface InitiateAppointmentCallApplicationServiceDto {
@@ -23,6 +25,7 @@ export class InitiateAppointmentCallApplicationService implements IApplicationSe
     get name(): string { return this.constructor.name; }
 
     private readonly validatePatientActiveStatusDomainService = new ValidatePatientActiveStatusDomainService();
+    private readonly validateAppointmentDateCallDomainService = new ValidateAppointmentDateCallDomainService();
 
     constructor(
         private readonly appointmentRepository: IAppointmentRepository,
@@ -45,6 +48,12 @@ export class InitiateAppointmentCallApplicationService implements IApplicationSe
         if (appointment.Status.Value != AppointmentStatusEnum.ACCEPTED) {
             throw new InvalidAppointmentException();
         }
+
+        /* Para la demostración se desactiva la verificación de la fecha de la cita.
+        if (!this.validateAppointmentDateCallDomainService.execute(appointment)) {
+            throw new InvalidDateAppointmentException();
+        }
+        */
 
         //Buscamos al paciente
         const patient = await this.patientRepository.findOneByIdOrFail(appointment.Patient.Id)
