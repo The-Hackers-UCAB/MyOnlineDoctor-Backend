@@ -61,7 +61,6 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
-
 ## Screenshots
 
 Grafo de dependencias.
@@ -85,3 +84,7 @@ Tabla con las actividades mas significativas por integrante:
 | Implementación del Bus de Eventos para el manejo de los eventos de dominio. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/9 |
 | Implementación de Notifier con patrones. Se implementó un decorador para el manejo de notificación junto con su puerto y adaptador de firebase. Se utilizó DI con funciones de orden superior y variables parametrizadas para la conversión de la data recibida y la necesaria según la implementación para enviar una notificación. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/19, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/25 |
 | Implementaciones relacionadas con citas. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/14, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/19, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/23 |
+
+## License
+
+MyOnlineDoctor-Backend & Nest are [MIT licensed](LICENSE)
