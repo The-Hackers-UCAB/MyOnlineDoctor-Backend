@@ -50,16 +50,28 @@ Ejecutar los siguientes comando para correr la aplicación.
 ```bash
 # development
 $ npm run start
+```
 
+```bash
 # watch mode
 $ npm run start:dev
+```
 
+```bash
 # production mode
 $ npm run start:prod
 ```
 
+## Screenshots
+
+Grafo de dependencias.
+
+![App Screenshot](./dependencygraph.svg)
+
+
 ## Desarrolladores
 
+Tabla con las actividades mas significativas por integrante: 
 
 ### Manuel Da Pena
 
