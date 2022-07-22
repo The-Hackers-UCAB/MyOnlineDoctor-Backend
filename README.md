@@ -85,6 +85,15 @@ Tabla con las actividades mas significativas por integrante:
 | Implementación de Notifier con patrones. Se implementó un decorador para el manejo de notificación junto con su puerto y adaptador de firebase. Se utilizó DI con funciones de orden superior y variables parametrizadas para la conversión de la data recibida y la necesaria según la implementación para enviar una notificación. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/19, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/25 |
 | Implementaciones relacionadas con citas. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/14, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/19, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/23 |
 
+
+### Antonio Badillo
+
+
+| Actividades                                                                                                            | Pull Request                                                |
+|----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
+| Continuous integration/continuous delivery (CI/CD) pipeline. Desplegado continuo (Continous Deployment) del servicio web ( NEST API ) a producción en Heroku usando un contenedor docker construido al momento de subir código al repositorio ( on push to master branch ). Automatización desarrollada con Github Actions | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/2 |
+| Implementación del agregado cita con value objects y excepciones| https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/12 |
+
 ## License
 
 MyOnlineDoctor-Backend & Nest are [MIT licensed](LICENSE)
