@@ -94,6 +94,14 @@ Tabla con las actividades mas significativas por integrante:
 | Continuous integration/continuous delivery (CI/CD) pipeline. Desplegado continuo (Continous Deployment) del servicio web ( NEST API ) a producción en Heroku usando un contenedor docker construido al momento de subir código al repositorio ( on push to master branch ). Automatización desarrollada con Github Actions | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/2 |
 | Implementación del agregado cita con value objects y excepciones| https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/12 |
 
+### Santiago Figueroa
+| Actividades                                                                                                            | Pull Request                                                |
+|----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
+| Implementación del controlador de paciente con su repositorio y mapeadores| https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/10 |
+|Implementación de la conexión de Nest con el servicio de Firebase |https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/15
+| Implementación del servicio de dominio para calcular el rating de un doctor | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/18
+| Casos de uso relacionados con las citas | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/20, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/22, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/24
+
 ## License
 
 MyOnlineDoctor-Backend & Nest are [MIT licensed](LICENSE)
