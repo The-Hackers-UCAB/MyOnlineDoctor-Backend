@@ -102,6 +102,11 @@ Tabla con las actividades mas significativas por integrante:
 | Implementación del servicio de dominio para calcular el rating de un doctor | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/18
 | Casos de uso relacionados con las citas | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/20, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/22, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/24
 
+### Gabriel Ojeda
+| Actividades                                                                                                            | Commit                                              |
+|----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
+| Implementación del agregado medical record con sus value objects, excepciones, repositorios, mapeadores y el caso de uso para crear un registro medico |[+ 2b00a49](https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/commit/2b00a49354615f14f08f0708d7242ef5b2a81144) |
+
 ## License
 
 MyOnlineDoctor-Backend & Nest are [MIT licensed](LICENSE)
