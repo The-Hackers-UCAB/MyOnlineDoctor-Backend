@@ -40,7 +40,6 @@ async function bootstrap() {
       resave: false,
       cookie: {
         httpOnly: false,
-        secure: Boolean(process.env.SESSION_SECURE),
         maxAge: Number.parseInt(process.env.SESSION_MAX_AGE),
         sameSite: (process.env.SESSION_SAME_SITE == 'none' ? 'none' : (process.env.SESSION_SAME_SITE == 'lax' ? 'lax' : 'strict')),
       },
