@@ -17,7 +17,7 @@ export interface UpdateDiagnosticMedicalRecordApplicationServiceDto {
 
 //#endregion
 
-export class UpdateDescriptionMedicalRecordApplicationService implements IApplicationService<UpdateDiagnosticMedicalRecordApplicationServiceDto, string>{
+export class UpdateDiagnosticMedicalRecordApplicationService implements IApplicationService<UpdateDiagnosticMedicalRecordApplicationServiceDto, string>{
     
     get name(): string { return this.constructor.name; }
     
