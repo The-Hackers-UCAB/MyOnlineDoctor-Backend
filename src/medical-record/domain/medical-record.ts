@@ -67,23 +67,19 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
 
     //Asignador de estados.
     protected when(event: DomainEvent): void {
-
         switch (event.constructor) {
-
             case MedicalRecordCreated:
                 const medicalRecordCreated: MedicalRecordCreated = event as MedicalRecordCreated;
                 this.date = medicalRecordCreated.date;
-                this.description = medicalRecordCreated.description;
-                this.diagnostic = medicalRecordCreated.diagnostic;
+                this.description = medicalRecordCreated?.description;
+                this.diagnostic = medicalRecordCreated?.diagnostic;
                 this.patient = medicalRecordCreated.patient;
                 this.appointment = medicalRecordCreated.appointment;
-                this.exams = medicalRecordCreated.exams;
-                this.recipe = medicalRecordCreated.recipe;
-                this.plannig = medicalRecordCreated.plannig;
+                this.exams = medicalRecordCreated?.exams;
+                this.recipe = medicalRecordCreated?.recipe;
+                this.plannig = medicalRecordCreated?.plannig;
                 this.doctor = medicalRecordCreated.doctor;
-
                 break;
-
             default:
                 throw new Error("Event not implemented.");
         }
@@ -93,13 +89,8 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
     protected ensureValidState(): void {
         if (
             !this.date ||
-            !this.description ||
-            !this.diagnostic ||
             !this.patient ||
             !this.appointment ||
-            !this.exams ||
-            !this.recipe ||
-            !this.plannig ||
             !this.doctor
         ) {
             throw new InvalidMedicalRecordException();
@@ -120,5 +111,4 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
     ): MedicalRecord {
         return new MedicalRecord(id, date, description, diagnostic, patient, appointment, exams, recipe, plannig, doctor);
     }
-
 }

@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, getManager, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, getManager, JoinColumn, ManyToOne, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { OrmDoctor } from "../../../doctor/infrastructure/entities/orm-doctor.entity";
 import { OrmDoctorSpecialty } from "../../../doctor/infrastructure/entities/orm-doctor-specialty.entity";
 import { OrmPatient } from "../../../patient/infrastructure/entities/orm-patient.entity";
@@ -14,11 +14,11 @@ export class OrmMedicalRecord {
     @PrimaryColumn({ type: 'uuid' }) id: string;
 
     @Column({ name: 'date' }) date: Date;
-    @Column({ name: 'description' }) description: string;
-    @Column({ name: 'diagnostic' }) diagnostic: string;
-    @Column({ name: 'exams' }) exams: string;
-    @Column({ name: 'recipe' }) recipe: string;
-    @Column({ name: 'plannig' }) plannig: string;
+    @Column({ name: 'description', nullable: true }) description: string;
+    @Column({ name: 'diagnostic', nullable: true }) diagnostic: string;
+    @Column({ name: 'exams', nullable: true }) exams: string;
+    @Column({ name: 'recipe', nullable: true }) recipe: string;
+    @Column({ name: 'plannig', nullable: true }) plannig: string;
 
     @Column({ name: 'doctor_id' }) doctorId: string;
     @ManyToOne(() => OrmDoctor, { eager: true }) @JoinColumn({ name: 'doctor_id' }) doctor: OrmDoctor;
@@ -28,7 +28,7 @@ export class OrmMedicalRecord {
     @ManyToOne(() => OrmPatient, { eager: true }) @JoinColumn({ name: 'patient_id' }) patient: OrmPatient;
 
     @Column({ name: 'appointment_id' }) appointmentId: string;
-    @ManyToOne(() => OrmAppointment, { eager: true }) @JoinColumn({ name: 'appointment_id' }) appointment: OrmAppointment;
+    @OneToOne(() => OrmAppointment, { eager: true }) @JoinColumn({ name: 'appointment_id' }) appointment: OrmAppointment;
 
     @CreateDateColumn({ name: 'created_at' }) createdAt: Date;
     @UpdateDateColumn({ name: 'updated_at' }) updatedAt: Date;

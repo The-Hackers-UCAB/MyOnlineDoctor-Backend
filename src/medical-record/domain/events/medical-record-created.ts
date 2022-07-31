@@ -10,7 +10,7 @@ import { MedicalRecordPlannig } from "../value-objects/medical-record-plannig";
 import { MedicalRecordDoctor } from "../value-objects/medical-record-doctor";
 import { DomainEvent } from "../../../core/domain/events/domain-event";
 
-export class MedicalRecordCreated extends DomainEvent{
+export class MedicalRecordCreated extends DomainEvent {
 
     protected constructor(
         public id: MedicalRecordID,
@@ -23,7 +23,7 @@ export class MedicalRecordCreated extends DomainEvent{
         public recipe: MedicalRecordRecipe,
         public plannig: MedicalRecordPlannig,
         public doctor: MedicalRecordDoctor
-    ){
+    ) {
         super();
     }
 
@@ -38,7 +38,7 @@ export class MedicalRecordCreated extends DomainEvent{
         recipe: MedicalRecordRecipe,
         plannig: MedicalRecordPlannig,
         doctor: MedicalRecordDoctor
-    ): MedicalRecordCreated{
-        return new MedicalRecordCreated(id,date,description,diagnostic,patient,appointment,exams,recipe,plannig,doctor);
+    ): MedicalRecordCreated {
+        return new MedicalRecordCreated(id, date, description, diagnostic, patient, appointment, exams, recipe, plannig, doctor);
     }
 }

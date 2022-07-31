@@ -33,13 +33,13 @@ export class EventBus implements IEventHandler {
     }
 
     async publish(events: DomainEvent[]): Promise<void> {
-        events.forEach(event => {
+        await events.forEach(async event => {
             //Obtenemos las funciones suscritas en función del evento invocado.
             const subscriber = this.subscribers[event.constructor.name];
 
             if (subscriber) {
                 //Por cada función suscrita se invoca el método y se pasa el evento.
-                Object.keys(subscriber).forEach((key) => subscriber[key](event));
+                await Object.keys(subscriber).forEach(async (key) => await subscriber[key](event));
             }
         });
     }
