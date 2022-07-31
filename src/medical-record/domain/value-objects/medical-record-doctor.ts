@@ -9,7 +9,7 @@ export class MedicalRecordDoctor implements IValueObject<MedicalRecordDoctor>{
     private readonly specialty: DoctorSpecialty;
 
     get Id() {
-        return this.Id;
+        return this.id;
     }
 
     get Specialty() {

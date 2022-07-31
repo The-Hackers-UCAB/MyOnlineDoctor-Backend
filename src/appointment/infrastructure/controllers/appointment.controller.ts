@@ -37,6 +37,9 @@ import { GetPatientId } from "../../../core/infrastructure/security/users/decora
 import { Role } from "../../../core/infrastructure/security/users/roles/role.entity.enum";
 import { Roles } from "../../../core/infrastructure/security/users/roles/roles.decorator";
 import { RolesGuard } from "../../../core/infrastructure/security/users/roles/roles.guard";
+import { AppointmentCompleted } from "src/appointment/domain/events/appointment-completed";
+import { CreateMedicalRecordApplicationService } from "src/medical-record/application/services/create-medical-record.aplication.service";
+import { OrmMedicalRecordRepository } from "src/medical-record/infrastructure/repositories/orm-medical-record.repository";
 
 @Controller('appointment')
 export class AppointmentController {
@@ -46,6 +49,7 @@ export class AppointmentController {
     private readonly ormDoctorRepository: OrmDoctorRepository;
     private readonly uuidGenerator: UUIDGenerator = new UUIDGenerator();
     private readonly agoraApiTokenGenerator: AgoraApiTokenGenerator;
+    private readonly ormMedicalRecordRepository: OrmMedicalRecordRepository;
 
     constructor(private readonly manager: EntityManager, private readonly httpService: HttpService) {
         if (!manager) { throw new Error("Entity manager can't be null"); }
@@ -53,6 +57,7 @@ export class AppointmentController {
         this.ormAppointmentRepository = this.manager.getCustomRepository(OrmAppointmentRepository);
         this.ormDoctorRepository = this.manager.getCustomRepository(OrmDoctorRepository);
         this.agoraApiTokenGenerator = new AgoraApiTokenGenerator(this.httpService);
+        this.ormMedicalRecordRepository = this.manager.getCustomRepository(OrmMedicalRecordRepository);
     }
 
 
@@ -395,7 +400,7 @@ export class AppointmentController {
         return await service.execute(dto);
     }
 
-    @Post('complete/doctor')
+    @Post('complete')
     @Roles(Role.DOCTOR)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
@@ -404,12 +409,34 @@ export class AppointmentController {
 
         const eventBus = EventBus.getInstance();
 
+        eventBus.subscribe(AppointmentCompleted.eventName(), async (event: AppointmentCompleted) => {
+            const eventBus = EventBus.getInstance();
+
+            const service = new ErrorApplicationServiceDecorator(
+                new LoggingApplicationServiceDecorator(
+                    new CreateMedicalRecordApplicationService(
+                        this.ormMedicalRecordRepository,
+                        this.ormAppointmentRepository,
+                        this.uuidGenerator,
+                        eventBus
+                    ),
+                    new NestLogger()
+                )
+            );
+
+            await service.execute({
+                appointmentId: event.id.Value,
+                doctorId: id,
+            });
+        });
+
         const service = new ErrorApplicationServiceDecorator(
             new LoggingApplicationServiceDecorator(
                 new CompleteAppointmentApplicationService(this.ormAppointmentRepository, eventBus, this.ormDoctorRepository),
                 new NestLogger()
             )
         );
+
         return await service.execute(dto);
     }
 }
