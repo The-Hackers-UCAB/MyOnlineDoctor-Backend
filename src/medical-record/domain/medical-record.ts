@@ -12,6 +12,9 @@ import { MedicalRecordExams } from "./value-objects/medical-record-exams";
 import { MedicalRecordRecipe } from "./value-objects/medical-record-recipe";
 import { MedicalRecordPlannig } from "./value-objects/medical-record-plannig";
 import { MedicalRecordDoctor } from "./value-objects/medical-record-doctor";
+import { MedicalRecordDescriptionModified } from "./events/medical-record-description-modified";
+import { MedicalRecordDiagnosticModified } from "./events/medical-record-diagnostics-modified";
+import { MedicalRecordExamsModified } from "./events/medical-record-exams-modified";
 
 export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
 
@@ -65,6 +68,19 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
         super(id, medicalRecordCreated);
     }
 
+    //Metodos
+    public updateDescription(description: MedicalRecordDescription): void {
+        this.apply(MedicalRecordDescriptionModified.create(this.Id, description));
+    }
+
+    public updateDiagnostic(diagnostic: MedicalRecordDiagnostic): void {
+        this.apply(MedicalRecordDiagnosticModified.create(this.Id, diagnostic));
+    }
+
+    public updateExams(exams: MedicalRecordExams): void {
+        this.apply(MedicalRecordExamsModified.create(this.Id, exams));
+    }
+
     //Asignador de estados.
     protected when(event: DomainEvent): void {
         switch (event.constructor) {
@@ -79,6 +95,18 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
                 this.recipe = medicalRecordCreated?.recipe;
                 this.plannig = medicalRecordCreated?.plannig;
                 this.doctor = medicalRecordCreated.doctor;
+                break;
+            case MedicalRecordDescriptionModified:
+                const medicalRecordDescriptionModified: MedicalRecordDescriptionModified = event as MedicalRecordDescriptionModified;
+                this.description = medicalRecordDescriptionModified.description;
+                break;
+            case MedicalRecordDiagnosticModified:
+                const medicalRecordDiagnosticModified: MedicalRecordDiagnosticModified = event as MedicalRecordDiagnosticModified;
+                this.diagnostic = medicalRecordDiagnosticModified.diagnostic;
+                break;
+            case MedicalRecordExamsModified:
+                const medicalRecordExamsModified: MedicalRecordExamsModified = event as MedicalRecordExamsModified;
+                this.exams = medicalRecordExamsModified.exams;
                 break;
             default:
                 throw new Error("Event not implemented.");
