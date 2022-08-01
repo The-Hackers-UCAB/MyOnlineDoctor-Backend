@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
 import { RequestAppointmentApplicationService, RequestAppointmentApplicationServiceDto } from "../../../appointment/application/services/request-appointment.application.service";
 import { ScheduleAppointmentApplicationService, ScheduleAppointmentApplicationServiceDto } from "../../../appointment/application/services/schedule-appointment.application.service";
 import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";
@@ -40,6 +40,10 @@ import { RolesGuard } from "../../../core/infrastructure/security/users/roles/ro
 import { AppointmentCompleted } from "src/appointment/domain/events/appointment-completed";
 import { CreateMedicalRecordApplicationService } from "src/medical-record/application/services/create-medical-record.aplication.service";
 import { OrmMedicalRecordRepository } from "src/medical-record/infrastructure/repositories/orm-medical-record.repository";
+import { OrmMedicalRecord } from "src/medical-record/infrastructure/entities/orm.medical-record.entity";
+import { SearchAppointmentMedicalRecordApplicationService, SearchAppointmentMedicalRecordApplicationServiceDto } from "src/appointment/application/services/search-appointment-medical-record.application.service";
+import { MedicalRecord } from "src/medical-record/domain/medical-record";
+import { OrmMedicalRecordMapper } from "src/medical-record/infrastructure/mappers/orm-medical-record.mapper";
 
 @Controller('appointment')
 export class AppointmentController {
@@ -50,6 +54,7 @@ export class AppointmentController {
     private readonly uuidGenerator: UUIDGenerator = new UUIDGenerator();
     private readonly agoraApiTokenGenerator: AgoraApiTokenGenerator;
     private readonly ormMedicalRecordRepository: OrmMedicalRecordRepository;
+    private readonly ormMedicalRecordMapper: OrmMedicalRecordMapper = new OrmMedicalRecordMapper();
 
     constructor(private readonly manager: EntityManager, private readonly httpService: HttpService) {
         if (!manager) { throw new Error("Entity manager can't be null"); }
@@ -58,6 +63,7 @@ export class AppointmentController {
         this.ormDoctorRepository = this.manager.getCustomRepository(OrmDoctorRepository);
         this.agoraApiTokenGenerator = new AgoraApiTokenGenerator(this.httpService);
         this.ormMedicalRecordRepository = this.manager.getCustomRepository(OrmMedicalRecordRepository);
+        // this.ormMedicalRecordMapper = new OrmMedicalRecordMapper();
     }
 
 
@@ -439,4 +445,32 @@ export class AppointmentController {
 
         return await service.execute(dto);
     }
+
+    @Get('medical-record')
+    async getMedicalRecord(@Body() dto: SearchAppointmentMedicalRecordApplicationServiceDto): Promise<Result<OrmMedicalRecord>> {
+
+        // let id = "c0edbf47-7f35-4c3e-87a5-e87e48f03ddf"
+        // const dto: SearchAppointmentMedicalRecordApplicationServiceDto = { id };
+
+        //Creamos el servicio de aplicación.
+        const service = new ErrorApplicationServiceDecorator(
+            new LoggingApplicationServiceDecorator(
+                new SearchAppointmentMedicalRecordApplicationService(this.ormMedicalRecordRepository),
+                new NestLogger()
+            )
+        );
+
+        //Ejecutamos el caso de uso
+        const result = (await service.execute(dto));
+
+        //Mapeamos y retornamos.
+        return ResultMapper.map(
+            result,
+            (value: MedicalRecord) => {
+                return this.ormMedicalRecordMapper.fromDomainToOther(value)
+            }
+        );
+    }
+
+
 }
