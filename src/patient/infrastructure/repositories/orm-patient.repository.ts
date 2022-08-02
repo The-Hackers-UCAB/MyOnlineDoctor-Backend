@@ -39,4 +39,7 @@ export class OrmPatientRepository extends Repository<OrmPatient> implements IPat
         return patient;
     }
 
+    async findPatientProfile(id: PatientId): Promise<Patient> {
+        return this.findOneById(id);
+    }
 }

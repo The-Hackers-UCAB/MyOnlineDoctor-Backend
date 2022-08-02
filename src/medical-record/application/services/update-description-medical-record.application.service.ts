@@ -18,15 +18,15 @@ export interface UpdateDescriptionMedicalRecordApplicationServiceDto {
 //#endregion
 
 export class UpdateDescriptionMedicalRecordApplicationService implements IApplicationService<UpdateDescriptionMedicalRecordApplicationServiceDto, string>{
-    
+
     get name(): string { return this.constructor.name; }
-    
+
     constructor(
         private readonly medicalRecordRepository: IMedicalRecordRepository,
         private readonly doctorRepository: IDoctorRepository,
         private readonly eventHandler: IEventHandler
     ) { }
-    
+
     async execute(dto: UpdateDescriptionMedicalRecordApplicationServiceDto): Promise<Result<string>> {
         const medicalRecord = await this.medicalRecordRepository.findOneByIdOrFail(MedicalRecordID.create(dto.id));
         //Verifico que el doctor sea el mismo que el que creo el registro
@@ -37,7 +37,7 @@ export class UpdateDescriptionMedicalRecordApplicationService implements IApplic
         }
 
         //Actualizo el registro
-        medicalRecord.updateDescription(MedicalRecordDescription.create(dto.description));
+        // medicalRecord.updateDescription(MedicalRecordDescription.create(dto.description));
 
         //Guardo el registro
         this.medicalRecordRepository.saveAggregate(medicalRecord);
