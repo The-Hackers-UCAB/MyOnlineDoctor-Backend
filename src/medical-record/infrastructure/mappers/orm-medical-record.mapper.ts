@@ -56,7 +56,7 @@ export class OrmMedicalRecordMapper implements IMapper<MedicalRecord, OrmMedical
             MedicalRecordAppointment.create(AppointmentId.create(other.appointmentId)),
             other.exams ? MedicalRecordExams.create(other.exams) : null,
             other.recipe ? MedicalRecordRecipe.create(other.recipe) : null,
-            other.plannig ? MedicalRecordPlanning.create(other.plannig) : null,
+            other.planning ? MedicalRecordPlanning.create(other.planning) : null,
             MedicalRecordDoctor.create(
                 DoctorId.create(other.doctorId),
                 DoctorSpecialty.create(other.specialty.specialty)
