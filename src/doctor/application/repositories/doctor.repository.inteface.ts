@@ -22,4 +22,5 @@ export class SearchDoctorsByCriteriaDomainDto {
 
 export interface IDoctorRepository extends IRepository<DoctorId, Doctor> {
     findDoctorByCriterias(criterias: SearchDoctorsByCriteriaDomainDto, options: RepositoryPagingDto): Promise<Doctor[]>;
+    findDoctorProfile(id: DoctorId): Promise<Doctor>;
 }

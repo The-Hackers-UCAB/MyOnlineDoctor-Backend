@@ -21,6 +21,7 @@ export class OrmDoctorRepository extends Repository<OrmDoctor> implements IDocto
         this.ormDoctorMapper = new OrmDoctorMapper();
     }
 
+
     async saveAggregate(aggregate: Doctor): Promise<void> {
         const ormDoctor = await this.ormDoctorMapper.fromDomainToOther(aggregate);
         await this.save(ormDoctor);
@@ -126,5 +127,10 @@ export class OrmDoctorRepository extends Repository<OrmDoctor> implements IDocto
         }
 
         return doctors;
+    }
+
+
+    async findDoctorProfile(id: DoctorId): Promise<Doctor> {
+        return this.findOneById(id);
     }
 }

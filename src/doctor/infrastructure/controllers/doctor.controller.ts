@@ -26,12 +26,15 @@ import { UsersRepository } from '../../../core/infrastructure/security/users/rep
 import { Role } from '../../../core/infrastructure/security/users/roles/role.entity.enum';
 import { Roles } from '../../../core/infrastructure/security/users/roles/roles.decorator';
 import { RolesGuard } from '../../../core/infrastructure/security/users/roles/roles.guard';
+import { OrmDoctorMapper } from '../mappers/orm-doctor-mapper';
+import { GetDoctorProfileApplicationService, GetDoctorProfileApplicationServiceDto } from 'src/doctor/application/services/get-doctor-profile.application.service';
 
 @Controller('doctor')
 export class DoctorController {
 
     private readonly ormDoctorRepository: OrmDoctorRepository;
-    private readonly ormDoctorMulMapper: OrmDoctorMulMapper = new OrmDoctorMulMapper();;
+    private readonly ormDoctorMulMapper: OrmDoctorMulMapper = new OrmDoctorMulMapper();
+    private readonly ormDoctorMapper: OrmDoctorMapper = new OrmDoctorMapper();
     private readonly ormAppointmentRepository: OrmAppointmentRepository;
     private readonly ormAppointmentMulMapper: OrmAppointmentMulMapper = new OrmAppointmentMulMapper();
     private readonly uuidGenerator: UUIDGenerator = new UUIDGenerator();
@@ -122,6 +125,30 @@ export class DoctorController {
             result,
             (value: Appointment[]) => {
                 return this.ormAppointmentMulMapper.fromDomainToOther(value)
+            }
+        );
+    }
+
+    @Get('profile')
+    async getProfile(@Body() dto: GetDoctorProfileApplicationServiceDto): Promise<Result<OrmDoctor>> {
+
+
+        //Creamos el servicio de aplicación.
+        const service = new ErrorApplicationServiceDecorator(
+            new LoggingApplicationServiceDecorator(
+                new GetDoctorProfileApplicationService(this.ormDoctorRepository),
+                new NestLogger()
+            )
+        );
+
+        //Ejecutamos el caso de uso
+        const result = (await service.execute(dto));
+
+        //Mapeamos y retornamos.
+        return ResultMapper.map(
+            result,
+            (value: Doctor) => {
+                return this.ormDoctorMapper.fromDomainToOther(value)
             }
         );
     }
