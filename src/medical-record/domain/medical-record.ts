@@ -10,11 +10,13 @@ import { MedicalRecordPatient } from "./value-objects/medical-record-patient";
 import { MedicalRecordAppointment } from "./value-objects/medical-record-appointment";
 import { MedicalRecordExams } from "./value-objects/medical-record-exams";
 import { MedicalRecordRecipe } from "./value-objects/medical-record-recipe";
-import { MedicalRecordPlannig } from "./value-objects/medical-record-plannig";
+import { MedicalRecordPlanning } from "./value-objects/medical-record-planning";
 import { MedicalRecordDoctor } from "./value-objects/medical-record-doctor";
 import { MedicalRecordDescriptionModified } from "./events/medical-record-description-modified";
 import { MedicalRecordDiagnosticModified } from "./events/medical-record-diagnostics-modified";
 import { MedicalRecordExamsModified } from "./events/medical-record-exams-modified";
+import { MedicalRecordRecipeModified } from "./events/medical-record-recipe-modified";
+import { MedicalRecordPlanningModified } from "./events/medical-record-planning-modified";
 
 export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
 
@@ -26,7 +28,7 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
     private appointment: MedicalRecordAppointment;
     private exams: MedicalRecordExams;
     private recipe: MedicalRecordRecipe;
-    private plannig: MedicalRecordPlannig;
+    private planning: MedicalRecordPlanning;
     private doctor: MedicalRecordDoctor;
 
     //Getters
@@ -37,7 +39,7 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
     get Appointment() { return this.appointment; }
     get Exams() { return this.exams; }
     get Recipe() { return this.recipe; }
-    get Plannig() { return this.plannig; }
+    get Planning() { return this.planning; }
     get Doctor() { return this.doctor; }
 
     //Constructor
@@ -50,7 +52,7 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
         appointment: MedicalRecordAppointment,
         exams: MedicalRecordExams,
         recipe: MedicalRecordRecipe,
-        plannig: MedicalRecordPlannig,
+        planning: MedicalRecordPlanning,
         doctor: MedicalRecordDoctor
     ) {
         const medicalRecordCreated = MedicalRecordCreated.create(
@@ -62,7 +64,7 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
             appointment,
             exams,
             recipe,
-            plannig,
+            planning,
             doctor
         );
         super(id, medicalRecordCreated);
@@ -81,6 +83,14 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
         this.apply(MedicalRecordExamsModified.create(this.Id, exams));
     }
 
+    public updateRecipe(recipe: MedicalRecordRecipe): void {
+        this.apply(MedicalRecordRecipeModified.create(this.Id, recipe));
+    }
+
+    public updatePlanning(planning: MedicalRecordPlanning): void {
+        this.apply(MedicalRecordPlanningModified.create(this.Id, planning));
+    }
+
     //Asignador de estados.
     protected when(event: DomainEvent): void {
         switch (event.constructor) {
@@ -93,7 +103,7 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
                 this.appointment = medicalRecordCreated.appointment;
                 this.exams = medicalRecordCreated?.exams;
                 this.recipe = medicalRecordCreated?.recipe;
-                this.plannig = medicalRecordCreated?.plannig;
+                this.planning = medicalRecordCreated?.planning;
                 this.doctor = medicalRecordCreated.doctor;
                 break;
             case MedicalRecordDescriptionModified:
@@ -108,6 +118,13 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
                 const medicalRecordExamsModified: MedicalRecordExamsModified = event as MedicalRecordExamsModified;
                 this.exams = medicalRecordExamsModified.exams;
                 break;
+            case MedicalRecordRecipeModified:
+                const medicalRecordRecipeModified: MedicalRecordRecipeModified = event as MedicalRecordRecipeModified;
+                this.recipe = medicalRecordRecipeModified.recipe;
+                break;
+            case MedicalRecordPlanningModified:
+                const medicalRecordPlanningModified: MedicalRecordPlanningModified = event as MedicalRecordPlanningModified;
+                this.planning = medicalRecordPlanningModified.planning;
             default:
                 throw new Error("Event not implemented.");
         }
@@ -134,9 +151,9 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
         appointment: MedicalRecordAppointment,
         exams: MedicalRecordExams,
         recipe: MedicalRecordRecipe,
-        plannig: MedicalRecordPlannig,
+        planning: MedicalRecordPlanning,
         doctor: MedicalRecordDoctor
     ): MedicalRecord {
-        return new MedicalRecord(id, date, description, diagnostic, patient, appointment, exams, recipe, plannig, doctor);
+        return new MedicalRecord(id, date, description, diagnostic, patient, appointment, exams, recipe, planning, doctor);
     }
 }

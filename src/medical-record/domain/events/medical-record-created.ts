@@ -6,7 +6,7 @@ import { MedicalRecordPatient } from "../value-objects/medical-record-patient";
 import { MedicalRecordAppointment } from "../value-objects/medical-record-appointment";
 import { MedicalRecordExams } from "../value-objects/medical-record-exams";
 import { MedicalRecordRecipe } from "../value-objects/medical-record-recipe";
-import { MedicalRecordPlannig } from "../value-objects/medical-record-plannig";
+import { MedicalRecordPlanning } from "../value-objects/medical-record-planning";
 import { MedicalRecordDoctor } from "../value-objects/medical-record-doctor";
 import { DomainEvent } from "../../../core/domain/events/domain-event";
 
@@ -21,7 +21,7 @@ export class MedicalRecordCreated extends DomainEvent {
         public appointment: MedicalRecordAppointment,
         public exams: MedicalRecordExams,
         public recipe: MedicalRecordRecipe,
-        public plannig: MedicalRecordPlannig,
+        public planning: MedicalRecordPlanning,
         public doctor: MedicalRecordDoctor
     ) {
         super();
@@ -36,9 +36,9 @@ export class MedicalRecordCreated extends DomainEvent {
         appointment: MedicalRecordAppointment,
         exams: MedicalRecordExams,
         recipe: MedicalRecordRecipe,
-        plannig: MedicalRecordPlannig,
+        planning: MedicalRecordPlanning,
         doctor: MedicalRecordDoctor
     ): MedicalRecordCreated {
-        return new MedicalRecordCreated(id, date, description, diagnostic, patient, appointment, exams, recipe, plannig, doctor);
+        return new MedicalRecordCreated(id, date, description, diagnostic, patient, appointment, exams, recipe, planning, doctor);
     }
 }

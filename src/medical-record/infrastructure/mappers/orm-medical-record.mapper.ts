@@ -11,7 +11,7 @@ import { MedicalRecordDoctor } from "../../../medical-record/domain/value-object
 import { MedicalRecordExams } from "../../../medical-record/domain/value-objects/medical-record-exams";
 import { MedicalRecordID } from "../../../medical-record/domain/value-objects/medical-record-id";
 import { MedicalRecordPatient } from "../../../medical-record/domain/value-objects/medical-record-patient";
-import { MedicalRecordPlannig } from "../../../medical-record/domain/value-objects/medical-record-plannig";
+import { MedicalRecordPlanning } from "../../domain/value-objects/medical-record-planning";
 import { MedicalRecordRecipe } from "../../../medical-record/domain/value-objects/medical-record-recipe";
 import { PatientId } from "../../../patient/domain/value-objects/patient-id";
 import { OrmMedicalRecord } from "../entities/orm.medical-record.entity";
@@ -31,7 +31,7 @@ export class OrmMedicalRecordMapper implements IMapper<MedicalRecord, OrmMedical
             domain.Diagnostic?.Value,
             domain.Exams?.Value,
             domain.Recipe?.Value,
-            domain.Plannig?.Value,
+            domain.Planning?.Value,
             domain.Doctor.Id.Value,
             domain.Patient.Id.Value,
             domain.Appointment.Id.Value,
@@ -56,7 +56,7 @@ export class OrmMedicalRecordMapper implements IMapper<MedicalRecord, OrmMedical
             MedicalRecordAppointment.create(AppointmentId.create(other.appointmentId)),
             other.exams ? MedicalRecordExams.create(other.exams) : null,
             other.recipe ? MedicalRecordRecipe.create(other.recipe) : null,
-            other.plannig ? MedicalRecordPlannig.create(other.plannig) : null,
+            other.plannig ? MedicalRecordPlanning.create(other.plannig) : null,
             MedicalRecordDoctor.create(
                 DoctorId.create(other.doctorId),
                 DoctorSpecialty.create(other.specialty.specialty)
