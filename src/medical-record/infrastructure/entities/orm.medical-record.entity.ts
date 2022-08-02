@@ -18,7 +18,7 @@ export class OrmMedicalRecord {
     @Column({ name: 'diagnostic', nullable: true }) diagnostic: string;
     @Column({ name: 'exams', nullable: true }) exams: string;
     @Column({ name: 'recipe', nullable: true }) recipe: string;
-    @Column({ name: 'plannig', nullable: true }) plannig: string;
+    @Column({ name: 'planning', nullable: true }) planning: string;
 
     @Column({ name: 'doctor_id' }) doctorId: string;
     @ManyToOne(() => OrmDoctor, { eager: true }) @JoinColumn({ name: 'doctor_id' }) doctor: OrmDoctor;
@@ -40,7 +40,7 @@ export class OrmMedicalRecord {
         diagnostic: string,
         exams: string,
         recipe: string,
-        plannig: string,
+        planning: string,
         doctorId: string,
         patientId: string,
         appointmentId: string,
@@ -54,7 +54,7 @@ export class OrmMedicalRecord {
         ormMedicalRecord.diagnostic = diagnostic;
         ormMedicalRecord.exams = exams;
         ormMedicalRecord.recipe = recipe;
-        ormMedicalRecord.plannig = plannig;
+        ormMedicalRecord.planning = planning;
         ormMedicalRecord.doctorId = doctorId;
         ormMedicalRecord.doctor = await getManager().getCustomRepository(OrmDoctorRepository).findOne({ where: { id: doctorId } });
         ormMedicalRecord.specialty = await getManager().getRepository(OrmDoctorSpecialty).findOne({ where: { specialty: doctorSpecialty } });
