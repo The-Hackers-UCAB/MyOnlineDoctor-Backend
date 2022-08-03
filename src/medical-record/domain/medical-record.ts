@@ -125,6 +125,7 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordID>{
             case MedicalRecordPlanningModified:
                 const medicalRecordPlanningModified: MedicalRecordPlanningModified = event as MedicalRecordPlanningModified;
                 this.planning = medicalRecordPlanningModified.planning;
+                break;
             default:
                 throw new Error("Event not implemented.");
         }

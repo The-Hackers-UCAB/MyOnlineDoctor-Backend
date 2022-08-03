@@ -40,6 +40,7 @@ import { RolesGuard } from "../../../core/infrastructure/security/users/roles/ro
 import { AppointmentCompleted } from "src/appointment/domain/events/appointment-completed";
 import { CreateMedicalRecordApplicationService } from "src/medical-record/application/services/create-medical-record.aplication.service";
 import { OrmMedicalRecordRepository } from "src/medical-record/infrastructure/repositories/orm-medical-record.repository";
+import { OrmAppointmentMapper } from "../mappers/orm-appointment.mapper";
 
 @Controller('appointment')
 export class AppointmentController {
@@ -50,6 +51,7 @@ export class AppointmentController {
     private readonly uuidGenerator: UUIDGenerator = new UUIDGenerator();
     private readonly agoraApiTokenGenerator: AgoraApiTokenGenerator;
     private readonly ormMedicalRecordRepository: OrmMedicalRecordRepository;
+    private readonly ormAppointmentMaper: OrmAppointmentMapper = new OrmAppointmentMapper();
 
     constructor(private readonly manager: EntityManager, private readonly httpService: HttpService) {
         if (!manager) { throw new Error("Entity manager can't be null"); }
@@ -113,13 +115,14 @@ export class AppointmentController {
                 new FirebaseNotifier(
                     async (data: ScheduleAppointmentApplicationServiceDto) => {
                         const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
+                        const ormAppointment = await this.ormAppointmentMaper.fromDomainToOther(appointment);
                         const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
                         return {
                             patientId: appointment.Patient.Id,
                             message: {
                                 title: "Cita Agendada",
                                 body: ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname + " - " + (new Date(data.date).toLocaleString()),
-                                payload: JSON.stringify({ appointmentId: appointment.Id.Value })
+                                payload: JSON.stringify(ormAppointment)
                             }
                         };
                     }
@@ -148,13 +151,14 @@ export class AppointmentController {
                 new FirebaseNotifier(
                     async (data: RejectDoctorAppointmentApplicationServiceDto) => {
                         const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
+                        const ormAppointment = await this.ormAppointmentMaper.fromDomainToOther(appointment);
                         const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
                         return {
                             patientId: appointment.Patient.Id,
                             message: {
                                 title: "Cita Rechazada",
                                 body: ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname + " ha rechazado la cita.",
-                                payload: JSON.stringify({ appointmentId: appointment.Id.Value })
+                                payload: JSON.stringify(ormAppointment)
                             }
                         };
                     }
@@ -255,13 +259,14 @@ export class AppointmentController {
                 new FirebaseNotifier(
                     async (data: CancelDoctorAppointmentApplicationServiceDto) => {
                         const appointment = await this.ormAppointmentRepository.findOneById(AppointmentId.create(data.id));
+                        const ormAppointment = await this.ormAppointmentMaper.fromDomainToOther(appointment);
                         const doctor = await this.ormDoctorRepository.findOneById(appointment.Doctor.Id);
                         return {
                             patientId: appointment.Patient.Id,
                             message: {
                                 title: "Cita Cancelada",
                                 body: ((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'Dr.' : 'Dra.') + doctor.Names.FirstName + " " + doctor.Surnames.FirstSurname + " canceló su cita.",
-                                payload: JSON.stringify({ appointmentId: appointment.Id.Value })
+                                payload: JSON.stringify(ormAppointment)
                             }
                         };
                     }
