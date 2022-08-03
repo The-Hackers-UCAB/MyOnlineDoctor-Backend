@@ -26,11 +26,18 @@ import { OrmPatient } from '../entities/orm-patient.entity';
 import { GetPatientProfilesApplicationService, GetPatientProfilesApplicationServiceDto } from 'src/patient/application/services/get-patient-profile.application.service';
 import { OrmPatientMapper } from '../mappers/orm-patient-mapper';
 import { Patient } from 'src/patient/domain/patient';
+import { OrmMedicalRecord } from 'src/medical-record/infrastructure/entities/orm.medical-record.entity';
+import { SearchPatientMedicalRecordsApplicationService, SearchPatientMedicalRecordsApplicationServiceDto } from 'src/patient/application/services/search-patient-medical-records.application.service';
+import { OrmMedicalRecordMulMapper } from 'src/medical-record/infrastructure/mappers/orm-medical-record-mul.mapper';
+import { OrmMedicalRecordRepository } from 'src/medical-record/infrastructure/repositories/orm-medical-record.repository';
+import { MedicalRecord } from 'src/medical-record/domain/medical-record';
 
 @Controller('patient')
 export class PatientController {
 
     private readonly ormPatientRepository: OrmPatientRepository;
+    private readonly ormMedicalRecordRepository: OrmMedicalRecordRepository;
+    private readonly ormMedicalRecordMulMapper: OrmMedicalRecordMulMapper = new OrmMedicalRecordMulMapper();
     private readonly ormAppointmentRepository: OrmAppointmentRepository;
     private readonly ormAppointmentMulMapper: OrmAppointmentMulMapper = new OrmAppointmentMulMapper();
     private readonly ormPatientMapper: OrmPatientMapper = new OrmPatientMapper();
@@ -40,6 +47,7 @@ export class PatientController {
         if (!manager) { throw new Error("Entity manager can't be null"); }
         this.ormPatientRepository = this.manager.getCustomRepository(OrmPatientRepository);
         this.ormAppointmentRepository = this.manager.getCustomRepository(OrmAppointmentRepository);
+        this.ormMedicalRecordRepository = this.manager.getCustomRepository(OrmMedicalRecordRepository);
     }
 
     @Post('')
@@ -126,6 +134,35 @@ export class PatientController {
             result,
             (value: Patient) => {
                 return this.ormPatientMapper.fromDomainToOther(value)
+            }
+        );
+    }
+    
+    @Get('medical-records')
+    @Roles(Role.PATIENT)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async getMedicalRecords(@GetPatientId() id, @Query('pageIndex') pageIndex, @Query('pageSize') pageSize): Promise<Result<OrmMedicalRecord[]>>{
+
+        //Agregamos Paginación
+        const dto: SearchPatientMedicalRecordsApplicationServiceDto = { id, paging: { pageIndex: (pageIndex) ? pageIndex : 0, pageSize: (pageSize) ? pageSize : 100 } };
+
+        //Creamos el servicio de aplicación.
+        const service = new ErrorApplicationServiceDecorator(
+            new LoggingApplicationServiceDecorator(
+                new SearchPatientMedicalRecordsApplicationService(this.ormMedicalRecordRepository),
+                new NestLogger()
+            )
+        );
+
+        //Ejecutamos el caso de uso
+        const result = (await service.execute(dto));
+
+        //Mapeamos y retornamos.
+        return ResultMapper.map(
+            result,
+            (value: MedicalRecord[]) => {
+                return this.ormMedicalRecordMulMapper.fromDomainToOther(value)
             }
         );
     }

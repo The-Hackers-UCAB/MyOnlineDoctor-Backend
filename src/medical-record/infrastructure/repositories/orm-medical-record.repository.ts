@@ -32,7 +32,7 @@ export class OrmMedicalRecordRepository extends Repository<OrmMedicalRecord> imp
     }
 
     async findMedicalRecordByPatient(id: PatientId, paging?: RepositoryPagingDto): Promise<MedicalRecord[]> {
-        const ormMedicalRecords = await this.find({ where: { patientId: id.Value } });
+        const ormMedicalRecords = await this.find({ where: { patientId: id.Value }, order: { updatedAt: 'DESC' } });
         return await this.ormMedicalRecordMulMapper.fromOtherToDomain(ormMedicalRecords);
     }
 }
