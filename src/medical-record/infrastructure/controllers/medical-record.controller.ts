@@ -136,7 +136,7 @@ export class MedicalRecordController {
                         patientId: medicalRecord.Patient.Id,
                         message : {
                             title: "Cambio en el registro medico",
-                            body: `${((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'El Dr.' : 'La Dra.')} ${doctor.Names.FirstName} ${doctor.Surnames.FirstSurname} ha cambiado los examenes del registro medico ${medicalRecord.Description}`, 
+                            body: `${((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'El Dr.' : 'La Dra.')} ${doctor.Names.FirstName} ${doctor.Surnames.FirstSurname} ha cambiado los examenes del registro medico`, 
                             payload: ''
                         }
                     };
