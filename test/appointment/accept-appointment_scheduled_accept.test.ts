@@ -13,7 +13,7 @@ import { DoctorRepositoryMock } from "../../test/core/repository-mocks/doctor.re
 import { PatientRepositoryMock } from "../../test/core/repository-mocks/patient.repository.mock";
 
 
-describe('Aceptar una cita que este agendada', () => {
+describe('Un Doctor acepta una cita que este agendada', () => {
 
     it('Exitosa', async () => {
             
