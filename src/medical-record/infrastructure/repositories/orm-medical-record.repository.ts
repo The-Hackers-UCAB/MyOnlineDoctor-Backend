@@ -8,6 +8,7 @@ import { EntityRepository, Repository } from "typeorm";
 import { OrmMedicalRecord } from "../entities/orm.medical-record.entity";
 import { OrmMedicalRecordMulMapper } from "../mappers/orm-medical-record-mul.mapper";
 import { OrmMedicalRecordMapper } from "../mappers/orm-medical-record.mapper";
+import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
 
 @EntityRepository(OrmMedicalRecord)
 export class OrmMedicalRecordRepository extends Repository<OrmMedicalRecord> implements IMedicalRecordRepository {
@@ -33,6 +34,11 @@ export class OrmMedicalRecordRepository extends Repository<OrmMedicalRecord> imp
 
     async findMedicalRecordByPatient(id: PatientId, paging?: RepositoryPagingDto): Promise<MedicalRecord[]> {
         const ormMedicalRecords = await this.find({ where: { patientId: id.Value }, order: { updatedAt: 'DESC' } });
+        return await this.ormMedicalRecordMulMapper.fromOtherToDomain(ormMedicalRecords);
+    }
+
+    async findMedicalRecordByDoctor(id: DoctorId, paging?: RepositoryPagingDto): Promise<MedicalRecord[]> {
+        const ormMedicalRecords = await this.find({ where: { doctorId: id.Value }, order: { updatedAt: 'DESC' } });
         return await this.ormMedicalRecordMulMapper.fromOtherToDomain(ormMedicalRecords);
     }
 }
