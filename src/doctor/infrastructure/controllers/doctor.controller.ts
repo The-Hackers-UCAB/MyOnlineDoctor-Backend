@@ -26,6 +26,11 @@ import { UsersRepository } from '../../../core/infrastructure/security/users/rep
 import { Role } from '../../../core/infrastructure/security/users/roles/role.entity.enum';
 import { Roles } from '../../../core/infrastructure/security/users/roles/roles.decorator';
 import { RolesGuard } from '../../../core/infrastructure/security/users/roles/roles.guard';
+import { OrmPatient } from 'src/patient/infrastructure/entities/orm-patient.entity';
+import { DoctorId } from 'src/doctor/domain/value-objects/doctor-id';
+import { SearchDoctorPatientsApplicationService, SearchDoctorPatientsApplicationServiceDto } from 'src/doctor/application/services/search-doctor-patients.application.service';
+import { Patient } from 'src/patient/domain/patient';
+import { OrmPatientMulMapper } from 'src/patient/infrastructure/mappers/orm-patient-mul-mapper';
 
 @Controller('doctor')
 export class DoctorController {
@@ -34,6 +39,7 @@ export class DoctorController {
     private readonly ormDoctorMulMapper: OrmDoctorMulMapper = new OrmDoctorMulMapper();;
     private readonly ormAppointmentRepository: OrmAppointmentRepository;
     private readonly ormAppointmentMulMapper: OrmAppointmentMulMapper = new OrmAppointmentMulMapper();
+    private readonly ormPatientMulMapper: OrmPatientMulMapper = new OrmPatientMulMapper();
     private readonly uuidGenerator: UUIDGenerator = new UUIDGenerator();
 
     constructor(private readonly manager: EntityManager) {
@@ -124,5 +130,30 @@ export class DoctorController {
                 return this.ormAppointmentMulMapper.fromDomainToOther(value)
             }
         );
+    }
+    @Get('patients')
+    @Roles(Role.DOCTOR)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async getPatients(@GetDoctorId() id) : Promise<Result<OrmPatient[]>>{
+
+        const dto: SearchDoctorPatientsApplicationServiceDto = {id}
+
+        const service = new ErrorApplicationServiceDecorator(
+            new LoggingApplicationServiceDecorator(
+                new SearchDoctorPatientsApplicationService(this.ormAppointmentRepository),
+                new NestLogger()
+            )
+        )
+
+        const result = (await service.execute(dto));
+
+        return ResultMapper.map(
+            result,
+            (value: Patient[]) => {
+                return this.ormPatientMulMapper.fromDomainToOther(value)
+            }
+        );
+
     }
 }
