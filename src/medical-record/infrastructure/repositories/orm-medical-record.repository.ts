@@ -33,12 +33,17 @@ export class OrmMedicalRecordRepository extends Repository<OrmMedicalRecord> imp
     }
 
     async findMedicalRecordByPatient(id: PatientId, paging?: RepositoryPagingDto): Promise<MedicalRecord[]> {
-        const ormMedicalRecords = await this.find({ where: { patientId: id.Value }, order: { updatedAt: 'DESC' } });
+        const ormMedicalRecords = await this.find({ where: { patientId: id.Value }, order: { updatedAt: 'DESC' }, skip: paging.pageIndex * paging.pageSize, take: paging.pageSize });
         return await this.ormMedicalRecordMulMapper.fromOtherToDomain(ormMedicalRecords);
     }
 
     async findMedicalRecordByDoctor(id: DoctorId, paging?: RepositoryPagingDto): Promise<MedicalRecord[]> {
-        const ormMedicalRecords = await this.find({ where: { doctorId: id.Value }, order: { updatedAt: 'DESC' } });
+        const ormMedicalRecords = await this.find({ where: { doctorId: id.Value }, order: { updatedAt: 'DESC' }, skip: paging.pageIndex * paging.pageSize, take: paging.pageSize });
+        return await this.ormMedicalRecordMulMapper.fromOtherToDomain(ormMedicalRecords);
+    }
+
+    async findPatientMedicalRecordByDoctor(doctorId: DoctorId, patientId: PatientId, paging?: RepositoryPagingDto): Promise<MedicalRecord[]> {
+        const ormMedicalRecords = await this.find({ where: { doctorId: doctorId.Value, patientId: patientId.Value }, order: { updatedAt: 'DESC' }, skip: paging.pageIndex * paging.pageSize, take: paging.pageSize });
         return await this.ormMedicalRecordMulMapper.fromOtherToDomain(ormMedicalRecords);
     }
 }
