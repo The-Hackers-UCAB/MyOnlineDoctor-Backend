@@ -110,3 +110,15 @@ Tabla con las actividades mas significativas por integrante:
 ## License
 
 MyOnlineDoctor-Backend & Nest are [MIT licensed](LICENSE)
+
+
+## Libraries, guides and code used
+
+### Libraries
+
+- [Jest](https://jestjs.io/)
+
+### Guides
+
+- [Deploy NestJS with Docker, Heroku, and GitHub Actions by Shariq Hirani](https://www.bundleapps.io/blog/nestjs-docker-heroku-github-actions-guide)
+- [Unit testing TypeScript with Jest by Duncan Lew](https://duncanlew.medium.com/unit-testing-typescript-with-jest-part-one-f39d2392d0f4)
