@@ -1,3 +1,5 @@
+import { InvalidPatientException } from "../../../../src/patient/domain/exceptions/invalid-patient.exception";
+import { ValidatePatientActiveStatusDomainService } from "src/patient/domain/services/validate-patient-active-status.domain.service";
 import { InvalidAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-exception";
 import { InvalidPatientAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-patient-exception";
 import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";
@@ -22,6 +24,8 @@ export class RateAppointmentApplicationService implements IApplicationService<Ra
 
     get name(): string { return this.constructor.name; }
 
+    private readonly validatePatientActiveStatusDomainService = new ValidatePatientActiveStatusDomainService();
+
     constructor(
         private readonly appointmentRepository: IAppointmentRepository,
         private readonly patientRepository: IPatientRepository,
@@ -35,15 +39,14 @@ export class RateAppointmentApplicationService implements IApplicationService<Ra
         //Verifico que la cita este asginada al paciente
         const patient = await this.patientRepository.findOneByIdOrFail(PatientId.create(dto.patientId));
 
-        //Verificamos que la cita corresponda al paciente.
-        if (!patient.Id.equals(appointment.Patient.Id)) {
-            throw new InvalidPatientAppointmentException();
-        }
+        //Validamos que la cita sea del paciente
+        if (!patient.Id.equals(appointment.Patient.Id)) { throw new InvalidPatientAppointmentException(); }
 
-        //Cambio el estado de la cita a rechazada
-        if (appointment.Status.Value != AppointmentStatusEnum.INICIATED) {
-            throw new InvalidAppointmentException();
-        }
+        //Validamos que el usuario se encuentre activo.
+        if (!this.validatePatientActiveStatusDomainService.execute(patient)) { throw new InvalidPatientException(); }
+
+        //Verificamos que la cita este iniciada.
+        if (appointment.Status.Value != AppointmentStatusEnum.INICIATED) { throw new InvalidAppointmentException(); }
 
         //Se califica la cita
         appointment.rate(DoctorRating.create(dto.rating));

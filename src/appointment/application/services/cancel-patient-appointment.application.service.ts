@@ -8,6 +8,8 @@ import { IEventHandler } from "../../../core/application/event-handler/event-han
 import { Result } from "../../../core/application/result-handler/result";
 import { PatientId } from "../../../patient/domain/value-objects/patient-id";
 import { IPatientRepository } from "../../../patient/application/repositories/patient.repository.interface";
+import { ValidatePatientActiveStatusDomainService } from "src/patient/domain/services/validate-patient-active-status.domain.service";
+import { InvalidPatientException } from "../../../../src/patient/domain/exceptions/invalid-patient.exception";
 
 //#Region Service Dtos
 export interface CancelPatientAppointmentApplicationServiceDto {
@@ -20,6 +22,8 @@ export class CancelPatientAppointmentApplicationService implements IApplicationS
 
     get name(): string { return this.constructor.name; }
 
+    private readonly validatePatientActiveStatusDomainService = new ValidatePatientActiveStatusDomainService();
+
     constructor(
         private readonly appointmentRepository: IAppointmentRepository,
         private readonly eventHandler: IEventHandler,
@@ -30,18 +34,18 @@ export class CancelPatientAppointmentApplicationService implements IApplicationS
         //Encuentro la cita medica
         const appointment = await this.appointmentRepository.findOneByIdOrFail(AppointmentId.create(dto.id));
 
-        //Verifico que la cita este asginada al paciente
+        //Buscamos el paciente en cuestión
         const patient = await this.patientRepository.findOneByIdOrFail(PatientId.create(dto.patientId));
 
-        if (!patient.Id.equals(appointment.Patient.Id)) {
-            throw new InvalidPatientAppointmentException();
-        }
+        //Validamos que la cita sea del paciente
+        if (!patient.Id.equals(appointment.Patient.Id)) { throw new InvalidPatientAppointmentException(); }
 
-        //Cambio el estado de la cita a cancelada
-        if (appointment.Status.Value != AppointmentStatusEnum.ACCEPTED) {
-            throw new InvalidAppointmentException();
-        }
-        
+        //Validamos que el usuario se encuentre activo.
+        if (!this.validatePatientActiveStatusDomainService.execute(patient)) { throw new InvalidPatientException(); }
+
+        //Validamos que la cita sea distinta a aceptada.
+        if (appointment.Status.Value != AppointmentStatusEnum.ACCEPTED) { throw new InvalidAppointmentException(); }
+
         //Cancelo la cita
         appointment.cancel();
 
@@ -53,6 +57,5 @@ export class CancelPatientAppointmentApplicationService implements IApplicationS
 
         //Retorno el resultado
         return Result.success('Cita cancelada');
-
     }
 }
