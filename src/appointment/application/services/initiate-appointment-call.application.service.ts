@@ -11,7 +11,9 @@ import { InvalidPatientException } from "../../../patient/domain/exceptions/inva
 import { ValidatePatientActiveStatusDomainService } from "../../../patient/domain/services/validate-patient-active-status.domain.service";
 import { IDoctorRepository } from "../../../doctor/application/repositories/doctor.repository.inteface";
 import { ValidateAppointmentDateCallDomainService } from "../../../appointment/domain/services/validate-appointment-date-calll.domain.service";
-import { InvalidDateAppointmentException } from "src/appointment/domain/exceptions/invalid-appointment-date-exception";
+import { InvalidDateAppointmentException } from "../../../../src/appointment/domain/exceptions/invalid-appointment-date-exception";
+import { ValidateDoctorActiveStatusDomainService } from "../../../../src/doctor/domain/domain-services/validate-doctor-active-status.domain.service";
+import { InvalidDoctorException } from "../../../../src/doctor/domain/exceptions/invalid-doctor.exception";
 
 //#Region Service Dtos
 export interface InitiateAppointmentCallApplicationServiceDto {
@@ -26,6 +28,7 @@ export class InitiateAppointmentCallApplicationService implements IApplicationSe
 
     private readonly validatePatientActiveStatusDomainService = new ValidatePatientActiveStatusDomainService();
     private readonly validateAppointmentDateCallDomainService = new ValidateAppointmentDateCallDomainService();
+    private readonly validateDoctorActiveStatusDomainService = new ValidateDoctorActiveStatusDomainService();
 
     constructor(
         private readonly appointmentRepository: IAppointmentRepository,
@@ -37,31 +40,27 @@ export class InitiateAppointmentCallApplicationService implements IApplicationSe
         //Buscamos la cita medica
         const appointment = await this.appointmentRepository.findOneByIdOrFail(AppointmentId.create(dto.id));
 
-        //Verificamos que la cita sea del doctor
+        //Buscamos el doctor.
         const doctor = await this.doctorRepository.findOneByIdOrFail(DoctorId.create(dto.doctorId));
 
-        if (!doctor.Id.equals(appointment.Doctor.Id)) {
-            throw new InvalidDoctorAppointmentException();
-        }
+        //Verificamos que la cita sea del doctor
+        if (!doctor.Id.equals(appointment.Doctor.Id)) { throw new InvalidDoctorAppointmentException(); }
+
+        //Validamos que el doctor este activo.
+        if (!this.validateDoctorActiveStatusDomainService.execute(doctor)) { throw new InvalidDoctorException(); }
 
         //Verificamos que su estado sea aceptado.
-        if (appointment.Status.Value != AppointmentStatusEnum.ACCEPTED) {
-            throw new InvalidAppointmentException();
-        }
+        if (appointment.Status.Value != AppointmentStatusEnum.ACCEPTED) { throw new InvalidAppointmentException(); }
 
         /* Para la demostración se desactiva la verificación de la fecha de la cita.
-        if (!this.validateAppointmentDateCallDomainService.execute(appointment)) {
-            throw new InvalidDateAppointmentException();
-        }
+        if (!this.validateAppointmentDateCallDomainService.execute(appointment)) { throw new InvalidDateAppointmentException(); }
         */
 
         //Buscamos al paciente
         const patient = await this.patientRepository.findOneByIdOrFail(appointment.Patient.Id)
 
         //Verificamos que el paciente este activo.
-        if (!this.validatePatientActiveStatusDomainService.execute(patient)) {
-            throw new InvalidPatientException();
-        }
+        if (!this.validatePatientActiveStatusDomainService.execute(patient)) { throw new InvalidPatientException(); }
 
         //Retorno el resultado
         return Result.success('Llamada iniciada.');

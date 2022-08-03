@@ -8,6 +8,8 @@ import { IEventHandler } from "../../../core/application/event-handler/event-han
 import { Result } from "../../../core/application/result-handler/result";
 import { PatientId } from "../../../patient/domain/value-objects/patient-id";
 import { IPatientRepository } from "../../../patient/application/repositories/patient.repository.interface";
+import { ValidatePatientActiveStatusDomainService } from "../../../../src/patient/domain/services/validate-patient-active-status.domain.service";
+import { InvalidPatientException } from "../../../../src/patient/domain/exceptions/invalid-patient.exception";
 
 //#Region Service Dtos
 export interface InitiateAppointmentApplicationServiceDto {
@@ -19,6 +21,8 @@ export interface InitiateAppointmentApplicationServiceDto {
 export class InitiateAppointmentApplicationService implements IApplicationService<InitiateAppointmentApplicationServiceDto, string> {
 
     get name(): string { return this.constructor.name; }
+
+    private readonly validatePatientActiveStatusDomainService = new ValidatePatientActiveStatusDomainService();
 
     constructor(
         private readonly appointmentRepository: IAppointmentRepository,
@@ -33,14 +37,14 @@ export class InitiateAppointmentApplicationService implements IApplicationServic
         //Verifico que la cita este asginada al paciente
         const patient = await this.patientRepository.findOneByIdOrFail(PatientId.create(dto.patientId));
 
-        if (!patient.Id.equals(appointment.Patient.Id)) {
-            throw new InvalidPatientAppointmentException();
-        }
+        //Validamos que la cita sea del paciente
+        if (!patient.Id.equals(appointment.Patient.Id)) { throw new InvalidPatientAppointmentException(); }
 
-        //Cambio el estado a iniciada
-        if (appointment.Status.Value != AppointmentStatusEnum.ACCEPTED) {
-            throw new InvalidAppointmentException();
-        }
+        //Validamos que el usuario se encuentre activo.
+        if (!this.validatePatientActiveStatusDomainService.execute(patient)) { throw new InvalidPatientException(); }
+
+        //Validamos que el estado de la cita no sea distinta a aceptada.
+        if (appointment.Status.Value != AppointmentStatusEnum.ACCEPTED) { throw new InvalidAppointmentException(); }
 
         //inicio la cita
         appointment.iniciate();
@@ -53,6 +57,5 @@ export class InitiateAppointmentApplicationService implements IApplicationServic
 
         //Retorno el resultado
         return Result.success('Cita iniciada');
-
     }
 }

@@ -8,6 +8,8 @@ import { IEventHandler } from "../../../core/application/event-handler/event-han
 import { Result } from "../../../core/application/result-handler/result";
 import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
 import { IDoctorRepository } from "../../../doctor/application/repositories/doctor.repository.inteface";
+import { ValidateDoctorActiveStatusDomainService } from "src/doctor/domain/domain-services/validate-doctor-active-status.domain.service";
+import { InvalidDoctorException } from "../../../../src/doctor/domain/exceptions/invalid-doctor.exception";
 
 //#Region Service Dtos
 export interface RejectDoctorAppointmentApplicationServiceDto {
@@ -20,6 +22,8 @@ export class RejectDoctorAppointmentApplicationService implements IApplicationSe
 
     get name(): string { return this.constructor.name; }
 
+    private readonly validateDoctorActiveStatusDomainService = new ValidateDoctorActiveStatusDomainService();
+
     constructor(
         private readonly appointmentRepository: IAppointmentRepository,
         private readonly eventHandler: IEventHandler,
@@ -27,21 +31,22 @@ export class RejectDoctorAppointmentApplicationService implements IApplicationSe
     ) { }
 
     async execute(dto: RejectDoctorAppointmentApplicationServiceDto): Promise<Result<string>> {
-
         //Encuentro la cita medica
         const appointment = await this.appointmentRepository.findOneByIdOrFail(AppointmentId.create(dto.id));
 
         //Verifico que la cita sea del doctor
         const doctor = await this.doctorRepository.findOneByIdOrFail(DoctorId.create(dto.doctorId));
 
-        if (!doctor.Id.equals(appointment.Doctor.Id)) {
-            throw new InvalidDoctorAppointmentException();
-        }
+        //Validamos que la cita pertenezca al doctor.
+        if (!doctor.Id.equals(appointment.Doctor.Id)) { throw new InvalidDoctorAppointmentException(); }
+
+        //Validamos que el doctor este activo.
+        if (!this.validateDoctorActiveStatusDomainService.execute(doctor)) { throw new InvalidDoctorException(); }
+
+        //Validamos que la cita esté solicitada.
+        if (appointment.Status.Value != AppointmentStatusEnum.REQUESTED) { throw new InvalidAppointmentException(); }
 
         //Cambio el estado de la cita a rechazada
-        if (appointment.Status.Value != AppointmentStatusEnum.REQUESTED) {
-            throw new InvalidAppointmentException();
-        }
         appointment.reject();
 
         //Guardo la cita
@@ -52,6 +57,5 @@ export class RejectDoctorAppointmentApplicationService implements IApplicationSe
 
         //Retorno el resultado
         return Result.success('Cita rechazada');
-
     }
 }
