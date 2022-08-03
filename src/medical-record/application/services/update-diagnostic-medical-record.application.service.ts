@@ -11,7 +11,7 @@ import { IMedicalRecordRepository } from "../repositories/medical-record.reposit
 //#region Service DTOs
 export interface UpdateDiagnosticMedicalRecordApplicationServiceDto {
     id?: string,
-    description?: string,
+    diagnostic?: string,
     doctorId?: string
 }
 
@@ -37,7 +37,7 @@ export class UpdateDiagnosticMedicalRecordApplicationService implements IApplica
         }
 
         //Actualizo el registro
-        medicalRecord.updateDiagnostic(MedicalRecordDiagnostic.create(dto.description));
+        medicalRecord.updateDiagnostic(MedicalRecordDiagnostic.create(dto.diagnostic));
 
         //Guardo el registro
         this.medicalRecordRepository.saveAggregate(medicalRecord);
