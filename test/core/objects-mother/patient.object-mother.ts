@@ -1,19 +1,19 @@
-import { UUIDGenerator } from "src/core/infrastructure/uuid/uuid-generator";
-import { Patient } from "src/patient/domain/patient";
-import { PatientAllergies } from "src/patient/domain/value-objects/patient-allergies";
-import { PatientBackground } from "src/patient/domain/value-objects/patient-background";
-import { PatientBirthdate } from "src/patient/domain/value-objects/patient-birthdate";
-import { PatientGender } from "src/patient/domain/value-objects/patient-gender";
-import { PatientGenderEnum } from "src/patient/domain/value-objects/patient-gender.enum";
-import { PatientHeight } from "src/patient/domain/value-objects/patient-height";
-import { PatientId } from "src/patient/domain/value-objects/patient-id";
-import { PatientNames } from "src/patient/domain/value-objects/patient-names";
-import { PatientPhoneNumber } from "src/patient/domain/value-objects/patient-phone-number";
-import { PatientStatus } from "src/patient/domain/value-objects/patient-status";
-import { PatientStatusEnum } from "src/patient/domain/value-objects/patient-status.enum";
-import { PatientSurgeries } from "src/patient/domain/value-objects/patient-surgeries";
-import { PatientSurnames } from "src/patient/domain/value-objects/patient-surnames";
-import { PatientWeight } from "src/patient/domain/value-objects/patient-weight";
+import { UUIDGenerator } from "../../../src/core/infrastructure/uuid/uuid-generator";
+import { Patient } from "../../../src/patient/domain/patient";
+import { PatientAllergies } from "../../../src/patient/domain/value-objects/patient-allergies";
+import { PatientBackground } from "../../../src/patient/domain/value-objects/patient-background";
+import { PatientBirthdate } from "../../../src/patient/domain/value-objects/patient-birthdate";
+import { PatientGender } from "../../../src/patient/domain/value-objects/patient-gender";
+import { PatientGenderEnum } from "../../../src/patient/domain/value-objects/patient-gender.enum";
+import { PatientHeight } from "../../../src/patient/domain/value-objects/patient-height";
+import { PatientId } from "../../../src/patient/domain/value-objects/patient-id";
+import { PatientNames } from "../../../src/patient/domain/value-objects/patient-names";
+import { PatientPhoneNumber } from "../../../src/patient/domain/value-objects/patient-phone-number";
+import { PatientStatus } from "../../../src/patient/domain/value-objects/patient-status";
+import { PatientStatusEnum } from "../../../src/patient/domain/value-objects/patient-status.enum";
+import { PatientSurgeries } from "../../../src/patient/domain/value-objects/patient-surgeries";
+import { PatientSurnames } from "../../../src/patient/domain/value-objects/patient-surnames";
+import { PatientWeight } from "../../../src/patient/domain/value-objects/patient-weight";
 
 export class PatientObjectMother {
     static createActivePatient() {

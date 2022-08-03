@@ -1,8 +1,8 @@
-import { RepositoryPagingDto } from "src/core/application/repositories/repository-paging.dto";
-import { Doctor } from "src/doctor/domain/doctor";
-import { InvalidDoctorException } from "src/doctor/domain/exceptions/invalid-doctor.exception";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
-import { IDoctorRepository, SearchDoctorsByCriteriaDomainDto } from "src/doctor/application/repositories/doctor.repository.inteface";
+import { RepositoryPagingDto } from "../../../src/core/application/repositories/repository-paging.dto";
+import { Doctor } from "../../../src/doctor/domain/doctor";
+import { InvalidDoctorException } from "../../../src/doctor/domain/exceptions/invalid-doctor.exception";
+import { DoctorId } from "../../../src/doctor/domain/value-objects/doctor-id";
+import { IDoctorRepository, SearchDoctorsByCriteriaDomainDto } from "../../../src/doctor/application/repositories/doctor.repository.inteface";
 
 export class DoctorRepositoryMock implements IDoctorRepository {
     private readonly doctors: Doctor[] = [];

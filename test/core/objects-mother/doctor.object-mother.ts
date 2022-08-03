@@ -1,16 +1,16 @@
-import { UUIDGenerator } from "src/core/infrastructure/uuid/uuid-generator";
-import { Doctor } from "src/doctor/domain/doctor";
-import { DoctorGender } from "src/doctor/domain/value-objects/doctor-gender";
-import { DoctorGenderEnum } from "src/doctor/domain/value-objects/doctor-gender.enum";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
-import { DoctorLocation } from "src/doctor/domain/value-objects/doctor-location";
-import { DoctorNames } from "src/doctor/domain/value-objects/doctor-names";
-import { DoctorRating } from "src/doctor/domain/value-objects/doctor-rating";
-import { DoctorSpecialty } from "src/doctor/domain/value-objects/doctor-specialty";
-import { DoctorSpecialtyEnum } from "src/doctor/domain/value-objects/doctor-specialty.enum";
-import { DoctorStatus } from "src/doctor/domain/value-objects/doctor-status";
-import { DoctorStatusEnum } from "src/doctor/domain/value-objects/doctor-status.enum";
-import { DoctorSurnames } from "src/doctor/domain/value-objects/doctor-surnames";
+import { UUIDGenerator } from "../../../src/core/infrastructure/uuid/uuid-generator";
+import { Doctor } from "../../../src/doctor/domain/doctor";
+import { DoctorGender } from "../../../src/doctor/domain/value-objects/doctor-gender";
+import { DoctorGenderEnum } from "../../../src/doctor/domain/value-objects/doctor-gender.enum";
+import { DoctorId } from "../../../src/doctor/domain/value-objects/doctor-id";
+import { DoctorLocation } from "../../../src/doctor/domain/value-objects/doctor-location";
+import { DoctorNames } from "../../../src/doctor/domain/value-objects/doctor-names";
+import { DoctorRating } from "../../../src/doctor/domain/value-objects/doctor-rating";
+import { DoctorSpecialty } from "../../../src/doctor/domain/value-objects/doctor-specialty";
+import { DoctorSpecialtyEnum } from "../../../src/doctor/domain/value-objects/doctor-specialty.enum";
+import { DoctorStatus } from "../../../src/doctor/domain/value-objects/doctor-status";
+import { DoctorStatusEnum } from "../../../src/doctor/domain/value-objects/doctor-status.enum";
+import { DoctorSurnames } from "../../../src/doctor/domain/value-objects/doctor-surnames";
 
 export class DoctorObjectMother {
     static createActiveDoctor() {

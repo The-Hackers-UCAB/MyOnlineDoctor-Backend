@@ -1,8 +1,8 @@
-import { RepositoryPagingDto } from "src/core/application/repositories/repository-paging.dto";
-import { Patient } from "src/patient/domain/patient";
-import { PatientId } from "src/patient/domain/value-objects/patient-id";
-import { IPatientRepository, SearchAssociatedPatientsDomainDto } from "src/patient/application/repositories/patient.repository.interface";
-import { InvalidPatientException } from "src/patient/domain/exceptions/invalid-patient.exception";
+import { RepositoryPagingDto } from "../../../src/core/application/repositories/repository-paging.dto";
+import { Patient } from "../../../src/patient/domain/patient";
+import { PatientId } from "../../../src/patient/domain/value-objects/patient-id";
+import { IPatientRepository, SearchAssociatedPatientsDomainDto } from "../../../src/patient/application/repositories/patient.repository.interface";
+import { InvalidPatientException } from "../../../src/patient/domain/exceptions/invalid-patient.exception";
 
 export class PatientRepositoryMock implements IPatientRepository {
 
