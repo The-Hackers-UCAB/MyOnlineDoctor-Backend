@@ -33,7 +33,7 @@ describe('Aceptar una cita que este solicitada', () => {
 
         const eventBus = EventBus.getInstance()
 
-        const dto = { id: appointment.Id.Value, doctorId: doctor.Id.Value };
+        const dto: AcceptPatientAppointmentApplicationServiceDto = { id: appointment.Id.Value, patientId: patient.Id.Value };
 
         const service = new ErrorApplicationServiceDecorator(
             new NotifierApplicationServiceDecorator(

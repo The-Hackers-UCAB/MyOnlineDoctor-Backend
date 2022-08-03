@@ -27,7 +27,7 @@ describe("Iniciar una llamada a paciente suspendido", () => {
         const appointmentRepositoryMock = new AppointmentRepositoryMock();
         await appointmentRepositoryMock.saveAggregate(appointment);
 
-        const dto = { id: appointment.Id.Value, doctorId: doctor.Id.Value };
+        const dto: InitiateAppointmentCallApplicationServiceDto = { id: appointment.Id.Value, doctorId: doctor.Id.Value };
 
         const service = new ErrorApplicationServiceDecorator(
             new NotifierApplicationServiceDecorator(
