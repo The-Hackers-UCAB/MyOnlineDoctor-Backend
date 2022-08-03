@@ -42,6 +42,7 @@ export class PatientController {
         if (!manager) { throw new Error("Entity manager can't be null"); }
         this.ormPatientRepository = this.manager.getCustomRepository(OrmPatientRepository);
         this.ormAppointmentRepository = this.manager.getCustomRepository(OrmAppointmentRepository);
+        this.ormMedicalRecordRepository = this.manager.getCustomRepository(OrmMedicalRecordRepository);
     }
 
     @Post('')
