@@ -25,6 +25,7 @@ import { DoctorGenderEnum } from "src/doctor/domain/value-objects/doctor-gender.
 import { UpdateExamsMedicalRecordApplicationService, UpdateExamsMedicalRecordApplicationServiceDto } from "src/medical-record/application/services/update-exams-medical-record.application.service";
 import { UpdateRecipeMedicalRecordApplicationService, UpdateRecipeMedicalRecordApplicationServiceDto } from "src/medical-record/application/services/update-recipe-medical-record.application.service";
 import { UpdatePlanningMedicalRecordApplicationService, UpdatePlanningMedicalRecordApplicationServiceDto } from "src/medical-record/application/services/update-planning-medical-record.application.service";
+import { OrmMedicalRecordMapper } from "../mappers/orm-medical-record.mapper";
 
 
 @Controller('medical-record')
@@ -35,6 +36,7 @@ export class MedicalRecordController {
     private readonly ormDoctorRepository: OrmDoctorRepository;
     private readonly ormMedicalRecordRepository: OrmMedicalRecordRepository;
     private readonly uuidGenerator: UUIDGenerator = new UUIDGenerator();
+    private readonly ormMedicalRecordMapper: OrmMedicalRecordMapper = new OrmMedicalRecordMapper();
 
     constructor(private readonly manager: EntityManager) {
         if (!manager) { throw new Error("Entity manager can't be null"); }
@@ -59,14 +61,15 @@ export class MedicalRecordController {
             ),
             new FirebaseNotifier(
                 async (data: UpdateDescriptionMedicalRecordApplicationServiceDto) => {
-                    const medicalRecord = await this.ormMedicalRecordRepository.findOneById(MedicalRecordID.create(data.id));
+                    const medicalRecord = await this.ormMedicalRecordRepository.findOneByIdOrFail(MedicalRecordID.create(data.id));
+                    const ormMedicalRecord = await this.ormMedicalRecordMapper.fromDomainToOther(medicalRecord);
                     const doctor = await this.ormDoctorRepository.findOneById(DoctorId.create(data.doctorId));
                     return {
                         patientId: medicalRecord.Patient.Id,
                         message : {
                             title: "Cambio en el registro medico",
                             body: `${((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'El Dr.' : 'La Dra.')} ${doctor.Names.FirstName} ${doctor.Surnames.FirstSurname} ha cambiado la descripcion del registro medico`,
-                            payload: ""
+                            payload: JSON.stringify(ormMedicalRecord)
                         }
                  };   
                 }
@@ -95,13 +98,14 @@ export class MedicalRecordController {
             new FirebaseNotifier(
                 async (data: UpdateDiagnosticMedicalRecordApplicationServiceDto) => {
                     const medicalRecord = await this.ormMedicalRecordRepository.findOneById(MedicalRecordID.create(data.id));
+                    const ormMedicalRecord = await this.ormMedicalRecordMapper.fromDomainToOther(medicalRecord);
                     const doctor = await this.ormDoctorRepository.findOneById(DoctorId.create(data.doctorId));
                     return {
                         patientId: medicalRecord.Patient.Id,
                         message : {
                             title: "Cambio en el registro medico",
                             body: `${((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'El Dr.' : 'La Dra.')} ${doctor.Names.FirstName} ${doctor.Surnames.FirstSurname} ha cambiado el diagnostico del registro medico`,
-                            payload: ""
+                            payload: JSON.stringify(ormMedicalRecord)
                         }
                  };   
                 }
@@ -131,13 +135,14 @@ export class MedicalRecordController {
             new FirebaseNotifier(
                 async (data: UpdateExamsMedicalRecordApplicationServiceDto) => {
                     const medicalRecord = await this.ormMedicalRecordRepository.findOneById(MedicalRecordID.create(data.id));
+                    const ormMedicalRecord = await this.ormMedicalRecordMapper.fromDomainToOther(medicalRecord);
                     const doctor = await this.ormDoctorRepository.findOneById(DoctorId.create(data.doctorId));
                     return {
                         patientId: medicalRecord.Patient.Id,
                         message : {
                             title: "Cambio en el registro medico",
                             body: `${((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'El Dr.' : 'La Dra.')} ${doctor.Names.FirstName} ${doctor.Surnames.FirstSurname} ha cambiado los examenes del registro medico`, 
-                            payload: ''
+                            payload: JSON.stringify(ormMedicalRecord)
                         }
                     };
                 }
@@ -168,13 +173,14 @@ export class MedicalRecordController {
             new FirebaseNotifier(
                 async (data: UpdateRecipeMedicalRecordApplicationServiceDto) =>{
                     const medicalRecord = await this.ormMedicalRecordRepository.findOneById(MedicalRecordID.create(data.id));
+                    const ormMedicalRecord = await this.ormMedicalRecordMapper.fromDomainToOther(medicalRecord);
                     const doctor = await this.ormDoctorRepository.findOneById(DoctorId.create(data.doctorId));
                     return{
                         patientId: medicalRecord.Patient.Id,
                         message: {
                             title: "Cambio en el registro medico",
                             body: `${((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'El Dr.' : 'La Dra.')} ${doctor.Names.FirstName} ${doctor.Surnames.FirstSurname} ha cambiado los recipes del registro medico`, 
-                            payload: ''
+                            payload: JSON.stringify(ormMedicalRecord)
                         }
                     };
                 }
@@ -207,13 +213,14 @@ export class MedicalRecordController {
             new FirebaseNotifier(
                 async (data: UpdatePlanningMedicalRecordApplicationServiceDto) =>{
                     const medicalRecord = await this.ormMedicalRecordRepository.findOneById(MedicalRecordID.create(data.id));
+                    const ormMedicalRecord = await this.ormMedicalRecordMapper.fromDomainToOther(medicalRecord);
                     const doctor = await this.ormDoctorRepository.findOneById(DoctorId.create(data.doctorId));
                     return{
                         patientId: medicalRecord.Patient.Id,
                         message: {
                             title: "Cambio en el registro medico",
                             body: `${((doctor.Gender.Value == DoctorGenderEnum.MALE) ? 'El Dr.' : 'La Dra.')} ${doctor.Names.FirstName} ${doctor.Surnames.FirstSurname} ha cambiado la planificacion del registro medico`, 
-                            payload: ''
+                            payload: JSON.stringify(ormMedicalRecord)
                         }
                     };
                 }
