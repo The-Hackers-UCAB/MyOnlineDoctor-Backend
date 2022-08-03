@@ -22,6 +22,10 @@ import { UsersRepository } from '../../../core/infrastructure/security/users/rep
 import { Role } from '../../../core/infrastructure/security/users/roles/role.entity.enum';
 import { Roles } from '../../../core/infrastructure/security/users/roles/roles.decorator';
 import { RolesGuard } from '../../../core/infrastructure/security/users/roles/roles.guard';
+import { OrmPatient } from '../entities/orm-patient.entity';
+import { GetPatientProfilesApplicationService, GetPatientProfilesApplicationServiceDto } from 'src/patient/application/services/get-patient-profile.application.service';
+import { OrmPatientMapper } from '../mappers/orm-patient-mapper';
+import { Patient } from 'src/patient/domain/patient';
 
 @Controller('patient')
 export class PatientController {
@@ -29,6 +33,7 @@ export class PatientController {
     private readonly ormPatientRepository: OrmPatientRepository;
     private readonly ormAppointmentRepository: OrmAppointmentRepository;
     private readonly ormAppointmentMulMapper: OrmAppointmentMulMapper = new OrmAppointmentMulMapper();
+    private readonly ormPatientMapper: OrmPatientMapper = new OrmPatientMapper();
     private readonly uuidGenerator: UUIDGenerator = new UUIDGenerator();
 
     constructor(private readonly manager: EntityManager) {
@@ -92,6 +97,35 @@ export class PatientController {
             result,
             (value: Appointment[]) => {
                 return this.ormAppointmentMulMapper.fromDomainToOther(value)
+            }
+        );
+    }
+
+
+    @Get('profile')
+    @Roles(Role.PATIENT)
+    @UseGuards(RolesGuard)
+    @UseGuards(SessionGuard)
+    async getProfile(@GetPatientId() id): Promise<Result<OrmPatient>> {
+
+        const dto: GetPatientProfilesApplicationServiceDto = { id };
+
+        //Creamos el servicio de aplicación.
+        const service = new ErrorApplicationServiceDecorator(
+            new LoggingApplicationServiceDecorator(
+                new GetPatientProfilesApplicationService(this.ormPatientRepository),
+                new NestLogger()
+            )
+        );
+
+        //Ejecutamos el caso de uso
+        const result = (await service.execute(dto));
+
+        //Mapeamos y retornamos.
+        return ResultMapper.map(
+            result,
+            (value: Patient) => {
+                return this.ormPatientMapper.fromDomainToOther(value)
             }
         );
     }
