@@ -30,4 +30,8 @@ export class MedicalRecordRepositoryMock implements IMedicalRecordRepository {
         if (!medicalRecord) { throw new InvalidMedicalRecordException(); }
         return medicalRecord;
     }
+
+    async findPatientMedicalRecordByDoctor(doctorId: DoctorId, patientId: PatientId, paging?: RepositoryPagingDto): Promise<MedicalRecord[]> {
+        return null;
+    }
 }
