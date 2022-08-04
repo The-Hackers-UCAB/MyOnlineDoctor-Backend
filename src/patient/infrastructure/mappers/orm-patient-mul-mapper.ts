@@ -1,4 +1,3 @@
-import { PatientSurnames } from "src/patient/domain/value-objects/patient-surnames";
 import { IMapper } from "../../../core/application/mappers/mapper.interface";
 import { Patient } from "../../../patient/domain/patient";
 import { OrmPatient } from "../entities/orm-patient.entity";

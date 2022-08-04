@@ -1,5 +1,5 @@
 import { InvalidPatientException } from "../../../../src/patient/domain/exceptions/invalid-patient.exception";
-import { ValidatePatientActiveStatusDomainService } from "src/patient/domain/services/validate-patient-active-status.domain.service";
+import { ValidatePatientActiveStatusDomainService } from "../../../../src/patient/domain/services/validate-patient-active-status.domain.service";
 import { InvalidAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-exception";
 import { InvalidPatientAppointmentException } from "../../../appointment/domain/exceptions/invalid-appointment-patient-exception";
 import { AppointmentId } from "../../../appointment/domain/value-objects/appointment-id";

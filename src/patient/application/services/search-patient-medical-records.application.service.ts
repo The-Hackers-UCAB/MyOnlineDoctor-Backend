@@ -1,8 +1,8 @@
-import { IApplicationService } from "src/core/application/application-service/application.service.interface";
-import { RepositoryPagingDto } from "src/core/application/repositories/repository-paging.dto";
-import { Result } from "src/core/application/result-handler/result";
-import { IMedicalRecordRepository } from "src/medical-record/application/repositories/medical-record.repository.interface";
-import { MedicalRecord } from "src/medical-record/domain/medical-record";
+import { IApplicationService } from "../../../../src/core/application/application-service/application.service.interface";
+import { RepositoryPagingDto } from "../../../../src/core/application/repositories/repository-paging.dto";
+import { Result } from "../../../../src/core/application/result-handler/result";
+import { IMedicalRecordRepository } from "../../../../src/medical-record/application/repositories/medical-record.repository.interface";
+import { MedicalRecord } from "../../../../src/medical-record/domain/medical-record";
 import { PatientId } from "../../../../src/patient/domain/value-objects/patient-id";
 
 //#region Service DTOs

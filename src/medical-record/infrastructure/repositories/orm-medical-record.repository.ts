@@ -8,7 +8,7 @@ import { EntityRepository, Repository } from "typeorm";
 import { OrmMedicalRecord } from "../entities/orm.medical-record.entity";
 import { OrmMedicalRecordMulMapper } from "../mappers/orm-medical-record-mul.mapper";
 import { OrmMedicalRecordMapper } from "../mappers/orm-medical-record.mapper";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
+import { DoctorId } from "../../../../src/doctor/domain/value-objects/doctor-id";
 
 @EntityRepository(OrmMedicalRecord)
 export class OrmMedicalRecordRepository extends Repository<OrmMedicalRecord> implements IMedicalRecordRepository {

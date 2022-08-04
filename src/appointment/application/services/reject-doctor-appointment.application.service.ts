@@ -8,7 +8,7 @@ import { IEventHandler } from "../../../core/application/event-handler/event-han
 import { Result } from "../../../core/application/result-handler/result";
 import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
 import { IDoctorRepository } from "../../../doctor/application/repositories/doctor.repository.inteface";
-import { ValidateDoctorActiveStatusDomainService } from "src/doctor/domain/domain-services/validate-doctor-active-status.domain.service";
+import { ValidateDoctorActiveStatusDomainService } from "../../../../src/doctor/domain/domain-services/validate-doctor-active-status.domain.service";
 import { InvalidDoctorException } from "../../../../src/doctor/domain/exceptions/invalid-doctor.exception";
 
 //#Region Service Dtos

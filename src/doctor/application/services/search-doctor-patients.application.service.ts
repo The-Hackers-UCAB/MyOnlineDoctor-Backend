@@ -1,8 +1,8 @@
-import { IAppointmentRepository } from "src/appointment/application/repositories/appointment.repository.interface";
-import { IApplicationService } from "src/core/application/application-service/application.service.interface";
-import { Result } from "src/core/application/result-handler/result";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
-import { Patient } from "src/patient/domain/patient";
+import { IAppointmentRepository } from "../../../../src/appointment/application/repositories/appointment.repository.interface";
+import { IApplicationService } from "../../../../src/core/application/application-service/application.service.interface";
+import { Result } from "../../../../src/core/application/result-handler/result";
+import { DoctorId } from "../../../../src/doctor/domain/value-objects/doctor-id";
+import { Patient } from "../../../../src/patient/domain/patient";
 
 
 
