@@ -61,12 +61,27 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+## Running Tests
+
+```bash
+# Correr Test
+$ npm run test
+```
+
 ## Screenshots
 
 Grafo de dependencias.
 
-![App Screenshot](./dependencygraph.svg)
+![App Screenshot](./docs/dependencygraph.svg)
 
+Arquitectura Hexagonal
+
+![App Screenshot](./docs/Arquitectura Hexagonal - The Hackers.svg)
+
+Modelo de Dominio.
+
+![App Screenshot](./docs/Modelo de Dominio - The Hackers.svg)
 
 ## Desarrolladores
 
@@ -116,7 +131,7 @@ Tabla con las actividades mas significativas por integrante:
 MyOnlineDoctor-Backend & Nest are [MIT licensed](LICENSE)
 
 
-## Libraries, guides and code used
+## Extras
 
 ### Libraries
 
