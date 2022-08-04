@@ -7,7 +7,7 @@ import { MedicalRecordID } from "../../../src/medical-record/domain/value-object
 import { PatientId } from "../../../src/patient/domain/value-objects/patient-id";
 
 export class MedicalRecordRepositoryMock implements IMedicalRecordRepository {
-
+    
     private readonly medicalRecords: MedicalRecord[] = [];
 
     async findMedicalRecordByPatient(id: PatientId, paging?: RepositoryPagingDto): Promise<MedicalRecord[]> {
@@ -29,5 +29,9 @@ export class MedicalRecordRepositoryMock implements IMedicalRecordRepository {
         const medicalRecord = await this.findOneById(id);
         if (!medicalRecord) { throw new InvalidMedicalRecordException(); }
         return medicalRecord;
+    }
+
+    findPatientMedicalRecordByDoctor(doctorId: DoctorId, patientId: PatientId, paging?: RepositoryPagingDto): Promise<MedicalRecord[]> {
+        return null;
     }
 }
