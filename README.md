@@ -93,6 +93,8 @@ Tabla con las actividades mas significativas por integrante:
 |----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
 | Continuous integration/continuous delivery (CI/CD) pipeline. Desplegado continuo (Continous Deployment) del servicio web ( NEST API ) a producción en Heroku usando un contenedor docker construido al momento de subir código al repositorio ( on push to master branch ). Automatización desarrollada con Github Actions | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/2 |
 | Implementación del agregado cita con value objects y excepciones| https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/12 |
+| Finalización del CI/CD pipeline. Se añadió la ejecución de pruebas automáticas en cada push | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/35 |
+| Implementación del endpoint para ver el perfil de un paciente | [+af455c7](https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/commit/af455c769a997d9a4164ab91d83549f292285553)|
 
 ### Santiago Figueroa
 | Actividades                                                                                                            | Pull Request                                                |
