@@ -26,16 +26,15 @@ import { UsersRepository } from '../../../core/infrastructure/security/users/rep
 import { Role } from '../../../core/infrastructure/security/users/roles/role.entity.enum';
 import { Roles } from '../../../core/infrastructure/security/users/roles/roles.decorator';
 import { RolesGuard } from '../../../core/infrastructure/security/users/roles/roles.guard';
-import { OrmPatient } from 'src/patient/infrastructure/entities/orm-patient.entity';
-import { DoctorId } from 'src/doctor/domain/value-objects/doctor-id';
-import { SearchDoctorPatientsApplicationService, SearchDoctorPatientsApplicationServiceDto } from 'src/doctor/application/services/search-doctor-patients.application.service';
-import { Patient } from 'src/patient/domain/patient';
-import { OrmPatientMulMapper } from 'src/patient/infrastructure/mappers/orm-patient-mul-mapper';
-import { OrmMedicalRecordRepository } from 'src/medical-record/infrastructure/repositories/orm-medical-record.repository';
-import { OrmMedicalRecordMulMapper } from 'src/medical-record/infrastructure/mappers/orm-medical-record-mul.mapper';
-import { OrmMedicalRecord } from 'src/medical-record/infrastructure/entities/orm.medical-record.entity';
-import { SearchDoctorMedicalRecordsApplicationService, SearchDoctorMedicalRecordsApplicationServiceDto } from 'src/doctor/application/services/search-doctor-medical-record.application.service';
-import { MedicalRecord } from 'src/medical-record/domain/medical-record';
+import { OrmPatient } from '../../../../src/patient/infrastructure/entities/orm-patient.entity';
+import { SearchDoctorPatientsApplicationService, SearchDoctorPatientsApplicationServiceDto } from '../../../../src/doctor/application/services/search-doctor-patients.application.service';
+import { Patient } from '../../../../src/patient/domain/patient';
+import { OrmPatientMulMapper } from '../../../../src/patient/infrastructure/mappers/orm-patient-mul-mapper';
+import { OrmMedicalRecordRepository } from '../../../../src/medical-record/infrastructure/repositories/orm-medical-record.repository';
+import { OrmMedicalRecordMulMapper } from '../../../../src/medical-record/infrastructure/mappers/orm-medical-record-mul.mapper';
+import { OrmMedicalRecord } from '../../../../src/medical-record/infrastructure/entities/orm.medical-record.entity';
+import { SearchDoctorMedicalRecordsApplicationService, SearchDoctorMedicalRecordsApplicationServiceDto } from '../../../../src/doctor/application/services/search-doctor-medical-record.application.service';
+import { MedicalRecord } from '../../../../src/medical-record/domain/medical-record';
 
 @Controller('doctor')
 export class DoctorController {
@@ -143,9 +142,9 @@ export class DoctorController {
     @Roles(Role.DOCTOR)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
-    async getPatients(@GetDoctorId() id) : Promise<Result<OrmPatient[]>>{
+    async getPatients(@GetDoctorId() id): Promise<Result<OrmPatient[]>> {
 
-        const dto: SearchDoctorPatientsApplicationServiceDto = {id}
+        const dto: SearchDoctorPatientsApplicationServiceDto = { id }
 
         const service = new ErrorApplicationServiceDecorator(
             new LoggingApplicationServiceDecorator(
@@ -169,7 +168,7 @@ export class DoctorController {
     @Roles(Role.DOCTOR)
     @UseGuards(RolesGuard)
     @UseGuards(SessionGuard)
-    async getMedicalRecords(@GetDoctorId() id, @Query('pageIndex') pageIndex, @Query('pageSize') pageSize): Promise<Result<OrmMedicalRecord[]>>{
+    async getMedicalRecords(@GetDoctorId() id, @Query('pageIndex') pageIndex, @Query('pageSize') pageSize): Promise<Result<OrmMedicalRecord[]>> {
 
         //Agregamos Paginación
         const dto: SearchDoctorMedicalRecordsApplicationServiceDto = { id, paging: { pageIndex: (pageIndex) ? pageIndex : 0, pageSize: (pageSize) ? pageSize : 100 } };
