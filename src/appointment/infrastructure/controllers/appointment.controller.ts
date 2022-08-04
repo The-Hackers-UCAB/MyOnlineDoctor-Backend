@@ -37,9 +37,9 @@ import { GetPatientId } from "../../../core/infrastructure/security/users/decora
 import { Role } from "../../../core/infrastructure/security/users/roles/role.entity.enum";
 import { Roles } from "../../../core/infrastructure/security/users/roles/roles.decorator";
 import { RolesGuard } from "../../../core/infrastructure/security/users/roles/roles.guard";
-import { AppointmentCompleted } from "src/appointment/domain/events/appointment-completed";
-import { CreateMedicalRecordApplicationService } from "src/medical-record/application/services/create-medical-record.aplication.service";
-import { OrmMedicalRecordRepository } from "src/medical-record/infrastructure/repositories/orm-medical-record.repository";
+import { AppointmentCompleted } from "../../../../src/appointment/domain/events/appointment-completed";
+import { CreateMedicalRecordApplicationService } from "../../../../src/medical-record/application/services/create-medical-record.aplication.service";
+import { OrmMedicalRecordRepository } from "../../../../src/medical-record/infrastructure/repositories/orm-medical-record.repository";
 import { OrmAppointmentMapper } from "../mappers/orm-appointment.mapper";
 
 @Controller('appointment')

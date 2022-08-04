@@ -8,7 +8,7 @@ import { IEventHandler } from "../../../core/application/event-handler/event-han
 import { Result } from "../../../core/application/result-handler/result";
 import { PatientId } from "../../../patient/domain/value-objects/patient-id";
 import { IPatientRepository } from "../../../patient/application/repositories/patient.repository.interface";
-import { ValidatePatientActiveStatusDomainService } from "src/patient/domain/services/validate-patient-active-status.domain.service";
+import { ValidatePatientActiveStatusDomainService } from "../../../../src/patient/domain/services/validate-patient-active-status.domain.service";
 import { InvalidPatientException } from "../../../../src/patient/domain/exceptions/invalid-patient.exception";
 
 //#Region Service Dtos

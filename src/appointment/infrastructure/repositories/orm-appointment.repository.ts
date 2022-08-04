@@ -8,9 +8,9 @@ import { InvalidAppointmentException } from "../../../appointment/domain/excepti
 import { DoctorId } from "../../../doctor/domain/value-objects/doctor-id";
 import { PatientId } from "../../../patient/domain/value-objects/patient-id";
 import { OrmAppointmentMulMapper } from "../mappers/orm-appointment-mul.mapper";
-import { Patient } from "src/patient/domain/patient";
-import { OrmPatientMulMapper } from "src/patient/infrastructure/mappers/orm-patient-mul-mapper";
-import { OrmPatient } from "src/patient/infrastructure/entities/orm-patient.entity";
+import { Patient } from "../../../../src/patient/domain/patient";
+import { OrmPatientMulMapper } from "../../../../src/patient/infrastructure/mappers/orm-patient-mul-mapper";
+import { OrmPatient } from "../../../../src/patient/infrastructure/entities/orm-patient.entity";
 
 @EntityRepository(OrmAppointment)
 export class OrmAppointmentRepository extends Repository<OrmAppointment> implements IAppointmentRepository {

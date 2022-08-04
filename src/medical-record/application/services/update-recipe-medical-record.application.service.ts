@@ -1,11 +1,11 @@
-import { IApplicationService } from "src/core/application/application-service/application.service.interface";
-import { IEventHandler } from "src/core/application/event-handler/event-handler.interface";
-import { Result } from "src/core/application/result-handler/result";
-import { IDoctorRepository } from "src/doctor/application/repositories/doctor.repository.inteface";
-import { InvalidDoctorException } from "src/doctor/domain/exceptions/invalid-doctor.exception";
-import { DoctorId } from "src/doctor/domain/value-objects/doctor-id";
-import { MedicalRecordID } from "src/medical-record/domain/value-objects/medical-record-id";
-import { MedicalRecordRecipe } from "src/medical-record/domain/value-objects/medical-record-recipe";
+import { IApplicationService } from "../../../../src/core/application/application-service/application.service.interface";
+import { IEventHandler } from "../../../../src/core/application/event-handler/event-handler.interface";
+import { Result } from "../../../../src/core/application/result-handler/result";
+import { IDoctorRepository } from "../../../../src/doctor/application/repositories/doctor.repository.inteface";
+import { InvalidDoctorException } from "../../../../src/doctor/domain/exceptions/invalid-doctor.exception";
+import { DoctorId } from "../../../../src/doctor/domain/value-objects/doctor-id";
+import { MedicalRecordID } from "../../../../src/medical-record/domain/value-objects/medical-record-id";
+import { MedicalRecordRecipe } from "../../../../src/medical-record/domain/value-objects/medical-record-recipe";
 import { IMedicalRecordRepository } from "../repositories/medical-record.repository.interface";
 
 //#region Service DTOs
