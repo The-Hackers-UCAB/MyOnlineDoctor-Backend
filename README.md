@@ -128,9 +128,13 @@ Tabla con las actividades mas significativas por integrante:
 | Casos de uso relacionados con las citas | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/20, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/22, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/24
 
 ### Gabriel Ojeda
-| Actividades                                                                                                            | Commit                                              |
+| Actividades                                                                                                            | Pull Request                                              |
 |----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
 | Implementación del agregado medical record con sus value objects, excepciones, repositorios, mapeadores y el caso de uso para crear un registro medico |[+ 2b00a49](https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/commit/2b00a49354615f14f08f0708d7242ef5b2a81144) |
+| Implementación de los endpoints, servicios de aplicación y eventos de dominio para actualizar los recipe y las planificaciones de los medical records | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/33 | 
+| Implementación del endpoint y su servicio de aplicación para obtener los medical records de un paciente | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/39 |
+| Implementación del endpoint y su servicio de aplicación para obtener los medical records de un doctor | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/42 |
+| Implementación del test que valida que no se puede crear un medical record si la cita asociada no esta completada | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/50
 
 ## License
 
