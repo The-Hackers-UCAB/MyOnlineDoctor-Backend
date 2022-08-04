@@ -1,6 +1,8 @@
+import { AcceptPatientAppointmentApplicationService, AcceptPatientAppointmentApplicationServiceDto } from "../../src/appointment/application/services/accept-patient-appointment.application.service";
 import { ErrorApplicationServiceDecorator } from "../../src/core/application/application-service/decoratos/error-decorator/error-application.service.decorator";
 import { LoggingApplicationServiceDecorator } from "../../src/core/application/application-service/decoratos/logging-decorator/logging-application.service.decorator";
 import { NotifierApplicationServiceDecorator } from "../../src/core/application/application-service/decoratos/notifier-decorator/notifier.application.service.decorator";
+import { EventBus } from "../../src/core/infrastructure/event-handler/event-bus";
 import { NestLogger } from "../../src/core/infrastructure/logger/nest-logger";
 import { NotifierMock } from "../../test/core/adapters-mocks/notifier.mock";
 import { AppointmentObjectMother } from "../../test/core/objects-mother/appointment.object-mother";
@@ -9,14 +11,16 @@ import { PatientObjectMother } from "../../test/core/objects-mother/patient.obje
 import { AppointmentRepositoryMock } from "../../test/core/repository-mocks/appointment.repository.mock";
 import { DoctorRepositoryMock } from "../../test/core/repository-mocks/doctor.repository.mock";
 import { PatientRepositoryMock } from "../../test/core/repository-mocks/patient.repository.mock";
-import { InitiateAppointmentCallApplicationService, InitiateAppointmentCallApplicationServiceDto } from "../../src/appointment/application/services/initiate-appointment-call.application.service";
 
-describe("Iniciar una llamada a paciente suspendido", () => {
-    it("debe ser rechazada", async () => {
+
+describe('Un paciente acepta una cita que este solicitada', () => {
+
+    it('No exitosa', async () => {
+
         //Arrange
-        const patient = PatientObjectMother.createSuspendedPatient();
+        const patient = PatientObjectMother.createActivePatient();
         const doctor = DoctorObjectMother.createActiveDoctor();
-        const appointment = AppointmentObjectMother.createAcceptedAppointment(patient.Id, doctor.Id, doctor.Specialties[0]);
+        const appointment = AppointmentObjectMother.createRequestedAppointment(patient.Id, doctor.Id, doctor.Specialties[0]);
 
         const patientRepositoryMock = new PatientRepositoryMock();
         await patientRepositoryMock.saveAggregate(patient);
@@ -27,26 +31,30 @@ describe("Iniciar una llamada a paciente suspendido", () => {
         const appointmentRepositoryMock = new AppointmentRepositoryMock();
         await appointmentRepositoryMock.saveAggregate(appointment);
 
-        const dto: InitiateAppointmentCallApplicationServiceDto = { id: appointment.Id.Value, doctorId: doctor.Id.Value };
+        const eventBus = EventBus.getInstance()
+
+        const dto: AcceptPatientAppointmentApplicationServiceDto = { id: appointment.Id.Value, patientId: patient.Id.Value };
 
         const service = new ErrorApplicationServiceDecorator(
             new NotifierApplicationServiceDecorator(
                 new LoggingApplicationServiceDecorator(
-                    new InitiateAppointmentCallApplicationService(appointmentRepositoryMock, doctorRepositoryMock, patientRepositoryMock),
-                    new NestLogger()
-                ),
-                new NotifierMock(
-                    async (data: InitiateAppointmentCallApplicationServiceDto) => {
-                        return { message: "Lamando al paciente." }
-                    }
-                )
+                    new AcceptPatientAppointmentApplicationService(appointmentRepositoryMock, eventBus, patientRepositoryMock),
+                    new NestLogger(),
+            ),
+            new NotifierMock(
+                async (data: AcceptPatientAppointmentApplicationServiceDto) => {
+                    return { message: 'Aceptando cita' };
+                }
+            )
             )
         );
 
         //Act
         const result = await service.execute(dto);
 
-        //Assert 
+        //Assert
         expect(result.IsSuccess).toBeFalsy();
+
     })
+
 });
