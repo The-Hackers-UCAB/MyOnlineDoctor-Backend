@@ -20,7 +20,7 @@ export class SearchPatientMedicalRecordsApplicationService implements IApplicati
 
     async execute(dto: SearchPatientMedicalRecordsApplicationServiceDto): Promise<Result<MedicalRecord[]>> {
 
-        const medicalRecords = await this.medicalRecordRepository.findMedicalRecordByPatient(PatientId.create(dto.id));
+        const medicalRecords = await this.medicalRecordRepository.findMedicalRecordByPatient(PatientId.create(dto.id), dto.paging);
 
         return Result.success(medicalRecords);
     }
