@@ -69,19 +69,25 @@ $ npm run start:prod
 $ npm run test
 ```
 
-## Screenshots
+## Documentation
+
+Modelo de Dominio.
+
+![App Screenshot](./docs/ModelodeDominio-TheHackers.svg)
+
+<br/>
 
 Grafo de dependencias.
 
 ![App Screenshot](./docs/dependencygraph.svg)
 
-Arquitectura Hexagonal
+<br/>
 
-![App Screenshot](./docs/Arquitectura Hexagonal - The Hackers.svg)
+Arquitectura Hexagonal.
 
-Modelo de Dominio.
+![App Screenshot](./docs/ArquitecturaHexagonal-TheHackers.svg)
 
-![App Screenshot](./docs/Modelo de Dominio - The Hackers.svg)
+<br/>
 
 ## Desarrolladores
 
