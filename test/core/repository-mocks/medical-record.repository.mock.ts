@@ -31,7 +31,7 @@ export class MedicalRecordRepositoryMock implements IMedicalRecordRepository {
         return medicalRecord;
     }
 
-    findPatientMedicalRecordByDoctor(doctorId: DoctorId, patientId: PatientId, paging?: RepositoryPagingDto): Promise<MedicalRecord[]> {
+    async findPatientMedicalRecordByDoctor(doctorId: DoctorId, patientId: PatientId, paging?: RepositoryPagingDto): Promise<MedicalRecord[]> {
         return null;
     }
 }
