@@ -105,6 +105,10 @@ Tabla con las actividades mas significativas por integrante:
 | Implementación del Bus de Eventos para el manejo de los eventos de dominio. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/9 |
 | Implementación de Notifier con patrones. Se implementó un decorador para el manejo de notificación junto con su puerto y adaptador de firebase. Se utilizó DI con funciones de orden superior y variables parametrizadas para la conversión de la data recibida y la necesaria según la implementación para enviar una notificación. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/19, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/25 |
 | Implementaciones relacionadas con citas. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/14, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/19, https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/23 |
+| Implementación de creación de registro médico a través de eventos de dominio. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/31 |
+| Base para Testing, implementación del patron creacional Object Mother y Mocks para los distintos adaptadores a utilizar en los test, configuración para ejecutar suite de test e implementación del test unitario para comprobar la regla de negocio de que si un paciente esta suspendido la llamada no se ejecuta. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/pull/44 |
+| Implementación de test para validar que no se sobre o infra califiquen citas. Se implemento test de aceptación para loging. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/commit/cd31315998c35e1345ba9c488b6ba74d80584905 |
+| Endpoint para bloquear usuario. | https://github.com/The-Hackers-UCAB/MyOnlineDoctor-Backend/commit/cd31315998c35e1345ba9c488b6ba74d80584905 |
 
 
 ### Antonio Badillo
